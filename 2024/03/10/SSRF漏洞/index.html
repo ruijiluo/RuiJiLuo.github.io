@@ -1,0 +1,276 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>SSRF漏洞 | RJ の 博客</title><meta name="author" content="Rui Ji"><meta name="copyright" content="Rui Ji"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="ffffff"><meta name="description" content="一.SSRF漏洞概述 SSRF (Server-Side Request Forgery,服务器端请求伪造)是一种由攻击者构造请求，由服务端发起请求的安全漏洞。一般情况下，SSRF攻击的目标是外网无法访问的内部系统(正因为请求是由服务端发起的，所以服务端能请求到与自身相连而与外网隔离的内部系统)。  二.SSRF漏洞原理 SSRF的形成大多是由于服务端提供了从其他服务器应用获取数据的功能且没有对目">
+<meta property="og:type" content="article">
+<meta property="og:title" content="SSRF漏洞">
+<meta property="og:url" content="http://ruijiluo.github.io/2024/03/10/SSRF%E6%BC%8F%E6%B4%9E/index.html">
+<meta property="og:site_name" content="RJ の 博客">
+<meta property="og:description" content="一.SSRF漏洞概述 SSRF (Server-Side Request Forgery,服务器端请求伪造)是一种由攻击者构造请求，由服务端发起请求的安全漏洞。一般情况下，SSRF攻击的目标是外网无法访问的内部系统(正因为请求是由服务端发起的，所以服务端能请求到与自身相连而与外网隔离的内部系统)。  二.SSRF漏洞原理 SSRF的形成大多是由于服务端提供了从其他服务器应用获取数据的功能且没有对目">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://s2.loli.net/2024/03/10/dLyBf98FswxYX4I.jpg">
+<meta property="article:published_time" content="2024-03-10T11:28:07.000Z">
+<meta property="article:modified_time" content="2024-03-10T16:31:53.316Z">
+<meta property="article:author" content="Rui Ji">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://s2.loli.net/2024/03/10/dLyBf98FswxYX4I.jpg"><link rel="shortcut icon" href="https://s2.loli.net/2023/09/07/hRcHvbPo15QmB7T.png"><link rel="canonical" href="http://ruijiluo.github.io/2024/03/10/SSRF%E6%BC%8F%E6%B4%9E/index.html"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css" media="print" onload="this.media='all'"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox/fancybox.min.css" media="print" onload="this.media='all'"><script>const GLOBAL_CONFIG = {
+  root: '/',
+  algolia: undefined,
+  localSearch: undefined,
+  translate: undefined,
+  noticeOutdate: undefined,
+  highlight: {"plugin":"highlighjs","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false},
+  copy: {
+    success: '复制成功',
+    error: '复制错误',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  dateSuffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  lightbox: 'fancybox',
+  Snackbar: undefined,
+  source: {
+    justifiedGallery: {
+      js: 'https://cdn.jsdelivr.net/npm/flickr-justified-gallery/dist/fjGallery.min.js',
+      css: 'https://cdn.jsdelivr.net/npm/flickr-justified-gallery/dist/fjGallery.min.css'
+    }
+  },
+  isPhotoFigcaption: false,
+  islazyload: false,
+  isAnchor: false,
+  percent: {
+    toc: true,
+    rightside: false,
+  },
+  autoDarkmode: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: 'SSRF漏洞',
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: false,
+  isToc: true,
+  postUpdate: '2024-03-11 00:31:53'
+}</script><noscript><style type="text/css">
+  #nav {
+    opacity: 1
+  }
+  .justified-gallery img {
+    opacity: 1
+  }
+
+  #recent-posts time,
+  #post-meta time {
+    display: inline !important
+  }
+</style></noscript><script>(win=>{
+    win.saveToLocal = {
+      set: function setWithExpiry(key, value, ttl) {
+        if (ttl === 0) return
+        const now = new Date()
+        const expiryDay = ttl * 86400000
+        const item = {
+          value: value,
+          expiry: now.getTime() + expiryDay,
+        }
+        localStorage.setItem(key, JSON.stringify(item))
+      },
+
+      get: function getWithExpiry(key) {
+        const itemStr = localStorage.getItem(key)
+
+        if (!itemStr) {
+          return undefined
+        }
+        const item = JSON.parse(itemStr)
+        const now = new Date()
+
+        if (now.getTime() > item.expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return item.value
+      }
+    }
+  
+    win.getScript = url => new Promise((resolve, reject) => {
+      const script = document.createElement('script')
+      script.src = url
+      script.async = true
+      script.onerror = reject
+      script.onload = script.onreadystatechange = function() {
+        const loadState = this.readyState
+        if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+        script.onload = script.onreadystatechange = null
+        resolve()
+      }
+      document.head.appendChild(script)
+    })
+  
+    win.getCSS = (url,id = false) => new Promise((resolve, reject) => {
+      const link = document.createElement('link')
+      link.rel = 'stylesheet'
+      link.href = url
+      if (id) link.id = id
+      link.onerror = reject
+      link.onload = link.onreadystatechange = function() {
+        const loadState = this.readyState
+        if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+        link.onload = link.onreadystatechange = null
+        resolve()
+      }
+      document.head.appendChild(link)
+    })
+  
+      win.activateDarkMode = function () {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      win.activateLightMode = function () {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', 'ffffff')
+        }
+      }
+      const t = saveToLocal.get('theme')
+    
+          if (t === 'dark') activateDarkMode()
+          else if (t === 'light') activateLightMode()
+        
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        if (asideStatus === 'hide') {
+          document.documentElement.classList.add('hide-aside')
+        } else {
+          document.documentElement.classList.remove('hide-aside')
+        }
+      }
+    
+    const detectApple = () => {
+      if(/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)){
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+    })(window)</script><link rel="stylesheet" href="./themes/butterfly/source/css/bg_color.css"><meta name="generator" content="Hexo 6.3.0"></head><body><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img is-center"><img src="https://s2.loli.net/2023/09/07/oZOaspjYrzmT5e9.jpg" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="sidebar-site-data site-data is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">15</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">0</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">0</div></a></div><hr class="custom-hr"/><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page group" href="javascript:void(0);"><i class="fa-fw fas fa-book"></i><span> 文章</span><i class="fas fa-chevron-down"></i></a><ul class="menus_item_child"><li><a class="site-page child" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 归档</span></a></li><li><a class="site-page child" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></li><li><a class="site-page child" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></li></ul></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header" style="background-image: url('https://s2.loli.net/2024/03/10/dLyBf98FswxYX4I.jpg')"><nav id="nav"><span id="blog-info"><a href="/" title="RJ の 博客"><span class="site-name">RJ の 博客</span></a></span><div id="menus"><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page group" href="javascript:void(0);"><i class="fa-fw fas fa-book"></i><span> 文章</span><i class="fas fa-chevron-down"></i></a><ul class="menus_item_child"><li><a class="site-page child" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 归档</span></a></li><li><a class="site-page child" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></li><li><a class="site-page child" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></li></ul></div></div><div id="toggle-menu"><a class="site-page" href="javascript:void(0);"><i class="fas fa-bars fa-fw"></i></a></div></div></nav><div id="post-info"><h1 class="post-title">SSRF漏洞</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2024-03-10T11:28:07.000Z" title="发表于 2024-03-10 19:28:07">2024-03-10</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2024-03-10T16:31:53.316Z" title="更新于 2024-03-11 00:31:53">2024-03-11</time></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title="SSRF漏洞"><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">阅读量:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="post-content" id="article-container"><h4 id="一-SSRF漏洞概述"><a href="#一-SSRF漏洞概述" class="headerlink" title="一.SSRF漏洞概述"></a>一.SSRF漏洞概述</h4><ul>
+<li>SSRF (Server-Side Request Forgery,服务器端请求伪造)是一种由攻击者构造请求，由服务端发起请求的安全漏洞。一般情况下，SSRF攻击的目标是外网无法访问的内部系统(正因为请求是由服务端发起的，所以服务端能请求到与自身相连而与外网隔离的内部系统)。</li>
+</ul>
+<h4 id="二-SSRF漏洞原理"><a href="#二-SSRF漏洞原理" class="headerlink" title="二.SSRF漏洞原理"></a>二.SSRF漏洞原理</h4><ul>
+<li><p>SSRF的形成大多是由于服务端提供了从其他服务器应用获取数据的功能且没有对目标地址做过滤与限制。例如，黑客操作服务端从指定URL地址获取网页文本内容，加载指定地址的图片等，利用的是服务端的请求伪造。SSRF利用存在缺陷的Web</p>
+<p>应用作为代理攻击远程和本地的服务器。</p>
+</li>
+</ul>
+<h5 id="1-主要攻击方式如下"><a href="#1-主要攻击方式如下" class="headerlink" title="1.主要攻击方式如下"></a>1.主要攻击方式如下</h5><ol>
+<li><p>对外网、服务器所在内网、本地进行端口扫描，获取一些服务的banner信息。</p>
+</li>
+<li><p>攻击运行在内网或本地的应用程序。</p>
+</li>
+<li><p>对内网Web应用进行指纹识别，识别企业内部的资产信息。</p>
+</li>
+<li><p>攻击内外网的Web应用，主要是使用HTTP GET请求就可以实现的攻击(比如struts2、SQli等)。</p>
+</li>
+<li><p>利用file协议读取本地文件等。</p>
+</li>
+</ol>
+<h5 id="2-漏洞产生相关函数-php"><a href="#2-漏洞产生相关函数-php" class="headerlink" title="2.漏洞产生相关函数(php)"></a>2.漏洞产生相关函数(php)</h5><ol>
+<li><p><strong>file_get_contents()</strong>: 用于获取url内容写入到指定文件中，并返回。</p>
+</li>
+<li><p><strong>fsockopen()</strong>:              用于在网络上打开一个socket(端口)，常用于创建TCP&#x2F;IP连接。</p>
+</li>
+<li><p><strong>curl_exec()</strong>:                用于执行CURL会话,并返回url内容。</p>
+</li>
+<li><p><strong>fopen()</strong>:                       用于打开文件或者 URL。</p>
+</li>
+<li><p><strong>readfile()</strong>:                   用于读取文件并直接输出到输出缓冲区。</p>
+</li>
+</ol>
+<p><strong>注意：</strong></p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="number">1</span>.一般情况下PHP不会开启fopen的gopher和wrapper协议</span><br><span class="line"><span class="number">2</span>.file_get_contents的gopher协议不能URL编码</span><br><span class="line"><span class="number">3</span>.file_get_contents关于Gopher的<span class="number">302</span>跳转会出现bug，导致利用失败</span><br><span class="line"><span class="number">4</span>.curl/libcurl <span class="number">7.43</span> 上gopher协议存在<span class="title function_ invoke__">bug</span>(%<span class="number">00</span>截断) 经测试<span class="number">7.49</span> 可用</span><br><span class="line"><span class="number">5</span>.<span class="title function_ invoke__">curl_exec</span>() <span class="comment">//默认不跟踪跳转</span></span><br><span class="line"><span class="number">6</span>.<span class="title function_ invoke__">file_get_contents</span>() <span class="comment">// file_get_contents支持php://input协议</span></span><br></pre></td></tr></table></figure>
+
+
+
+<h4 id="三-SSRF漏洞验证"><a href="#三-SSRF漏洞验证" class="headerlink" title="三.SSRF漏洞验证"></a>三.SSRF漏洞验证</h4><ol>
+<li><p><strong>排除法</strong>：通过查看网页源代码或使用浏览器开发者工具（如F12），观察是否有从本地服务器发起的请求。如果发现请求的URL参数可以接受其他服务器地址，可能存在SSRF漏洞。</p>
+</li>
+<li><p><strong>使用DNSlog等工具进行测试</strong>：将准备请求的URL和参数编码成base64，然后观察是否有相应的DNS查询请求。如果有，说明请求被发送到了其他服务器，可能存在SSRF漏洞。</p>
+</li>
+<li><p><strong>抓包分析</strong>：使用抓包工具（如Wireshark）捕获请求，并分析请求是否是通过服务器发送的。如果请求不是由客户端发起的，则可能存在SSRF漏洞。进一步，可以尝试发现内网地址。</p>
+</li>
+<li><p><strong>利用历史漏洞和暴力猜解</strong>：通过漏洞平台的历史漏洞或使用暴力猜解工具，寻找可能泄露的内网地址。</p>
+</li>
+<li><p><strong>使用file协议读取内网信息</strong>：利用file协议，尝试读取服务器上的敏感文件，如配置文件，从中获取相关内网地址。</p>
+</li>
+<li><p><strong>检查返回的Banner、title、content等信息</strong>：观察返回的页面或数据中是否包含内网相关信息，例如Banner、标题、内容等。</p>
+</li>
+<li><p><strong>留意布尔型SSRF</strong>：观察两次不同请求结果的差异,  如果差异明显，则可能存在SSRF漏洞。</p>
+</li>
+</ol>
+<h4 id="四-SSRF常见漏洞点"><a href="#四-SSRF常见漏洞点" class="headerlink" title="四.SSRF常见漏洞点"></a>四.SSRF常见漏洞点</h4><ol>
+<li><p><strong>社交分享功能</strong>：当应用程序允许用户分享链接，并且获取链接内容来显示标题等信息时，存在潜在的SSRF漏洞。攻击者可以通过构造恶意链接来触发SSRF漏洞。</p>
+</li>
+<li><p><strong>转码服务</strong>：如果应用程序提供了将URL地址转码为适合手机屏幕浏览的功能，攻击者可以利用这个功能来触发SSRF漏洞。</p>
+</li>
+<li><p><strong>在线翻译</strong>：类似于转码服务，如果应用程序提供了将网址翻译为对应网页内容的功能，攻击者可以利用这个功能来触发SSRF漏洞。</p>
+</li>
+<li><p><strong>图片加载&#x2F;下载</strong>：在富文本编辑器或其他功能中，如果应用程序允许从URL地址加载或下载图片，可能存在SSRF漏洞。</p>
+</li>
+<li><p><strong>图片&#x2F;文章收藏功能</strong>：如果应用程序允许用户收藏图片或文章，并且获取URL地址中的标题和内容来显示，可能存在SSRF漏洞。</p>
+</li>
+<li><p><strong>云服务厂商</strong>：一些云服务提供商可能会远程执行一些命令来判断网站是否存活等，攻击者可以尝试利用这些功能来触发SSRF漏洞。</p>
+</li>
+<li><p><strong>网站采集，网站抓取</strong>：一些网站可能会针对输入的URL进行信息采集工作，攻击者可以通过构造恶意URL来触发SSRF漏洞。</p>
+</li>
+<li><p><strong>数据库内置功能</strong>：一些数据库可能具有类似于复制数据库等功能，攻击者可以利用这些功能来触发SSRF漏洞。</p>
+</li>
+<li><p><strong>邮件系统</strong>：如果应用程序涉及接收邮件服务器地址等功能，可能存在SSRF漏洞。</p>
+</li>
+<li><p><strong>编码处理、属性信息处理、文件处理</strong>：像ffpmg、ImageMagick、docx、pdf、xml处理器等工具可能存在SSRF漏洞。</p>
+</li>
+<li><p><strong>未公开的API实现以及其他扩展调用URL的功能</strong>：攻击者可以利用Google语法结合关键字来寻找应用程序中未公开的API实现或其他扩展调用URL的功能。</p>
+</li>
+<li><p><strong>从远程服务器请求资源</strong>：像上传文件时从URL地址获取资源，如discuz！；导入和导出rss feed，如web blog；以及使用了xml引擎对象的地方，如wordpress的xmlrpc.php等地方，都可能存在SSRF漏洞。</p>
+</li>
+</ol>
+<h4 id="五-SSRF漏洞利用方式"><a href="#五-SSRF漏洞利用方式" class="headerlink" title="五.SSRF漏洞利用方式"></a>五.SSRF漏洞利用方式</h4><ol>
+<li>能扫描内部网络，获取端口，服务信息。</li>
+<li>攻击运行在内网或本地的应用程序。</li>
+<li>对内网web进行指纹识别</li>
+<li>对内部主机和端口发送请求包进行攻击</li>
+<li>file协议读取本地文件</li>
+</ol>
+<h4 id="六-SSRF漏洞演示"><a href="#六-SSRF漏洞演示" class="headerlink" title="六.SSRF漏洞演示"></a>六.SSRF漏洞演示</h4><h5 id="1-SSRF-curl-exec"><a href="#1-SSRF-curl-exec" class="headerlink" title="1.SSRF(curl_exec)"></a>1.SSRF(curl_exec)</h5><p><img src="https://s2.loli.net/2024/03/11/aVuhM2DFQfJskR9.png" alt="image-20240311000817874"></p>
+<ul>
+<li><p>点击超链接后发现前端通过get方式传递参数?url,可能存在SSRF漏洞</p>
+<figure class="highlight http"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">http://127.0.0.1:8083/vul/ssrf/ssrf_curl.php?url=http://127.0.0.1/vul/ssrf/ssrf_info/info1.php</span><br></pre></td></tr></table></figure>
+
+
+</li>
+<li><p>修改参数,探测内部服务器192.168.31.203:22状态</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">url=http://192.168.31.203:22</span><br></pre></td></tr></table></figure></li>
+</ul>
+<p><img src="https://s2.loli.net/2024/03/11/7CpbkleKyS38Xnm.png" alt="image-20240311001354546"></p>
+<ul>
+<li><p>查看后端源码可以发现后端将前端传递过来的参数直接通过curl_exec请求,后echo到前端</p>
+<p><img src="https://s2.loli.net/2024/03/11/yj5bvMgLzWBAroS.png" alt="image-20240311002239104"></p>
+</li>
+</ul>
+<h5 id="2-SSRF-file-get-content"><a href="#2-SSRF-file-get-content" class="headerlink" title="2.SSRF(file_get_content)"></a>2.SSRF(file_get_content)</h5><p><img src="https://s2.loli.net/2024/03/11/nU9yTjxFQ5EfDqH.png" alt="image-20240311001514498"></p>
+<ul>
+<li><p>同样的file_get_content()也可能存在SSRF漏洞,同时该函数可以获取到后端php源码</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">读取PHP文件的源码  php:<span class="comment">//filter/read=convert.base64-encode/resource=ssrf.php  //解码后可以获得源码</span></span><br></pre></td></tr></table></figure>
+
+
+
+<p><img src="https://s2.loli.net/2024/03/11/5jMzWCb7aite9Bw.png" alt="image-20240311003111804"></p>
+</li>
+</ul>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta">文章作者: </span><span class="post-copyright-info"><a href="http://RuiJiLuo.github.io">Rui Ji</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta">文章链接: </span><span class="post-copyright-info"><a href="http://ruijiluo.github.io/2024/03/10/SSRF%E6%BC%8F%E6%B4%9E/">http://ruijiluo.github.io/2024/03/10/SSRF%E6%BC%8F%E6%B4%9E/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta">版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来自 <a href="http://RuiJiLuo.github.io" target="_blank">RJ の 博客</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"></div><div class="post_share"><div class="social-share" data-image="https://s2.loli.net/2024/03/10/dLyBf98FswxYX4I.jpg" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><div class="prev-post pull-left"><a href="/2024/03/11/XXE%E5%A4%96%E9%83%A8%E5%AE%9E%E4%BD%93%E6%B3%A8%E5%85%A5%E6%BC%8F%E6%B4%9E/" title="XXE外部实体注入漏洞"><img class="cover" src="https://s2.loli.net/2024/03/11/Smf6Ua2ZhNvq9MC.png" onerror="onerror=null;src='/img/404.jpg'" alt="cover of previous post"><div class="pagination-info"><div class="label">上一篇</div><div class="prev_info">XXE外部实体注入漏洞</div></div></a></div><div class="next-post pull-right"><a href="/2024/03/09/PHP%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96%E6%BC%8F%E6%B4%9E/" title="PHP反序列化漏洞"><img class="cover" src="https://s2.loli.net/2024/03/09/5D729ckhd1OVxts.jpg" onerror="onerror=null;src='/img/404.jpg'" alt="cover of next post"><div class="pagination-info"><div class="label">下一篇</div><div class="next_info">PHP反序列化漏洞</div></div></a></div></nav></div><div class="aside-content" id="aside-content"><div class="card-widget card-info"><div class="is-center"><div class="avatar-img"><img src="https://s2.loli.net/2023/09/07/oZOaspjYrzmT5e9.jpg" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info__name">Rui Ji</div><div class="author-info__description">私 の hacker 夢</div></div><div class="card-info-data site-data is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">15</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">0</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">0</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/ruijiluo"><i class="fab fa-github"></i><span>Follow Me</span></a></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E4%B8%80-SSRF%E6%BC%8F%E6%B4%9E%E6%A6%82%E8%BF%B0"><span class="toc-number">1.</span> <span class="toc-text">一.SSRF漏洞概述</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E4%BA%8C-SSRF%E6%BC%8F%E6%B4%9E%E5%8E%9F%E7%90%86"><span class="toc-number">2.</span> <span class="toc-text">二.SSRF漏洞原理</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#1-%E4%B8%BB%E8%A6%81%E6%94%BB%E5%87%BB%E6%96%B9%E5%BC%8F%E5%A6%82%E4%B8%8B"><span class="toc-number">2.1.</span> <span class="toc-text">1.主要攻击方式如下</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#2-%E6%BC%8F%E6%B4%9E%E4%BA%A7%E7%94%9F%E7%9B%B8%E5%85%B3%E5%87%BD%E6%95%B0-php"><span class="toc-number">2.2.</span> <span class="toc-text">2.漏洞产生相关函数(php)</span></a></li></ol></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E4%B8%89-SSRF%E6%BC%8F%E6%B4%9E%E9%AA%8C%E8%AF%81"><span class="toc-number">3.</span> <span class="toc-text">三.SSRF漏洞验证</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%9B%9B-SSRF%E5%B8%B8%E8%A7%81%E6%BC%8F%E6%B4%9E%E7%82%B9"><span class="toc-number">4.</span> <span class="toc-text">四.SSRF常见漏洞点</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E4%BA%94-SSRF%E6%BC%8F%E6%B4%9E%E5%88%A9%E7%94%A8%E6%96%B9%E5%BC%8F"><span class="toc-number">5.</span> <span class="toc-text">五.SSRF漏洞利用方式</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%85%AD-SSRF%E6%BC%8F%E6%B4%9E%E6%BC%94%E7%A4%BA"><span class="toc-number">6.</span> <span class="toc-text">六.SSRF漏洞演示</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#1-SSRF-curl-exec"><span class="toc-number">6.1.</span> <span class="toc-text">1.SSRF(curl_exec)</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#2-SSRF-file-get-content"><span class="toc-number">6.2.</span> <span class="toc-text">2.SSRF(file_get_content)</span></a></li></ol></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item"><a class="thumbnail" href="/2024/04/12/HVV%E7%AC%94%E8%AE%B0/" title="HVV笔记"><img src="https://s2.loli.net/2024/04/12/umEX5tM9wfAGZC2.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="HVV笔记"/></a><div class="content"><a class="title" href="/2024/04/12/HVV%E7%AC%94%E8%AE%B0/" title="HVV笔记">HVV笔记</a><time datetime="2024-04-12T10:08:58.000Z" title="发表于 2024-04-12 18:08:58">2024-04-12</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2024/03/23/webshell%E5%B7%A5%E5%85%B7%E6%B5%81%E9%87%8F%E7%89%B9%E5%BE%81/" title="webshell工具流量特征"><img src="https://s2.loli.net/2024/03/23/d4FV63Y2olLUuKn.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="webshell工具流量特征"/></a><div class="content"><a class="title" href="/2024/03/23/webshell%E5%B7%A5%E5%85%B7%E6%B5%81%E9%87%8F%E7%89%B9%E5%BE%81/" title="webshell工具流量特征">webshell工具流量特征</a><time datetime="2024-03-23T08:57:03.000Z" title="发表于 2024-03-23 16:57:03">2024-03-23</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2024/03/12/sqlmap%E7%AE%80%E5%8D%95%E4%BD%BF%E7%94%A8/" title="sqlmap简单使用"><img src="https://s2.loli.net/2024/03/12/6NXSyKVvalT9i5G.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="sqlmap简单使用"/></a><div class="content"><a class="title" href="/2024/03/12/sqlmap%E7%AE%80%E5%8D%95%E4%BD%BF%E7%94%A8/" title="sqlmap简单使用">sqlmap简单使用</a><time datetime="2024-03-12T14:36:28.000Z" title="发表于 2024-03-12 22:36:28">2024-03-12</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2024/03/11/XXE%E5%A4%96%E9%83%A8%E5%AE%9E%E4%BD%93%E6%B3%A8%E5%85%A5%E6%BC%8F%E6%B4%9E/" title="XXE外部实体注入漏洞"><img src="https://s2.loli.net/2024/03/11/Smf6Ua2ZhNvq9MC.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="XXE外部实体注入漏洞"/></a><div class="content"><a class="title" href="/2024/03/11/XXE%E5%A4%96%E9%83%A8%E5%AE%9E%E4%BD%93%E6%B3%A8%E5%85%A5%E6%BC%8F%E6%B4%9E/" title="XXE外部实体注入漏洞">XXE外部实体注入漏洞</a><time datetime="2024-03-11T06:04:03.000Z" title="发表于 2024-03-11 14:04:03">2024-03-11</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2024/03/10/SSRF%E6%BC%8F%E6%B4%9E/" title="SSRF漏洞"><img src="https://s2.loli.net/2024/03/10/dLyBf98FswxYX4I.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="SSRF漏洞"/></a><div class="content"><a class="title" href="/2024/03/10/SSRF%E6%BC%8F%E6%B4%9E/" title="SSRF漏洞">SSRF漏洞</a><time datetime="2024-03-10T11:28:07.000Z" title="发表于 2024-03-10 19:28:07">2024-03-10</time></div></div></div></div></div></div></main><footer id="footer"><div id="footer-wrap"><div class="copyright">&copy;2020 - 2024 By Rui Ji</div><div class="framework-info"><span>框架 </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo</a><span class="footer-separator">|</span><span>主题 </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly</a></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="浅色和深色模式转换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside_config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><button id="go-up" type="button" title="回到顶部"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox/fancybox.umd.min.js"></script><div class="js-pjax"></div><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div></body></html>
