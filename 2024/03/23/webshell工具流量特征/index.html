@@ -1,0 +1,232 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>webshell工具流量特征 | RJ の 博客</title><meta name="author" content="Rui Ji"><meta name="copyright" content="Rui Ji"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="ffffff"><meta name="description" content="冰蝎、蚁剑、哥斯拉、菜刀的流量特征一. 蚁剑流量特征1. 蚁剑webshell静态特征 蚁剑中php使用assert、eval执行；asp只有eval执行；在jsp使用的是Java类加载（ClassLoader），同时会带有base64编码解码等字符特征。  2. 蚁剑webshell动态特征 我们使用一句话木马上传的jsp载荷的webshell都存在以@ini_set(&quot;display">
+<meta property="og:type" content="article">
+<meta property="og:title" content="webshell工具流量特征">
+<meta property="og:url" content="http://ruijiluo.github.io/2024/03/23/webshell%E5%B7%A5%E5%85%B7%E6%B5%81%E9%87%8F%E7%89%B9%E5%BE%81/index.html">
+<meta property="og:site_name" content="RJ の 博客">
+<meta property="og:description" content="冰蝎、蚁剑、哥斯拉、菜刀的流量特征一. 蚁剑流量特征1. 蚁剑webshell静态特征 蚁剑中php使用assert、eval执行；asp只有eval执行；在jsp使用的是Java类加载（ClassLoader），同时会带有base64编码解码等字符特征。  2. 蚁剑webshell动态特征 我们使用一句话木马上传的jsp载荷的webshell都存在以@ini_set(&quot;display">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://s2.loli.net/2024/03/23/d4FV63Y2olLUuKn.jpg">
+<meta property="article:published_time" content="2024-03-23T08:57:03.000Z">
+<meta property="article:modified_time" content="2024-03-23T09:05:08.599Z">
+<meta property="article:author" content="Rui Ji">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://s2.loli.net/2024/03/23/d4FV63Y2olLUuKn.jpg"><link rel="shortcut icon" href="https://s2.loli.net/2023/09/07/hRcHvbPo15QmB7T.png"><link rel="canonical" href="http://ruijiluo.github.io/2024/03/23/webshell%E5%B7%A5%E5%85%B7%E6%B5%81%E9%87%8F%E7%89%B9%E5%BE%81/index.html"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css" media="print" onload="this.media='all'"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox/fancybox.min.css" media="print" onload="this.media='all'"><script>const GLOBAL_CONFIG = {
+  root: '/',
+  algolia: undefined,
+  localSearch: undefined,
+  translate: undefined,
+  noticeOutdate: undefined,
+  highlight: {"plugin":"highlighjs","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false},
+  copy: {
+    success: '复制成功',
+    error: '复制错误',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  dateSuffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  lightbox: 'fancybox',
+  Snackbar: undefined,
+  source: {
+    justifiedGallery: {
+      js: 'https://cdn.jsdelivr.net/npm/flickr-justified-gallery/dist/fjGallery.min.js',
+      css: 'https://cdn.jsdelivr.net/npm/flickr-justified-gallery/dist/fjGallery.min.css'
+    }
+  },
+  isPhotoFigcaption: false,
+  islazyload: false,
+  isAnchor: false,
+  percent: {
+    toc: true,
+    rightside: false,
+  },
+  autoDarkmode: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: 'webshell工具流量特征',
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: false,
+  isToc: true,
+  postUpdate: '2024-03-23 17:05:08'
+}</script><noscript><style type="text/css">
+  #nav {
+    opacity: 1
+  }
+  .justified-gallery img {
+    opacity: 1
+  }
+
+  #recent-posts time,
+  #post-meta time {
+    display: inline !important
+  }
+</style></noscript><script>(win=>{
+    win.saveToLocal = {
+      set: function setWithExpiry(key, value, ttl) {
+        if (ttl === 0) return
+        const now = new Date()
+        const expiryDay = ttl * 86400000
+        const item = {
+          value: value,
+          expiry: now.getTime() + expiryDay,
+        }
+        localStorage.setItem(key, JSON.stringify(item))
+      },
+
+      get: function getWithExpiry(key) {
+        const itemStr = localStorage.getItem(key)
+
+        if (!itemStr) {
+          return undefined
+        }
+        const item = JSON.parse(itemStr)
+        const now = new Date()
+
+        if (now.getTime() > item.expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return item.value
+      }
+    }
+  
+    win.getScript = url => new Promise((resolve, reject) => {
+      const script = document.createElement('script')
+      script.src = url
+      script.async = true
+      script.onerror = reject
+      script.onload = script.onreadystatechange = function() {
+        const loadState = this.readyState
+        if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+        script.onload = script.onreadystatechange = null
+        resolve()
+      }
+      document.head.appendChild(script)
+    })
+  
+    win.getCSS = (url,id = false) => new Promise((resolve, reject) => {
+      const link = document.createElement('link')
+      link.rel = 'stylesheet'
+      link.href = url
+      if (id) link.id = id
+      link.onerror = reject
+      link.onload = link.onreadystatechange = function() {
+        const loadState = this.readyState
+        if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+        link.onload = link.onreadystatechange = null
+        resolve()
+      }
+      document.head.appendChild(link)
+    })
+  
+      win.activateDarkMode = function () {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      win.activateLightMode = function () {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', 'ffffff')
+        }
+      }
+      const t = saveToLocal.get('theme')
+    
+          if (t === 'dark') activateDarkMode()
+          else if (t === 'light') activateLightMode()
+        
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        if (asideStatus === 'hide') {
+          document.documentElement.classList.add('hide-aside')
+        } else {
+          document.documentElement.classList.remove('hide-aside')
+        }
+      }
+    
+    const detectApple = () => {
+      if(/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)){
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+    })(window)</script><link rel="stylesheet" href="./themes/butterfly/source/css/bg_color.css"><meta name="generator" content="Hexo 6.3.0"></head><body><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img is-center"><img src="https://s2.loli.net/2023/09/07/oZOaspjYrzmT5e9.jpg" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="sidebar-site-data site-data is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">27</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">1</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">0</div></a></div><hr class="custom-hr"/><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page group" href="javascript:void(0);"><i class="fa-fw fas fa-book"></i><span> 文章</span><i class="fas fa-chevron-down"></i></a><ul class="menus_item_child"><li><a class="site-page child" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 归档</span></a></li><li><a class="site-page child" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></li><li><a class="site-page child" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></li></ul></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header" style="background-image: url('https://s2.loli.net/2024/03/23/d4FV63Y2olLUuKn.jpg')"><nav id="nav"><span id="blog-info"><a href="/" title="RJ の 博客"><span class="site-name">RJ の 博客</span></a></span><div id="menus"><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page group" href="javascript:void(0);"><i class="fa-fw fas fa-book"></i><span> 文章</span><i class="fas fa-chevron-down"></i></a><ul class="menus_item_child"><li><a class="site-page child" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 归档</span></a></li><li><a class="site-page child" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></li><li><a class="site-page child" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></li></ul></div></div><div id="toggle-menu"><a class="site-page" href="javascript:void(0);"><i class="fas fa-bars fa-fw"></i></a></div></div></nav><div id="post-info"><h1 class="post-title">webshell工具流量特征</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2024-03-23T08:57:03.000Z" title="发表于 2024-03-23 16:57:03">2024-03-23</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2024-03-23T09:05:08.599Z" title="更新于 2024-03-23 17:05:08">2024-03-23</time></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title="webshell工具流量特征"><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">阅读量:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="post-content" id="article-container"><h1 id="冰蝎、蚁剑、哥斯拉、菜刀的流量特征"><a href="#冰蝎、蚁剑、哥斯拉、菜刀的流量特征" class="headerlink" title="冰蝎、蚁剑、哥斯拉、菜刀的流量特征"></a>冰蝎、蚁剑、哥斯拉、菜刀的流量特征</h1><h2 id="一-蚁剑流量特征"><a href="#一-蚁剑流量特征" class="headerlink" title="一. 蚁剑流量特征"></a>一. 蚁剑流量特征</h2><h3 id="1-蚁剑webshell静态特征"><a href="#1-蚁剑webshell静态特征" class="headerlink" title="1. 蚁剑webshell静态特征"></a>1. 蚁剑webshell静态特征</h3><blockquote>
+<p>蚁剑中php使用assert、eval执行；asp只有eval执行；在jsp使用的是Java类加载（ClassLoader），同时会带有base64编码解码等字符特征。</p>
+</blockquote>
+<h3 id="2-蚁剑webshell动态特征"><a href="#2-蚁剑webshell动态特征" class="headerlink" title="2. 蚁剑webshell动态特征"></a>2. 蚁剑webshell动态特征</h3><blockquote>
+<p>我们使用一句话木马上传的jsp载荷的webshell都存在以<code>@ini_set(&quot;display_errors&quot;,&quot;0&quot;);@set_time_limit(0)开头。</code>并且请求体是base64编码发的混淆字符，格式为：<code>随机数 结果 随机数</code>。</p>
+</blockquote>
+<p><img src="https://s2.loli.net/2024/03/23/SWcz13LiNAMmEpY.png" alt="image-20240323145321252"></p>
+<p>去除混淆字符（随机数）后进行base64解码，解码后响应体的返回结果的格式为：<code>随机数 解码后的结果 随机数</code>。观察payload可以发现攻击行为。</p>
+<p>另外，蚁剑混淆加密后还有一个比较明显的特征，即为参数名大多以<code>“_0x.....=”</code>这种形式（下划线可替换为其他）所以，以_0x开头的参数名，后面为加密数据的数据包也可识别为蚁剑的流量特征。</p>
+<h2 id="二-冰蝎流量特征"><a href="#二-冰蝎流量特征" class="headerlink" title="二. 冰蝎流量特征"></a>二. 冰蝎流量特征</h2><h3 id="1-冰蝎2-0"><a href="#1-冰蝎2-0" class="headerlink" title="1. 冰蝎2.0"></a>1. 冰蝎2.0</h3><blockquote>
+<p>使用<code>AES加密 + base64编码</code>，AES使用动态密钥对通信进行加密，进行请求时内置了十几个User-Agent头，每次请求时会随机选择其中的一个。因此当发现一个ip的请求头中的user-agent在频繁变换，就可能是冰蝎。 </p>
+</blockquote>
+<h3 id="2-冰蝎3-0"><a href="#2-冰蝎3-0" class="headerlink" title="2. 冰蝎3.0"></a>2. 冰蝎3.0</h3><blockquote>
+<p>使用<code>AES加密 + base64编码</code>,取消了2.0的动态获取密钥，使用固定的连接密钥，AES加密的密钥为<code>webshell连接密码的MD5的前16位，默认连接密码是&quot;rebeyond&quot;(即密钥是md5(&#39;rebeyond&#39;)[0:16]=e45e329feb5d925b)。</code>进行请求时内置了十几个User-Agent头，每次请求时会随机选择其中的一个。因此当发现一个ip的请求头中的user-agent在频繁变换，就可能是冰蝎。</p>
+<p><img src="https://s2.loli.net/2024/03/23/UkFsE4rjG5VzhcT.png" alt="image-20240323152507640"></p>
+<p>3.0连接jsp的webshell的请求数据包中的<code>content-type</code>字段常见为<code>application/octet-stream</code>。</p>
+<h6 id="2-3-冰蝎4-0"><a href="#2-3-冰蝎4-0" class="headerlink" title="2.3 冰蝎4.0"></a>2.3 冰蝎4.0</h6></blockquote>
+<blockquote>
+<ul>
+<li>提供了传输协议自定义的功能，让用户对流量的加密和解密进行自定义，实现流量加解密协议的去中心化。v4.0版本不再有连接密码的概念，自定义传输协议的算法就是连接密码。</li>
+<li><code>Accept</code>字段（弱特征），通常是<code>Accept: application/json, text/javascript, */*; q=0.01</code> 意思是浏览器可接受任何文件，但最倾向<code>application/json 和 text/javascript</code>。</li>
+<li><code>Content-Type</code>字段（弱特征），通常是<code>Content-type: Application/x-www-form-urlencoded</code></li>
+<li>与冰蝎的前述版本相似，进行请求时内置了十几个User-Agent头，每次请求时会随机选择其中的一个。</li>
+<li>连接的端口有一定的特征，冰蝎与webshell建立连接的同时，java也与目的主机建立tcp连接，每次连接使用本地端口在49700左右(就是比较大的端口)，每连接一次，每建立一次新的连接，端口就依次增加。</li>
+<li>使用长连接，避免了频繁的握手造成的资源开销。默认情况下，请求头和响应头里会带有<code>Connection：Keep-Alive</code></li>
+<li>有固定的请求头和响应头，请求字节头：<code>dFAXQV1LORcHRQtLRlwMAhwFTAg/M</code> ，响应字节头：<code>TxcWR1NNExZAD0ZaAWMIPAZjH1BFBFtHThcJSlUXWEd</code></li>
+<li>默认时，冰蝎 webshell都有<code>e45e329feb5d925b</code> 一串密钥，与冰蝎3.0相同。</li>
+</ul>
+<h6 id="内置的16个ua："><a href="#内置的16个ua：" class="headerlink" title="内置的16个ua："></a>内置的16个ua：</h6><blockquote>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/535.1 (KHTML, like Gecko) Chrome/14.0.835.163 Safari/535.1</span><br><span class="line">Mozilla/5.0 (Windows NT 6.1; WOW64; rv:6.0) Gecko/20100101 Firefox/6.0</span><br><span class="line">Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/534.50 (KHTML, like Gecko) Version/5.1 Safari/534.50</span><br><span class="line">Opera/9.80 (Windows NT 6.1; U; zh-cn) Presto/2.9.168 Version/11.50</span><br><span class="line">Mozilla/5.0 (compatible; MSIE 9.0; Windows NT 6.1; Win64; x64; Trident/5.0; .NET CLR 2.0.50727; SLCC2; .NET CLR 3.5.30729; .NET CLR 3.0.30729; Media Center PC 6.0; InfoPath.3; .NET4.0C; Tablet PC 2.0; .NET4.0E)</span><br><span class="line">Mozilla/4.0 (compatible; MSIE 8.0; Windows NT 6.1; WOW64; Trident/4.0; SLCC2; .NET CLR 2.0.50727; .NET CLR 3.5.30729; .NET CLR 3.0.30729; Media Center PC 6.0; .NET4.0C; InfoPath.3)</span><br><span class="line">Mozilla/4.0 (compatible; MSIE 8.0; Windows NT 5.1; Trident/4.0; GTB7.0)</span><br><span class="line">Mozilla/4.0 (compatible; MSIE 7.0; Windows NT 5.1)</span><br><span class="line">Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.1; SV1)</span><br><span class="line">Mozilla/5.0 (Windows; U; Windows NT 6.1; ) AppleWebKit/534.12 (KHTML, like Gecko) Maxthon/3.0 Safari/534.12</span><br><span class="line">Mozilla/4.0 (compatible; MSIE 7.0; Windows NT 6.1; WOW64; Trident/5.0; SLCC2; .NET CLR 2.0.50727; .NET CLR 3.5.30729; .NET CLR 3.0.30729; Media Center PC 6.0; InfoPath.3; .NET4.0C; .NET4.0E)</span><br><span class="line">Mozilla/4.0 (compatible; MSIE 7.0; Windows NT 6.1; WOW64; Trident/5.0; SLCC2; .NET CLR 2.0.50727; .NET CLR 3.5.30729; .NET CLR 3.0.30729; Media Center PC 6.0; InfoPath.3; .NET4.0C; .NET4.0E; SE 2.X MetaSr 1.0)</span><br><span class="line">Mozilla/5.0 (Windows; U; Windows NT 6.1; en-US) AppleWebKit/534.3 (KHTML, like Gecko) Chrome/6.0.472.33 Safari/534.3 SE 2.X MetaSr 1.0</span><br><span class="line">Mozilla/5.0 (compatible; MSIE 9.0; Windows NT 6.1; WOW64; Trident/5.0; SLCC2; .NET CLR 2.0.50727; .NET CLR 3.5.30729; .NET CLR 3.0.30729; Media Center PC 6.0; InfoPath.3; .NET4.0C; .NET4.0E)</span><br><span class="line">Mozilla/5.0 (Windows NT 6.1) AppleWebKit/535.1 (KHTML, like Gecko) Chrome/13.0.782.41 Safari/535.1 QQBrowser/6.9.11079.201</span><br><span class="line">Mozilla/4.0 (compatible; MSIE 7.0; Windows NT 6.1; WOW64; Trident/5.0; SLCC2; .NET CLR 2.0.50727; .NET CLR 3.5.30729; .NET CLR 3.0.30729; Media Center PC 6.0; InfoPath.3; .NET4.0C; .NET4.0E) QQBrowser/6.9.11079.201</span><br><span class="line">Mozilla/5.0 (compatible; MSIE 9.0; Windows NT 6.1; WOW64; Trident/5.0)</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+</blockquote>
+</blockquote>
+<h2 id="三-哥斯拉流量特征"><a href="#三-哥斯拉流量特征" class="headerlink" title="三. 哥斯拉流量特征"></a>三. 哥斯拉流量特征</h2><p>哥斯拉支持多种加密方式，采用了和冰蝎 2.0 类似的密钥交换方式。它的webshell需要动态生成，可以根据需求选择不同的加密方式。</p>
+<h3 id="1-哥斯拉静态特征"><a href="#1-哥斯拉静态特征" class="headerlink" title="1. 哥斯拉静态特征"></a>1. 哥斯拉静态特征</h3><blockquote>
+<p>在默认脚本编码的情况下，jsp会出现<code>xc、pass字符和Java反射(ClassLoader，getClass().getClassLoader())，base64加解码</code>等特征。</p>
+</blockquote>
+<h3 id="2-哥斯拉动态特征"><a href="#2-哥斯拉动态特征" class="headerlink" title="2. 哥斯拉动态特征"></a>2. 哥斯拉动态特征</h3><p><img src="https://s2.loli.net/2024/03/23/u2t7vJibzxmCYPA.png" alt="image-20240323160636216"></p>
+<blockquote>
+<ul>
+<li><p>User-Agent字段（弱特征），如果采用默认的情况，会暴露使用的jdk信息。不过哥斯拉支持自定义HTTP头部，这个默认特征是可以很容易去除的。</p>
+</li>
+<li><p>Accept字段（弱特征），默认是<code>Accept:text/html, image/gif, image/jpeg, *; q=.2, /; q=.2。</code>同上，这个也可修改，只能作为辅助检测的特征。</p>
+</li>
+<li><p><code>Cookie中有一个非常关键的特征，最后会有个分号</code>。估计后续的版本会修复。</p>
+<p><img src="https://s2.loli.net/2024/03/23/TEFDkwitnNAZVph.png" alt="image-20240323160217538"></p>
+</li>
+<li><p>响应体的数据有一定特征，哥斯拉会把一个32位的md5字符串按照一半拆分，分别放在base64编码的数据的前后两部分。整个响应包的结构体征为：md5前十六位+base64+md5后十六位。</p>
+</li>
+</ul>
+</blockquote>
+<h2 id="四-菜刀流量特征"><a href="#四-菜刀流量特征" class="headerlink" title="四. 菜刀流量特征"></a>四. 菜刀流量特征</h2><h3 id="1-菜刀静态特征"><a href="#1-菜刀静态特征" class="headerlink" title="1. 菜刀静态特征"></a>1. 菜刀静态特征</h3><blockquote>
+<p>菜刀使用一句话木马，特征十分明显，在PHP、ASP、ASP.NET的网站都可以：</p>
+</blockquote>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">PHP:  <span class="meta">&lt;?php</span> @<span class="keyword">eval</span>([<span class="variable">$_post</span>[<span class="string">&#x27;test&#x27;</span>]]); <span class="meta">?&gt;</span></span><br><span class="line">ASP:  &lt;% <span class="keyword">eval</span> <span class="title function_ invoke__">request</span>(<span class="string">&quot;test&quot;</span>)%&gt;</span><br><span class="line">ASP.NET:  &lt;%@ Page Language=<span class="string">&quot;Javascript&quot;</span>%&gt;&lt;% <span class="keyword">eval</span>(Request.Item[<span class="string">&quot;test&quot;</span>],<span class="string">&quot;unsafe&quot;</span>);%&gt;</span><br></pre></td></tr></table></figure>
+
+<h3 id="2-菜刀动态特征"><a href="#2-菜刀动态特征" class="headerlink" title="2. 菜刀动态特征"></a>2. 菜刀动态特征</h3><blockquote>
+<ul>
+<li><p><code>User-Agent:</code></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">百度: Mozilla/5.0 (compatible; Baiduspider/2.0; +http://www.baidu.com/search/spider.html)</span><br><span class="line">火狐: Mozilla/5.0 (Windows NT 6.1; rv:2.0.1) Gecko/20100101 Firefox/4.0.1</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>payload在请求体中，采用url编码+base64编码，payload部分是明文传输。</p>
+</li>
+<li><p>payload中有eval或assert、base64_decode这样的字符。</p>
+</li>
+<li><p>payload中有默认固定的<code>&amp;z0=QGluaV9zZXQ...</code>这样base64加密的攻击载荷，参数z0对应<code>$_POST[z0]</code>接收到的数据，且固定为<code>QGluaV9zZXQ</code>开头。进行base64解码后可看到代码：<code>@ini_set(&quot;display_errors&quot;,&quot;0&quot;);@set_time_limit(0);@set_magic_quotes_runtime(0);</code>这段意思是首先关闭报错和magic_quotes，接下来去获取主机的信息。</p>
+</li>
+</ul>
+</blockquote>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta">文章作者: </span><span class="post-copyright-info"><a href="http://RuiJiLuo.github.io">Rui Ji</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta">文章链接: </span><span class="post-copyright-info"><a href="http://ruijiluo.github.io/2024/03/23/webshell%E5%B7%A5%E5%85%B7%E6%B5%81%E9%87%8F%E7%89%B9%E5%BE%81/">http://ruijiluo.github.io/2024/03/23/webshell%E5%B7%A5%E5%85%B7%E6%B5%81%E9%87%8F%E7%89%B9%E5%BE%81/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta">版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来自 <a href="http://RuiJiLuo.github.io" target="_blank">RJ の 博客</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"></div><div class="post_share"><div class="social-share" data-image="https://s2.loli.net/2024/03/23/d4FV63Y2olLUuKn.jpg" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><div class="prev-post pull-left"><a href="/2024/05/14/%E5%B8%B8%E7%94%A8%E5%8D%95%E8%AF%8D/" title="常用单词"><img class="cover" src="https://s2.loli.net/2024/03/02/FDPTWtXMoQ7Z5ea.jpg" onerror="onerror=null;src='/img/404.jpg'" alt="cover of previous post"><div class="pagination-info"><div class="label">上一篇</div><div class="prev_info">常用单词</div></div></a></div><div class="next-post pull-right"><a href="/2024/03/12/sqlmap%E7%AE%80%E5%8D%95%E4%BD%BF%E7%94%A8/" title="sqlmap简单使用"><img class="cover" src="https://s2.loli.net/2024/03/12/6NXSyKVvalT9i5G.jpg" onerror="onerror=null;src='/img/404.jpg'" alt="cover of next post"><div class="pagination-info"><div class="label">下一篇</div><div class="next_info">sqlmap简单使用</div></div></a></div></nav></div><div class="aside-content" id="aside-content"><div class="card-widget card-info"><div class="is-center"><div class="avatar-img"><img src="https://s2.loli.net/2023/09/07/oZOaspjYrzmT5e9.jpg" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info__name">Rui Ji</div><div class="author-info__description">私 の hacker 夢</div></div><div class="card-info-data site-data is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">27</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">1</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">0</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/ruijiluo"><i class="fab fa-github"></i><span>Follow Me</span></a></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%86%B0%E8%9D%8E%E3%80%81%E8%9A%81%E5%89%91%E3%80%81%E5%93%A5%E6%96%AF%E6%8B%89%E3%80%81%E8%8F%9C%E5%88%80%E7%9A%84%E6%B5%81%E9%87%8F%E7%89%B9%E5%BE%81"><span class="toc-text">冰蝎、蚁剑、哥斯拉、菜刀的流量特征</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%80-%E8%9A%81%E5%89%91%E6%B5%81%E9%87%8F%E7%89%B9%E5%BE%81"><span class="toc-text">一. 蚁剑流量特征</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-%E8%9A%81%E5%89%91webshell%E9%9D%99%E6%80%81%E7%89%B9%E5%BE%81"><span class="toc-text">1. 蚁剑webshell静态特征</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-%E8%9A%81%E5%89%91webshell%E5%8A%A8%E6%80%81%E7%89%B9%E5%BE%81"><span class="toc-text">2. 蚁剑webshell动态特征</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BA%8C-%E5%86%B0%E8%9D%8E%E6%B5%81%E9%87%8F%E7%89%B9%E5%BE%81"><span class="toc-text">二. 冰蝎流量特征</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-%E5%86%B0%E8%9D%8E2-0"><span class="toc-text">1. 冰蝎2.0</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-%E5%86%B0%E8%9D%8E3-0"><span class="toc-text">2. 冰蝎3.0</span></a><ol class="toc-child"><li class="toc-item toc-level-6"><a class="toc-link" href="#2-3-%E5%86%B0%E8%9D%8E4-0"><span class="toc-text">2.3 冰蝎4.0</span></a></li><li class="toc-item toc-level-6"><a class="toc-link" href="#%E5%86%85%E7%BD%AE%E7%9A%8416%E4%B8%AAua%EF%BC%9A"><span class="toc-text">内置的16个ua：</span></a></li></ol></li></ol></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%89-%E5%93%A5%E6%96%AF%E6%8B%89%E6%B5%81%E9%87%8F%E7%89%B9%E5%BE%81"><span class="toc-text">三. 哥斯拉流量特征</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-%E5%93%A5%E6%96%AF%E6%8B%89%E9%9D%99%E6%80%81%E7%89%B9%E5%BE%81"><span class="toc-text">1. 哥斯拉静态特征</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-%E5%93%A5%E6%96%AF%E6%8B%89%E5%8A%A8%E6%80%81%E7%89%B9%E5%BE%81"><span class="toc-text">2. 哥斯拉动态特征</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%9B%9B-%E8%8F%9C%E5%88%80%E6%B5%81%E9%87%8F%E7%89%B9%E5%BE%81"><span class="toc-text">四. 菜刀流量特征</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-%E8%8F%9C%E5%88%80%E9%9D%99%E6%80%81%E7%89%B9%E5%BE%81"><span class="toc-text">1. 菜刀静态特征</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-%E8%8F%9C%E5%88%80%E5%8A%A8%E6%80%81%E7%89%B9%E5%BE%81"><span class="toc-text">2. 菜刀动态特征</span></a></li></ol></li></ol></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item"><a class="thumbnail" href="/2024/11/14/pwn/" title="pwn"><img src="https://s2.loli.net/2024/03/07/Dxc6Z5vWzdCfQIP.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="pwn"/></a><div class="content"><a class="title" href="/2024/11/14/pwn/" title="pwn">pwn</a><time datetime="2024-11-14T09:15:12.000Z" title="发表于 2024-11-14 17:15:12">2024-11-14</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2024/09/12/app%E6%B8%97%E9%80%8F/" title="app渗透"><img src="https://s2.loli.net/2024/03/07/Dxc6Z5vWzdCfQIP.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="app渗透"/></a><div class="content"><a class="title" href="/2024/09/12/app%E6%B8%97%E9%80%8F/" title="app渗透">app渗透</a><time datetime="2024-09-12T11:35:21.000Z" title="发表于 2024-09-12 19:35:21">2024-09-12</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2024/09/12/%E5%86%85%E7%BD%91%E6%B8%97%E9%80%8F/" title="内网渗透"><img src="https://s2.loli.net/2024/03/07/Dxc6Z5vWzdCfQIP.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="内网渗透"/></a><div class="content"><a class="title" href="/2024/09/12/%E5%86%85%E7%BD%91%E6%B8%97%E9%80%8F/" title="内网渗透">内网渗透</a><time datetime="2024-09-12T11:32:28.000Z" title="发表于 2024-09-12 19:32:28">2024-09-12</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2024/09/12/%E4%BB%A3%E7%A0%81%E5%AE%A1%E8%AE%A1/" title="代码审计"><img src="https://s2.loli.net/2024/03/07/Dxc6Z5vWzdCfQIP.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="代码审计"/></a><div class="content"><a class="title" href="/2024/09/12/%E4%BB%A3%E7%A0%81%E5%AE%A1%E8%AE%A1/" title="代码审计">代码审计</a><time datetime="2024-09-12T11:31:50.000Z" title="发表于 2024-09-12 19:31:50">2024-09-12</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2024/09/12/js%E9%80%86%E5%90%91/" title="js逆向"><img src="https://s2.loli.net/2024/03/07/Dxc6Z5vWzdCfQIP.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="js逆向"/></a><div class="content"><a class="title" href="/2024/09/12/js%E9%80%86%E5%90%91/" title="js逆向">js逆向</a><time datetime="2024-09-12T11:31:20.000Z" title="发表于 2024-09-12 19:31:20">2024-09-12</time></div></div></div></div></div></div></main><footer id="footer"><div id="footer-wrap"><div class="copyright">&copy;2020 - 2025 By Rui Ji</div><div class="framework-info"><span>框架 </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo</a><span class="footer-separator">|</span><span>主题 </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly</a></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="浅色和深色模式转换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside_config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><button id="go-up" type="button" title="回到顶部"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox/fancybox.umd.min.js"></script><div class="js-pjax"></div><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div></body></html>

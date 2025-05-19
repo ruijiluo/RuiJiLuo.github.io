@@ -1,0 +1,263 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>不安全的文件下载和上传漏洞 | RJ の 博客</title><meta name="author" content="Rui Ji"><meta name="copyright" content="Rui Ji"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="ffffff"><meta name="description" content="一.不安全的文件下载概述 (Unsafe Filedownload) 文件下载功能在很多web系统上都会出现，一般我们当点击下载链接，便会向后台发送一个下载请求，一般这个请求会包含一个需要下载的文件名称，后台在收到请求后 会开始执行下载代码，将该文件名对应的文件response给浏览器，从而完成下载。  此时如果 攻击者提交的不是一个程序预期的的文件名，而是一个精心构造的路径(如..&#x2F;.">
+<meta property="og:type" content="article">
+<meta property="og:title" content="不安全的文件下载和上传漏洞">
+<meta property="og:url" content="http://ruijiluo.github.io/2024/03/03/%E4%B8%8D%E5%AE%89%E5%85%A8%E7%9A%84%E6%96%87%E4%BB%B6%E4%B8%8A%E4%BC%A0%E5%92%8C%E4%B8%8B%E8%BD%BD%E6%BC%8F%E6%B4%9E/index.html">
+<meta property="og:site_name" content="RJ の 博客">
+<meta property="og:description" content="一.不安全的文件下载概述 (Unsafe Filedownload) 文件下载功能在很多web系统上都会出现，一般我们当点击下载链接，便会向后台发送一个下载请求，一般这个请求会包含一个需要下载的文件名称，后台在收到请求后 会开始执行下载代码，将该文件名对应的文件response给浏览器，从而完成下载。  此时如果 攻击者提交的不是一个程序预期的的文件名，而是一个精心构造的路径(如..&#x2F;.">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://s2.loli.net/2024/03/06/fEnS7bLZK1im4rO.png">
+<meta property="article:published_time" content="2024-03-02T18:42:48.000Z">
+<meta property="article:modified_time" content="2024-03-06T15:49:39.043Z">
+<meta property="article:author" content="Rui Ji">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://s2.loli.net/2024/03/06/fEnS7bLZK1im4rO.png"><link rel="shortcut icon" href="https://s2.loli.net/2023/09/07/hRcHvbPo15QmB7T.png"><link rel="canonical" href="http://ruijiluo.github.io/2024/03/03/%E4%B8%8D%E5%AE%89%E5%85%A8%E7%9A%84%E6%96%87%E4%BB%B6%E4%B8%8A%E4%BC%A0%E5%92%8C%E4%B8%8B%E8%BD%BD%E6%BC%8F%E6%B4%9E/index.html"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css" media="print" onload="this.media='all'"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox/fancybox.min.css" media="print" onload="this.media='all'"><script>const GLOBAL_CONFIG = {
+  root: '/',
+  algolia: undefined,
+  localSearch: undefined,
+  translate: undefined,
+  noticeOutdate: undefined,
+  highlight: {"plugin":"highlighjs","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false},
+  copy: {
+    success: '复制成功',
+    error: '复制错误',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  dateSuffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  lightbox: 'fancybox',
+  Snackbar: undefined,
+  source: {
+    justifiedGallery: {
+      js: 'https://cdn.jsdelivr.net/npm/flickr-justified-gallery/dist/fjGallery.min.js',
+      css: 'https://cdn.jsdelivr.net/npm/flickr-justified-gallery/dist/fjGallery.min.css'
+    }
+  },
+  isPhotoFigcaption: false,
+  islazyload: false,
+  isAnchor: false,
+  percent: {
+    toc: true,
+    rightside: false,
+  },
+  autoDarkmode: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: '不安全的文件下载和上传漏洞',
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: false,
+  isToc: true,
+  postUpdate: '2024-03-06 23:49:39'
+}</script><noscript><style type="text/css">
+  #nav {
+    opacity: 1
+  }
+  .justified-gallery img {
+    opacity: 1
+  }
+
+  #recent-posts time,
+  #post-meta time {
+    display: inline !important
+  }
+</style></noscript><script>(win=>{
+    win.saveToLocal = {
+      set: function setWithExpiry(key, value, ttl) {
+        if (ttl === 0) return
+        const now = new Date()
+        const expiryDay = ttl * 86400000
+        const item = {
+          value: value,
+          expiry: now.getTime() + expiryDay,
+        }
+        localStorage.setItem(key, JSON.stringify(item))
+      },
+
+      get: function getWithExpiry(key) {
+        const itemStr = localStorage.getItem(key)
+
+        if (!itemStr) {
+          return undefined
+        }
+        const item = JSON.parse(itemStr)
+        const now = new Date()
+
+        if (now.getTime() > item.expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return item.value
+      }
+    }
+  
+    win.getScript = url => new Promise((resolve, reject) => {
+      const script = document.createElement('script')
+      script.src = url
+      script.async = true
+      script.onerror = reject
+      script.onload = script.onreadystatechange = function() {
+        const loadState = this.readyState
+        if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+        script.onload = script.onreadystatechange = null
+        resolve()
+      }
+      document.head.appendChild(script)
+    })
+  
+    win.getCSS = (url,id = false) => new Promise((resolve, reject) => {
+      const link = document.createElement('link')
+      link.rel = 'stylesheet'
+      link.href = url
+      if (id) link.id = id
+      link.onerror = reject
+      link.onload = link.onreadystatechange = function() {
+        const loadState = this.readyState
+        if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+        link.onload = link.onreadystatechange = null
+        resolve()
+      }
+      document.head.appendChild(link)
+    })
+  
+      win.activateDarkMode = function () {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      win.activateLightMode = function () {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', 'ffffff')
+        }
+      }
+      const t = saveToLocal.get('theme')
+    
+          if (t === 'dark') activateDarkMode()
+          else if (t === 'light') activateLightMode()
+        
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        if (asideStatus === 'hide') {
+          document.documentElement.classList.add('hide-aside')
+        } else {
+          document.documentElement.classList.remove('hide-aside')
+        }
+      }
+    
+    const detectApple = () => {
+      if(/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)){
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+    })(window)</script><link rel="stylesheet" href="./themes/butterfly/source/css/bg_color.css"><meta name="generator" content="Hexo 6.3.0"></head><body><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img is-center"><img src="https://s2.loli.net/2023/09/07/oZOaspjYrzmT5e9.jpg" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="sidebar-site-data site-data is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">27</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">1</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">0</div></a></div><hr class="custom-hr"/><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page group" href="javascript:void(0);"><i class="fa-fw fas fa-book"></i><span> 文章</span><i class="fas fa-chevron-down"></i></a><ul class="menus_item_child"><li><a class="site-page child" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 归档</span></a></li><li><a class="site-page child" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></li><li><a class="site-page child" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></li></ul></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header" style="background-image: url('https://s2.loli.net/2024/03/06/fEnS7bLZK1im4rO.png')"><nav id="nav"><span id="blog-info"><a href="/" title="RJ の 博客"><span class="site-name">RJ の 博客</span></a></span><div id="menus"><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page group" href="javascript:void(0);"><i class="fa-fw fas fa-book"></i><span> 文章</span><i class="fas fa-chevron-down"></i></a><ul class="menus_item_child"><li><a class="site-page child" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 归档</span></a></li><li><a class="site-page child" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></li><li><a class="site-page child" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></li></ul></div></div><div id="toggle-menu"><a class="site-page" href="javascript:void(0);"><i class="fas fa-bars fa-fw"></i></a></div></div></nav><div id="post-info"><h1 class="post-title">不安全的文件下载和上传漏洞</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2024-03-02T18:42:48.000Z" title="发表于 2024-03-03 02:42:48">2024-03-03</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2024-03-06T15:49:39.043Z" title="更新于 2024-03-06 23:49:39">2024-03-06</time></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title="不安全的文件下载和上传漏洞"><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">阅读量:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="post-content" id="article-container"><h4 id="一-不安全的文件下载概述-Unsafe-Filedownload"><a href="#一-不安全的文件下载概述-Unsafe-Filedownload" class="headerlink" title="一.不安全的文件下载概述 (Unsafe Filedownload)"></a>一.不安全的文件下载概述 (Unsafe Filedownload)</h4><ul>
+<li><p>文件下载功能在很多web系统上都会出现，一般我们当点击下载链接，便会向后台发送一个下载请求，一般这个请求会包含一个需要下载的文件名称，后台在收到请求后 会开始执行下载代码，将该文件名对应的文件response给浏览器，从而完成下载。</p>
+</li>
+<li><p>此时如果 攻击者提交的不是一个程序预期的的文件名，而是一个精心构造的路径(如..&#x2F;..&#x2F;..&#x2F;etc&#x2F;passwd),则很有可能会直接将该指定的文件下载下来。 从而导致后台敏感信息(密码文件、源代码等)被下载。</p>
+</li>
+</ul>
+<h4 id="二-不安全的文件上传概述-Unsafe-Fileupload"><a href="#二-不安全的文件上传概述-Unsafe-Fileupload" class="headerlink" title="二.不安全的文件上传概述(Unsafe Fileupload)"></a>二.不安全的文件上传概述(Unsafe Fileupload)</h4><ul>
+<li><p>文件上传功能在web应用系统很常见，比如很多网站注册的时候需要上传头像、上传附件等等。当用户点击上传按钮后，后台会对上传的文件进行判断 比如是否是指定的类型、后缀名、大小等等，然后将其按照设计的格式进行重命名后存储在指定的目录。 如果说后台对上传的文件没有进行任何的安全判断或者判断条件不够严谨，则攻击着可能会上传一些恶意的文件，比如一句话木马，从而导致后台服务器被webshell。</p>
+</li>
+<li><p>所以，在设计文件上传功能时，一定要对传进来的文件进行严格的安全考虑。比如：</p>
+<ol>
+<li>验证文件类型、后缀名、大小;</li>
+<li>验证文件的上传方式;</li>
+<li>对文件进行一定复杂的重命名;</li>
+<li>不要暴露文件上传后的路径;</li>
+</ol>
+</li>
+</ul>
+<h4 id="三-文件下载漏洞演示"><a href="#三-文件下载漏洞演示" class="headerlink" title="三.文件下载漏洞演示"></a>三.文件下载漏洞演示</h4><h5 id="1-Unsafe-Filedownload"><a href="#1-Unsafe-Filedownload" class="headerlink" title="1.Unsafe Filedownload"></a>1.Unsafe Filedownload</h5><p><img src="https://s2.loli.net/2024/03/04/hEMoS8NAX16wr9m.png" alt="image-20240304001115956"></p>
+<ul>
+<li><p>使用浏览器查看元素可以发现,链接被点击后会跳转到href&#x3D;”execdownload.php同时通过get传递filename&#x3D;kb.png</p>
+<img src="https://s2.loli.net/2024/03/04/NbPvwoFmLjHJ6tI.png" alt="image-20240304213348056" style="zoom:108%;" />
+
+
+</li>
+<li><p>直接通过url访问execdownload.php,使filename&#x3D;..&#x2F;..&#x2F;..&#x2F;..&#x2F;..&#x2F;..&#x2F;..&#x2F;笔记&#x2F;Git学习.md可以直接下载后台的笔记&#x2F;Git学习.md</p>
+<img src="https://s2.loli.net/2024/03/04/JPTSjOnqsAoRB6K.png" alt="image-20240304214311490" style="zoom: 45%;" />
+
+
+</li>
+<li><p>查看后端源码可以发现,后端php代码直接将前端的filename对应的路径的文件通过http发送到了浏览器,未对路径进行检验</p>
+<img src="https://s2.loli.net/2024/03/04/8tAEh7Corl4YueP.png" alt="image-20240304214924561" style="zoom:63%;" /></li>
+</ul>
+<h4 id="四-文件上传漏洞演示"><a href="#四-文件上传漏洞演示" class="headerlink" title="四.文件上传漏洞演示"></a>四.文件上传漏洞演示</h4><h5 id="1-client"><a href="#1-client" class="headerlink" title="1.client"></a>1.client</h5><ul>
+<li><p>当文件上传时只通过前端js等技术进行检验时可以使用浏览器控制台修改前端代码绕过</p>
+<p><img src="https://s2.loli.net/2024/03/04/HinFKgjI2ye6Xq3.png" alt="image-20240304233934459"></p>
+</li>
+<li><p>上传一句话木马php文件yijuihua.php,发现无法上传</p>
+<p>​                          <img src="https://s2.loli.net/2024/03/05/rBGhozjlbJ7M8vN.png" alt="image-20240305002028699" style="zoom:123%;" /> </p>
+<p><img src="https://s2.loli.net/2024/03/04/YeHryg7ZJak1FVI.png" alt="image-20240304234933680"></p>
+</li>
+<li><p>检查元素可以发现,当上传文件时会触发事件调用checkFileExt()js函数对文件后缀进行检验</p>
+<img src="https://s2.loli.net/2024/03/04/eglTnONpmihLWrY.png" alt="image-20240304234145907" style="zoom:95%;" />
+
+<p><img src="https://s2.loli.net/2024/03/04/vf9WigHF3GEoPDs.png" alt="image-20240304234300353"></p>
+</li>
+<li><p>可以将文件改为png后通过抓包改回php,即可上传yijuihua.php</p>
+<p><img src="https://s2.loli.net/2024/03/05/C8IT5N9q4EWhy7s.png" alt="image-20240305000920396"></p>
+</li>
+<li><p>通过提示的路径访问yijuihua.php可以webshell(一般路径要通过猜测或暴力破解等方式获得)</p>
+<p><img src="https://s2.loli.net/2024/03/05/vyp5OeDmcSfWQ2E.png" alt="image-20240305001228696"></p>
+<img src="https://s2.loli.net/2024/03/05/VI8dUDnz5jZM3vC.png" alt="image-20240305002132973" style="zoom:82%;" /></li>
+</ul>
+<h5 id="2-MIME-type"><a href="#2-MIME-type" class="headerlink" title="2.MIME type"></a>2.MIME type</h5><ul>
+<li><p>MIME是多用途互联网扩展邮件类型,多用于指定一些客户自定义的文件名和一些媒体文件打开方式</p>
+<p>比如:</p>
+<p>超文本标记语言文本，html,.html text&#x2F;html<br>普通文本   txt text&#x2F;plain<br>RTF文本    rtf application&#x2F;&#x2F;rtf<br>GlF图形     gif image&#x2F;gif<br>JPEG图形   ipeg,.jpg image&#x2F;jpeg</p>
+<p>PNG图像   image&#x2F;png</p>
+</li>
+<li><p>**$_FILES()**是PHP中一个全局函数</p>
+<p>可以从客户计算机向远程服务器上传文件。<br>第一个参数是表单的input name,第二个下标可以是”name”,”type”,”size”,”tmp_name”或“error”</p>
+</li>
+</ul>
+<p><img src="https://s2.loli.net/2024/03/05/39uwUhxSPy4OReM.png" alt="image-20240305041831836"></p>
+<ul>
+<li>通过查看元素并不能发现检验手段,上传php文件后通过抓包可以发现文件的MIME类型为</li>
+</ul>
+<p><img src="https://s2.loli.net/2024/03/05/sYGmT6ICiVyaO3E.png" alt="image-20240305153158966"></p>
+<ul>
+<li><p>将Content-Type改为：Content-Type: image&#x2F;png</p>
+<p><img src="https://s2.loli.net/2024/03/05/sUmOZix6TV7oWwF.png" alt="image-20240305154039303"></p>
+</li>
+</ul>
+<h5 id="3-getimagesize"><a href="#3-getimagesize" class="headerlink" title="3.getimagesize"></a>3.getimagesize</h5><ul>
+<li><p>php中的getimagesize()可以返回文件大小和文件类型，如果用这个函数来获取类型，从而判<br>断是否是图片的话，会存在问题,因为该函数通过图片16进制的片头来判断类型。</p>
+</li>
+<li><p>可以伪造图片头制作图片木马来绕过:<br>方法1:   CMD: copy &#x2F;b test.png + muma.php  tpm.png<br>方法2:   使用GIMP（开源的图片修改软件），通过增加备注，写入执行命令</p>
+<p><img src="https://s2.loli.net/2024/03/05/jyiA5hrMzZYDBbF.png" alt="image-20240305174240782"></p>
+</li>
+<li><p>测试可以发现，不能通过client和MIME type绕过，猜测后端使用了php中的Getimagesize()</p>
+<p>使用方法1制作图片马绕过</p>
+<p><img src="https://s2.loli.net/2024/03/05/h4LgE6boTztKJqy.png" alt="image-20240305180052633"></p>
+</li>
+<li><p>可以发现tmp.png的16进制后部为一句话木马</p>
+</li>
+</ul>
+<img src="https://s2.loli.net/2024/03/05/GNjiqeXforKJL9z.png" alt="image-20240305180140309" style="zoom:102%;" />
+
+
+
+<h6 id="3-1图片马的利用"><a href="#3-1图片马的利用" class="headerlink" title="3.1图片马的利用"></a>3.1图片马的利用</h6><ul>
+<li><p>通过猜测或暴力破解等方式获得路径后我们并不能直接利用图片马，往往要结合其他漏洞，当文件上传目录为可执行目录时，我们可以利用本地文件包含来执行图片马(使用include包含文件时忽略语法错误执行)</p>
+</li>
+<li><p>图片马路径为..&#x2F;vul&#x2F;unsafeupload&#x2F;uploads&#x2F;2024&#x2F;03&#x2F;05&#x2F;53200865e6f57410be9081040430.png</p>
+</li>
+<li><p>通过以下链接利用图片马：<a target="_blank" rel="noopener" href="http://127.0.0.1:8083/vul/fileinclude/fi_local.php?filename=../../unsafeupload/uploads/2024/03/05/53200865e6f57410be9081040430.png&x=ipconfig&submit=%E6%8F%90%E4%BA%A4">http://127.0.0.1:8083/vul/fileinclude/fi_local.php?filename=../../unsafeupload/uploads/2024/03/05/53200865e6f57410be9081040430.png&amp;x=ipconfig&amp;submit=%E6%8F%90%E4%BA%A4</a></p>
+</li>
+</ul>
+<img src="https://s2.loli.net/2024/03/05/RPKv4yfcQle9hki.png" alt="image-20240305191958687" style="zoom: 80%;" />
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta">文章作者: </span><span class="post-copyright-info"><a href="http://RuiJiLuo.github.io">Rui Ji</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta">文章链接: </span><span class="post-copyright-info"><a href="http://ruijiluo.github.io/2024/03/03/%E4%B8%8D%E5%AE%89%E5%85%A8%E7%9A%84%E6%96%87%E4%BB%B6%E4%B8%8A%E4%BC%A0%E5%92%8C%E4%B8%8B%E8%BD%BD%E6%BC%8F%E6%B4%9E/">http://ruijiluo.github.io/2024/03/03/%E4%B8%8D%E5%AE%89%E5%85%A8%E7%9A%84%E6%96%87%E4%BB%B6%E4%B8%8A%E4%BC%A0%E5%92%8C%E4%B8%8B%E8%BD%BD%E6%BC%8F%E6%B4%9E/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta">版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来自 <a href="http://RuiJiLuo.github.io" target="_blank">RJ の 博客</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"></div><div class="post_share"><div class="social-share" data-image="https://s2.loli.net/2024/03/06/fEnS7bLZK1im4rO.png" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><div class="prev-post pull-left"><a href="/2024/03/07/%E8%B6%8A%E6%9D%83%E6%BC%8F%E6%B4%9E%E4%B9%8B%E6%B0%B4%E5%B9%B3%E8%B6%8A%E6%9D%83%E5%92%8C%E5%9E%82%E7%9B%B4%E8%B6%8A%E6%9D%83/" title="越权漏洞之水平越权和垂直越权"><img class="cover" src="https://s2.loli.net/2024/03/07/uWZHva8gfL7eqIM.png" onerror="onerror=null;src='/img/404.jpg'" alt="cover of previous post"><div class="pagination-info"><div class="label">上一篇</div><div class="prev_info">越权漏洞之水平越权和垂直越权</div></div></a></div><div class="next-post pull-right"><a href="/2024/03/02/%E6%96%87%E4%BB%B6%E5%8C%85%E5%90%AB/" title="File Inclusion文件包含漏洞"><img class="cover" src="https://s2.loli.net/2024/03/02/5l3ZSVXEKxgi27F.jpg" onerror="onerror=null;src='/img/404.jpg'" alt="cover of next post"><div class="pagination-info"><div class="label">下一篇</div><div class="next_info">File Inclusion文件包含漏洞</div></div></a></div></nav></div><div class="aside-content" id="aside-content"><div class="card-widget card-info"><div class="is-center"><div class="avatar-img"><img src="https://s2.loli.net/2023/09/07/oZOaspjYrzmT5e9.jpg" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info__name">Rui Ji</div><div class="author-info__description">私 の hacker 夢</div></div><div class="card-info-data site-data is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">27</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">1</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">0</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/ruijiluo"><i class="fab fa-github"></i><span>Follow Me</span></a></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E4%B8%80-%E4%B8%8D%E5%AE%89%E5%85%A8%E7%9A%84%E6%96%87%E4%BB%B6%E4%B8%8B%E8%BD%BD%E6%A6%82%E8%BF%B0-Unsafe-Filedownload"><span class="toc-text">一.不安全的文件下载概述 (Unsafe Filedownload)</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E4%BA%8C-%E4%B8%8D%E5%AE%89%E5%85%A8%E7%9A%84%E6%96%87%E4%BB%B6%E4%B8%8A%E4%BC%A0%E6%A6%82%E8%BF%B0-Unsafe-Fileupload"><span class="toc-text">二.不安全的文件上传概述(Unsafe Fileupload)</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E4%B8%89-%E6%96%87%E4%BB%B6%E4%B8%8B%E8%BD%BD%E6%BC%8F%E6%B4%9E%E6%BC%94%E7%A4%BA"><span class="toc-text">三.文件下载漏洞演示</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#1-Unsafe-Filedownload"><span class="toc-text">1.Unsafe Filedownload</span></a></li></ol></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%9B%9B-%E6%96%87%E4%BB%B6%E4%B8%8A%E4%BC%A0%E6%BC%8F%E6%B4%9E%E6%BC%94%E7%A4%BA"><span class="toc-text">四.文件上传漏洞演示</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#1-client"><span class="toc-text">1.client</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#2-MIME-type"><span class="toc-text">2.MIME type</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#3-getimagesize"><span class="toc-text">3.getimagesize</span></a><ol class="toc-child"><li class="toc-item toc-level-6"><a class="toc-link" href="#3-1%E5%9B%BE%E7%89%87%E9%A9%AC%E7%9A%84%E5%88%A9%E7%94%A8"><span class="toc-text">3.1图片马的利用</span></a></li></ol></li></ol></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item"><a class="thumbnail" href="/2024/11/14/pwn/" title="pwn"><img src="https://s2.loli.net/2024/03/07/Dxc6Z5vWzdCfQIP.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="pwn"/></a><div class="content"><a class="title" href="/2024/11/14/pwn/" title="pwn">pwn</a><time datetime="2024-11-14T09:15:12.000Z" title="发表于 2024-11-14 17:15:12">2024-11-14</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2024/09/12/app%E6%B8%97%E9%80%8F/" title="app渗透"><img src="https://s2.loli.net/2024/03/07/Dxc6Z5vWzdCfQIP.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="app渗透"/></a><div class="content"><a class="title" href="/2024/09/12/app%E6%B8%97%E9%80%8F/" title="app渗透">app渗透</a><time datetime="2024-09-12T11:35:21.000Z" title="发表于 2024-09-12 19:35:21">2024-09-12</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2024/09/12/%E5%86%85%E7%BD%91%E6%B8%97%E9%80%8F/" title="内网渗透"><img src="https://s2.loli.net/2024/03/07/Dxc6Z5vWzdCfQIP.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="内网渗透"/></a><div class="content"><a class="title" href="/2024/09/12/%E5%86%85%E7%BD%91%E6%B8%97%E9%80%8F/" title="内网渗透">内网渗透</a><time datetime="2024-09-12T11:32:28.000Z" title="发表于 2024-09-12 19:32:28">2024-09-12</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2024/09/12/%E4%BB%A3%E7%A0%81%E5%AE%A1%E8%AE%A1/" title="代码审计"><img src="https://s2.loli.net/2024/03/07/Dxc6Z5vWzdCfQIP.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="代码审计"/></a><div class="content"><a class="title" href="/2024/09/12/%E4%BB%A3%E7%A0%81%E5%AE%A1%E8%AE%A1/" title="代码审计">代码审计</a><time datetime="2024-09-12T11:31:50.000Z" title="发表于 2024-09-12 19:31:50">2024-09-12</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2024/09/12/js%E9%80%86%E5%90%91/" title="js逆向"><img src="https://s2.loli.net/2024/03/07/Dxc6Z5vWzdCfQIP.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="js逆向"/></a><div class="content"><a class="title" href="/2024/09/12/js%E9%80%86%E5%90%91/" title="js逆向">js逆向</a><time datetime="2024-09-12T11:31:20.000Z" title="发表于 2024-09-12 19:31:20">2024-09-12</time></div></div></div></div></div></div></main><footer id="footer"><div id="footer-wrap"><div class="copyright">&copy;2020 - 2025 By Rui Ji</div><div class="framework-info"><span>框架 </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo</a><span class="footer-separator">|</span><span>主题 </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly</a></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="浅色和深色模式转换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside_config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><button id="go-up" type="button" title="回到顶部"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox/fancybox.umd.min.js"></script><div class="js-pjax"></div><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div></body></html>

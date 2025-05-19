@@ -1,0 +1,839 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>计网知识总结 | RJ の 博客</title><meta name="author" content="Rui Ji"><meta name="copyright" content="Rui Ji"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="ffffff"><meta name="description" content="一.计网知识总结一、计算机网络概述    1.1 计算机网络的分类按照网络的作用范围：广域网（WAN）、城域网（MAN）、局域网（LAN）； 按照网络使用者：公用网络、专用网络。 1.2 计算机网络的层次结构  TCP&#x2F;IP四层模型与OSI体系结构对比：  1.3 层次结构设计的基本原则 各层之间是相互独立的； 每一层需要有足够的灵活性； 各层之间完全解耦。    1.4 计算机网络的性">
+<meta property="og:type" content="article">
+<meta property="og:title" content="计网知识总结">
+<meta property="og:url" content="http://ruijiluo.github.io/2023/09/07/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/index.html">
+<meta property="og:site_name" content="RJ の 博客">
+<meta property="og:description" content="一.计网知识总结一、计算机网络概述    1.1 计算机网络的分类按照网络的作用范围：广域网（WAN）、城域网（MAN）、局域网（LAN）； 按照网络使用者：公用网络、专用网络。 1.2 计算机网络的层次结构  TCP&#x2F;IP四层模型与OSI体系结构对比：  1.3 层次结构设计的基本原则 各层之间是相互独立的； 每一层需要有足够的灵活性； 各层之间完全解耦。    1.4 计算机网络的性">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://s2.loli.net/2023/09/07/1e3XvsuNQrkL7aV.jpg">
+<meta property="article:published_time" content="2023-09-07T09:16:24.863Z">
+<meta property="article:modified_time" content="2023-09-08T15:33:22.889Z">
+<meta property="article:author" content="Rui Ji">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://s2.loli.net/2023/09/07/1e3XvsuNQrkL7aV.jpg"><link rel="shortcut icon" href="https://s2.loli.net/2023/09/07/hRcHvbPo15QmB7T.png"><link rel="canonical" href="http://ruijiluo.github.io/2023/09/07/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/index.html"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css" media="print" onload="this.media='all'"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox/fancybox.min.css" media="print" onload="this.media='all'"><script>const GLOBAL_CONFIG = {
+  root: '/',
+  algolia: undefined,
+  localSearch: undefined,
+  translate: undefined,
+  noticeOutdate: undefined,
+  highlight: {"plugin":"highlighjs","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false},
+  copy: {
+    success: '复制成功',
+    error: '复制错误',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  dateSuffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  lightbox: 'fancybox',
+  Snackbar: undefined,
+  source: {
+    justifiedGallery: {
+      js: 'https://cdn.jsdelivr.net/npm/flickr-justified-gallery/dist/fjGallery.min.js',
+      css: 'https://cdn.jsdelivr.net/npm/flickr-justified-gallery/dist/fjGallery.min.css'
+    }
+  },
+  isPhotoFigcaption: false,
+  islazyload: false,
+  isAnchor: false,
+  percent: {
+    toc: true,
+    rightside: false,
+  },
+  autoDarkmode: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: '计网知识总结',
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: false,
+  isToc: true,
+  postUpdate: '2023-09-08 23:33:22'
+}</script><noscript><style type="text/css">
+  #nav {
+    opacity: 1
+  }
+  .justified-gallery img {
+    opacity: 1
+  }
+
+  #recent-posts time,
+  #post-meta time {
+    display: inline !important
+  }
+</style></noscript><script>(win=>{
+    win.saveToLocal = {
+      set: function setWithExpiry(key, value, ttl) {
+        if (ttl === 0) return
+        const now = new Date()
+        const expiryDay = ttl * 86400000
+        const item = {
+          value: value,
+          expiry: now.getTime() + expiryDay,
+        }
+        localStorage.setItem(key, JSON.stringify(item))
+      },
+
+      get: function getWithExpiry(key) {
+        const itemStr = localStorage.getItem(key)
+
+        if (!itemStr) {
+          return undefined
+        }
+        const item = JSON.parse(itemStr)
+        const now = new Date()
+
+        if (now.getTime() > item.expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return item.value
+      }
+    }
+  
+    win.getScript = url => new Promise((resolve, reject) => {
+      const script = document.createElement('script')
+      script.src = url
+      script.async = true
+      script.onerror = reject
+      script.onload = script.onreadystatechange = function() {
+        const loadState = this.readyState
+        if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+        script.onload = script.onreadystatechange = null
+        resolve()
+      }
+      document.head.appendChild(script)
+    })
+  
+    win.getCSS = (url,id = false) => new Promise((resolve, reject) => {
+      const link = document.createElement('link')
+      link.rel = 'stylesheet'
+      link.href = url
+      if (id) link.id = id
+      link.onerror = reject
+      link.onload = link.onreadystatechange = function() {
+        const loadState = this.readyState
+        if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+        link.onload = link.onreadystatechange = null
+        resolve()
+      }
+      document.head.appendChild(link)
+    })
+  
+      win.activateDarkMode = function () {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      win.activateLightMode = function () {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', 'ffffff')
+        }
+      }
+      const t = saveToLocal.get('theme')
+    
+          if (t === 'dark') activateDarkMode()
+          else if (t === 'light') activateLightMode()
+        
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        if (asideStatus === 'hide') {
+          document.documentElement.classList.add('hide-aside')
+        } else {
+          document.documentElement.classList.remove('hide-aside')
+        }
+      }
+    
+    const detectApple = () => {
+      if(/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)){
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+    })(window)</script><link rel="stylesheet" href="./themes/butterfly/source/css/bg_color.css"><meta name="generator" content="Hexo 6.3.0"></head><body><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img is-center"><img src="https://s2.loli.net/2023/09/07/oZOaspjYrzmT5e9.jpg" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="sidebar-site-data site-data is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">27</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">1</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">0</div></a></div><hr class="custom-hr"/><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page group" href="javascript:void(0);"><i class="fa-fw fas fa-book"></i><span> 文章</span><i class="fas fa-chevron-down"></i></a><ul class="menus_item_child"><li><a class="site-page child" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 归档</span></a></li><li><a class="site-page child" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></li><li><a class="site-page child" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></li></ul></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header" style="background-image: url('https://s2.loli.net/2023/09/07/1e3XvsuNQrkL7aV.jpg')"><nav id="nav"><span id="blog-info"><a href="/" title="RJ の 博客"><span class="site-name">RJ の 博客</span></a></span><div id="menus"><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page group" href="javascript:void(0);"><i class="fa-fw fas fa-book"></i><span> 文章</span><i class="fas fa-chevron-down"></i></a><ul class="menus_item_child"><li><a class="site-page child" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 归档</span></a></li><li><a class="site-page child" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></li><li><a class="site-page child" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></li></ul></div></div><div id="toggle-menu"><a class="site-page" href="javascript:void(0);"><i class="fas fa-bars fa-fw"></i></a></div></div></nav><div id="post-info"><h1 class="post-title">计网知识总结</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2023-09-07T09:16:24.863Z" title="发表于 2023-09-07 17:16:24">2023-09-07</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2023-09-08T15:33:22.889Z" title="更新于 2023-09-08 23:33:22">2023-09-08</time></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title="计网知识总结"><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">阅读量:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="post-content" id="article-container"><h1 id="一-计网知识总结"><a href="#一-计网知识总结" class="headerlink" title="一.计网知识总结"></a>一.计网知识总结</h1><h2 id="一、计算机网络概述"><a href="#一、计算机网络概述" class="headerlink" title="一、计算机网络概述"></a><strong>一、计算机网络概述</strong></h2><img src="https://s2.loli.net/2023/09/08/OSbzlukKcP2Nm7Q.png" alt="img" style="zoom: 80%;" />
+
+
+
+<h3 id="1-1-计算机网络的分类"><a href="#1-1-计算机网络的分类" class="headerlink" title="1.1 计算机网络的分类"></a><strong>1.1 计算机网络的分类</strong></h3><p>按照网络的作用范围：广域网（WAN）、城域网（MAN）、局域网（LAN）；</p>
+<p>按照网络使用者：公用网络、专用网络。</p>
+<h3 id="1-2-计算机网络的层次结构"><a href="#1-2-计算机网络的层次结构" class="headerlink" title="1.2 计算机网络的层次结构"></a><strong>1.2 计算机网络的层次结构</strong></h3><img src="https://s2.loli.net/2023/09/08/UBSN1jlnhqD2rKI.png" alt="img" style="zoom: 67%;" />
+
+<p>TCP&#x2F;IP四层模型与OSI体系结构对比：</p>
+<p><img src="https://s2.loli.net/2023/09/08/ynXtGiI1zHjTZ9g.png" alt="img"></p>
+<h3 id="1-3-层次结构设计的基本原则"><a href="#1-3-层次结构设计的基本原则" class="headerlink" title="1.3 层次结构设计的基本原则"></a><strong>1.3 层次结构设计的基本原则</strong></h3><ul>
+<li>各层之间是相互独立的；</li>
+<li>每一层需要有足够的灵活性；</li>
+<li>各层之间完全解耦。</li>
+</ul>
+<img src="https://s2.loli.net/2023/09/08/UKya2rZwEXz9xQf.png" alt="img" style="zoom: 67%;" />
+
+<h3 id="1-4-计算机网络的性能指标"><a href="#1-4-计算机网络的性能指标" class="headerlink" title="1.4 计算机网络的性能指标"></a><strong>1.4 计算机网络的性能指标</strong></h3><p>速率：bps&#x3D;bit&#x2F;s 时延：发送时延、传播时延、排队时延、处理时延 往返时间RTT：数据报文在端到端通信中的来回一次的时间。</p>
+<h2 id=""><a href="#" class="headerlink" title=""></a></h2><h2 id="二、物理层"><a href="#二、物理层" class="headerlink" title="二、物理层"></a><strong>二、物理层</strong></h2><p>物理层的作用：连接不同的物理设备，传输比特流。该层为上层协议提供了一个传输数据的可靠的物理媒体。简单的说，物理层确保原始的数据可在各种物理媒体上传输。</p>
+<p>物理层设备：</p>
+<ul>
+<li>中继器【Repeater，也叫放大器】：同一局域网的再生信号；两端口的网段必须同一协议；5-4-3规程：10BASE-5以太网中，最多串联4个中继器，5段中只能有3个连接主机；</li>
+<li>集线器：同一局域网的再生、放大信号（多端口的中继器）；半双工，不能隔离冲突域也不能隔离广播域。</li>
+</ul>
+<p>信道的基本概念：信道是往一个方向传输信息的媒体，一条通信电路包含一个发送信道和一个接受信道。</p>
+<ol>
+<li>单工通信信道：只能一个方向通信，没有反方向反馈的信道；</li>
+<li>半双工通信信道：双方都可以发送和接受信息，但不能同时发送也不能同时接收；</li>
+<li>全双工通信信道：双方都可以同时发送和接收。</li>
+</ol>
+<h2 id="三、数据链路层"><a href="#三、数据链路层" class="headerlink" title="三、数据链路层"></a><strong>三、数据链路层</strong></h2><h3 id="3-1-数据链路层概述"><a href="#3-1-数据链路层概述" class="headerlink" title="3.1 数据链路层概述"></a><strong>3.1 数据链路层概述</strong></h3><p>数据链路层在物理层提供的服务的基础上向网络层提供服务，其最基本的服务是将源自网络层来的数据可靠地传输到相邻节点的目标机网络层。数据链路层在不可靠的物理介质上提供可靠的传输。</p>
+<p>该层的作用包括：<strong>物理地址寻址、数据的成帧、流量控制、数据的检错、重发</strong>等。</p>
+<p>有关数据链路层的重要知识点：</p>
+<ol>
+<li>数据链路层为网络层提供可靠的数据传输；</li>
+<li>基本数据单位为帧；</li>
+<li>主要的协议：以太网协议；</li>
+<li>两个重要设备名称：网桥和交换机。</li>
+</ol>
+<p>封装成帧：“帧”是<strong>数据链路层</strong>数据的基本单位：</p>
+<p>透明传输：“透明”是指即使控制字符在帧数据中，但是要当做不存在去处理。即在控制字符前加上转义字符ESC。</p>
+<h3 id="3-2-数据链路层的差错监测"><a href="#3-2-数据链路层的差错监测" class="headerlink" title="3.2 数据链路层的差错监测"></a><strong>3.2 数据链路层的差错监测</strong></h3><p>差错检测：奇偶校验码、循环冗余校验码CRC</p>
+<ol>
+<li>奇偶校验码–局限性：当出错两位时，检测不到错误。</li>
+<li>循环冗余检验码：根据传输或保存的数据而产生固定位数校验码。</li>
+</ol>
+<h3 id="3-3-最大传输单元MTU"><a href="#3-3-最大传输单元MTU" class="headerlink" title="3.3 最大传输单元MTU"></a><strong>3.3 最大传输单元MTU</strong></h3><p>最大传输单元MTU(Maximum Transmission Unit)，数据链路层的数据帧不是无限大的，数据帧长度受MTU限制.</p>
+<p>路径MTU：由链路中MTU的最小值决定。</p>
+<h3 id="3-4-以太网协议详解"><a href="#3-4-以太网协议详解" class="headerlink" title="3.4 以太网协议详解"></a><strong>3.4 以太网协议详解</strong></h3><p>MAC地址：每一个设备都拥有唯一的MAC地址，共48位，使用十六进制表示。</p>
+<p>以太网协议：是一种使用广泛的局域网技术，是一种应用于数据链路层的协议，使用以太网可以完成相邻设备的数据帧传输</p>
+<h4 id="局域网分类："><a href="#局域网分类：" class="headerlink" title="局域网分类："></a>局域网分类：</h4><p>Ethernet以太网IEEE802.3：</p>
+<ol>
+<li>以太网第一个广泛部署的高速局域网</li>
+<li>以太网数据速率快</li>
+<li>以太网硬件价格便宜，网络造价成本低</li>
+</ol>
+<h4 id="以太网帧结构："><a href="#以太网帧结构：" class="headerlink" title="以太网帧结构："></a>以太网帧结构：</h4><ol>
+<li>类型：标识上层协议（2字节）</li>
+<li>目的地址和源地址：MAC地址（每个6字节）</li>
+<li>数据：封装的上层协议的分组（46~1500字节）</li>
+<li>CRC：循环冗余码（4字节）</li>
+<li>以太网最短帧：以太网帧最短64字节；以太网帧除了数据部分18字节；数据最短46字节；</li>
+</ol>
+<h4 id="MAC地址（物理地址、局域网地址）"><a href="#MAC地址（物理地址、局域网地址）" class="headerlink" title="MAC地址（物理地址、局域网地址）"></a>MAC地址（物理地址、局域网地址）</h4><ol>
+<li>MAC地址长度为6字节，48位；</li>
+<li>MAC地址具有唯一性，每个网络适配器对应一个MAC地址；</li>
+<li>通常采用十六进制表示法，每个字节表示一个十六进制数，用 - 或 : 连接起来；</li>
+<li>MAC广播地址：FF-FF-FF-FF-FF-FF。</li>
+</ol>
+<h2 id="四、网络层"><a href="#四、网络层" class="headerlink" title="四、网络层"></a><strong>四、网络层</strong></h2><p>网络层的目的是实现两个端系统之间的数据透明传送，具体功能包括寻址和路由选择、连接的建立、保持和终止等。数据交换技术是报文交换（基本上被分组所替代）：采用储存转发方式，数据交换单位是报文。</p>
+<p>网络层中涉及众多的协议，其中包括最重要的协议，也是TCP&#x2F;IP的核心协议——IP协议。IP协议非常简单，仅仅提供不可靠、无连接的传送服务。IP协议的主要功能有：无连接数据报传输、数据报路由选择和差错控制。</p>
+<p>与IP协议配套使用实现其功能的还有地址解析协议ARP、逆地址解析协议RARP、因特网报文协议ICMP、因特网组管理协议IGMP。具体的协议我们会在接下来的部分进行总结，有关网络层的重点为：</p>
+<ol>
+<li>网络层负责对子网间的数据包进行路由选择。此外，网络层还可以实现拥塞控制、网际互连等功能；</li>
+<li>基本数据单位为IP数据报；</li>
+<li>包含的主要协议：</li>
+</ol>
+<ul>
+<li>IP协议（Internet Protocol，因特网互联协议）;</li>
+<li>ICMP协议（Internet Control Message Protocol，因特网控制报文协议）;</li>
+<li>ARP协议（Address Resolution Protocol，地址解析协议）;</li>
+<li>RARP协议（Reverse Address Resolution Protocol，逆地址解析协议）。</li>
+</ul>
+<ol>
+<li>重要的设备：路由器。</li>
+</ol>
+<p>路由器相关协议</p>
+<img src="https://s2.loli.net/2023/09/08/Cxj2hJLGqDwUEHs.png" alt="图片" style="zoom: 80%;" />
+
+
+
+<h3 id="4-1-IP协议详解"><a href="#4-1-IP协议详解" class="headerlink" title="4.1 IP协议详解"></a><strong>4.1 IP协议详解</strong></h3><p>IP网际协议是 Internet 网络层最核心的协议。虚拟互联网络的产生：实际的计算机网络错综复杂；物理设备通过使用IP协议，屏蔽了物理网络之间的差异；当网络中主机使用IP协议连接时，无需关注网络细节，于是形成了虚拟网络。</p>
+<p>IP协议使得复杂的实际网络变为一个虚拟互联的网络；并且解决了在虚拟网络中数据报传输路径的问题。</p>
+<p>其中，版本指IP协议的版本，占4位，如IPv4和IPv6；首部位长度表示IP首部长度，占4位，最大数值位15；总长度表示IP数据报总长度，占16位，最大数值位65535；TTL表示IP数据报文在网络中的寿命，占8位；协议表明IP数据所携带的具体数据是什么协议的，如TCP、UDP。</p>
+<h3 id="4-2-IP协议的转发流程"><a href="#4-2-IP协议的转发流程" class="headerlink" title="4.2 IP协议的转发流程"></a><strong>4.2 IP协议的转发流程</strong></h3><img src="https://s2.loli.net/2023/09/08/y9FjtdAQREiSe45.png" alt="img" style="zoom:67%;" />
+
+<h3 id="4-3-IP地址的子网划分"><a href="#4-3-IP地址的子网划分" class="headerlink" title="4.3 IP地址的子网划分"></a><strong>4.3 IP地址的子网划分</strong></h3><p><img src="https://s2.loli.net/2023/09/08/qBRdY9XOgf85HS2.png" alt="img"></p>
+<p>A类（8网络号+24主机号）、B类（16网络号+16主机号）、C类（24网络号+8主机号）可以用于标识网络中的主机或路由器，D类地址作为组广播地址，E类是地址保留。</p>
+<img src="https://s2.loli.net/2023/09/08/WNatBf1m3FidXr4.png" alt="img" style="zoom:80%;" />
+
+<h3 id="4-4-网络地址转换NAT技术"><a href="#4-4-网络地址转换NAT技术" class="headerlink" title="4.4 网络地址转换NAT技术"></a><strong>4.4 网络地址转换NAT技术</strong></h3><p>用于多个主机通过一个公有IP访问访问互联网的私有网络中，减缓了IP地址的消耗，但是增加了网络通信的复杂度。</p>
+<h4 id="NAT-工作原理："><a href="#NAT-工作原理：" class="headerlink" title="NAT 工作原理："></a>NAT 工作原理：</h4><p>从内网出去的IP数据报，将其IP地址替换为NAT服务器拥有的合法的公共IP地址，并将替换关系记录到NAT转换表中；</p>
+<p>从公共互联网返回的IP数据报，依据其目的的IP地址检索NAT转换表，并利用检索到的内部私有IP地址替换目的IP地址，然后将IP数据报转发到内部网络。</p>
+<h3 id="4-5-ARP协议与RARP协议"><a href="#4-5-ARP协议与RARP协议" class="headerlink" title="4.5 ARP协议与RARP协议"></a><strong>4.5 ARP协议与RARP协议</strong></h3><p>地址解析协议 ARP（Address Resolution Protocol）：为网卡（网络适配器）的IP地址到对应的硬件地址提供动态映射。可以把网络层32位地址转化为数据链路层MAC48位地址。</p>
+<p>ARP 是即插即用的，一个ARP表是自动建立的，不需要系统管理员来配置。</p>
+<img src="https://s2.loli.net/2023/09/08/hwHZqdoDVv83E1m.png" alt="img" style="zoom:80%;" />
+
+<p>RARP(Reverse Address Resolution Protocol)协议指逆地址解析协议，可以把数据链路层MAC48位地址转化为网络层32位地址。</p>
+<h3 id="4-6-ICMP协议详解"><a href="#4-6-ICMP协议详解" class="headerlink" title="4.6 ICMP协议详解"></a><strong>4.6 ICMP协议详解</strong></h3><p>ICMP（Internet Control Message Protocol，互联网控制报文协议）是一种用于在IP网络中进行控制和错误报告的网络协议。它是TCP&#x2F;IP协议族中的一个重要组成部分，通常在网络中用于处理网络设备之间的通信错误和状态信息。</p>
+<img src="https://s2.loli.net/2023/09/08/GyKACaFk1uhtmwb.png" alt="img" style="zoom:80%;" />
+
+<p>ICMP的主要功能包括以下几个方面：</p>
+<ol>
+<li>错误报告：ICMP可以生成和发送错误报文，用于报告在数据传输过程中出现的错误，例如目标不可达、超时、重定向等。</li>
+<li>网络探测：ICMP可以用于进行网络探测，例如通过发送Ping请求和接收Ping回应来测试网络设备的可达性和延迟。</li>
+<li>路由控制：ICMP可以用于向路由器发送路由重定向消息，通知其更改路由选择。</li>
+<li>网络管理：ICMP还可以用于网络管理目的，例如通过发送Traceroute请求来识别数据包在网络中的传输路径。</li>
+</ol>
+<p>ICMP报文通常被封装在IP数据包中，作为IP协议的一部分进行传输。ICMP报文的类型和代码字段用于标识不同类型的错误和控制消息。例如，常见的ICMP报文类型包括Echo Request和Echo Reply（用于Ping操作）、Destination Unreachable（目标不可达报文）、Time Exceeded（超时报文）等。</p>
+<p>需要注意的是，ICMP是一种控制协议，主要用于网络设备之间的通信和错误报告，并不用于传输应用层数据。在网络安全方面，ICMP协议也可能被用于执行一些攻击行为，如Ping洪泛攻击、ICMP隧道等，因此在网络配置和安全设置时需要谨慎使用和限制ICMP协议的使用。</p>
+<h4 id="ICMP协议的应用："><a href="#ICMP协议的应用：" class="headerlink" title="ICMP协议的应用："></a>ICMP协议的应用：</h4><ul>
+<li>Ping应用：网络故障的排查；</li>
+<li>Traceroute应用：可以探测IP数据报在网络中走过的路径。</li>
+</ul>
+<h3 id="4-7路由转发"><a href="#4-7路由转发" class="headerlink" title="4.7路由转发"></a><strong>4.7路由转发</strong></h3><p>在计算机网络中，路由转发是指将数据包从源主机传输到目标主机的过程。它涉及到网络中的路由器根据预先配置的路由表或路由算法，选择合适的路径将数据包从一个网络节点转发到另一个网络节点。</p>
+<p>“<strong>路由转发</strong>”顾名思义，分为“<strong>路由</strong>”和“转发”两步：</p>
+<p>● 路由选择：确定数据报走那一条路径，即路由器根据不同的算法生成动态的路由表。</p>
+<p>● 分组转发：路由器根据转发表将用户的IP数据从合适的端口报转发出去。</p>
+<p>注意：路由表是由路由算法生成的，转发表是根据路由表生成的。但是在讨论路由选择的	   原理时，往往不去区分路由表和转发表的区别，同一使用路由表一词。</p>
+<ul>
+<li><strong>路由转发</strong>的基本步骤：</li>
+</ul>
+<ol>
+<li><strong>数据包到达路由器</strong>：当数据包从源主机发送出去后，经过本地网络（如局域网）传输，最终到达发送主机所连接的路由器。</li>
+<li><strong>查找路由表</strong>：路由器通过查找自己的路由表，根据目标主机的IP地址，确定下一跳的路径。路由表通常包含了<strong>网络拓扑信息</strong>、<strong>目标主机的IP地址</strong>和<strong>相应的下一跳路由器</strong>。</li>
+<li><strong>选择下一跳</strong>：根据路由表中的信息，路由器选择一个合适的下一跳路由器，将数据包发送给该路由器。这个选择过程可能基于静态路由，即管理员手动配置的路由表，也可能基于动态路由协议，如OSPF、BGP等，通过路由器之间的协作来自动更新路由表。</li>
+<li><strong>转发数据包</strong>：选定下一跳后，路由器将数据包转发给下一跳路由器，该路由器将重复上述步骤，直到数据包到达目标主机所连接的路由器。</li>
+<li><strong>数据包到达目标主机</strong>：最终，数据包到达目标主机所连接的路由器，并被传递给目标主机，完成整个路由转发过程。</li>
+</ol>
+<ul>
+<li><p>在路由转发过程中，路由器可能会进行一系列操作，如计算校验和、修改TTL（Time-to-Live）字段、进行NAT（Network Address Translation）等。这些操作可以根据网络的需求和配置而变化。路由转发是计算机网络中的重要功能，它使得数据包能够在复杂的网络中正确地传递到目标主机，从而实现了互联网的通信。</p>
+</li>
+<li><p><strong>路由分类</strong>:</p>
+</li>
+</ul>
+<ol>
+<li><strong>静态路由</strong>和<strong>动态路由</strong>：静态路由是由管理员手动配置的，如果网络拓扑或链路状态发生变化时，不会自动更新；动态路由是通过路由器之间的协议自动学习和更新的。</li>
+<li><strong>内部路由</strong>和<strong>外部路由</strong>：内部路由是自治系统内部进行的路由，用于在同一自治系统内的不同网络之间进行路由选择；外部路由是不同自治系统之间进行的路由，用于在不同自治系统之间进行路由选择。</li>
+<li><strong>默认路由</strong>和<strong>具体路由</strong>：默认路由是在路由表中没有匹配到目标主机地址时，将数据包转发到预先指定的默认下一跳路由器；具体路由是通过配置指定了目标主机地址和相应的下一跳路由器。</li>
+<li><strong>内联路由</strong>和<strong>外联路由</strong>：内联路由是将路由器直接连接到较小的网络中，用于在局域网内进行路由选择；外联路由是将路由器连接到其他路由器或网络设备中，用于在不同网络之间进行路由选择。</li>
+<li><strong>单播路由、多播路由</strong>和<strong>广播路由</strong>：单播路由是将数据包从源主机传输到一个目标主机的过程；多播路由是将数据包从源主机传输到一组目标主机的过程；广播路由是将数据包从源主机传输到所有目标主机的过程。</li>
+</ol>
+<h3 id="4-8-内部网关路由协议之RIP协议"><a href="#4-8-内部网关路由协议之RIP协议" class="headerlink" title="4.8 内部网关路由协议之RIP协议"></a><strong>4.8 内部网关路由协议之RIP协议</strong></h3><p>路由信息协议 RIP(Routing Information Protocol)【<strong>应用层</strong>】，基于距离-向量的路由选择算法，较小的<strong>AS（自治系统）</strong>，适合小型网络；RIP报文，封装进UDP数据报。</p>
+<h4 id="RIP协议特性："><a href="#RIP协议特性：" class="headerlink" title="RIP协议特性："></a>RIP协议特性：</h4><ol>
+<li>RIP在度量路径时采用的是跳数（每个路由器维护自身到其他每个路由器的距离记录）；</li>
+<li>RIP的费用定义在源路由器和目的子网之间；</li>
+<li>RIP被限制的网络直径不超过15跳；</li>
+<li>和隔壁交换所有的信息，30主动一次（广播）。</li>
+</ol>
+<h3 id="4-9-内部网关路由协议之OSPF协议"><a href="#4-9-内部网关路由协议之OSPF协议" class="headerlink" title="4.9 内部网关路由协议之OSPF协议"></a><strong>4.9 内部网关路由协议之OSPF协议</strong></h3><p>开放最短路径优先协议 OSPF(Open Shortest Path First)【网络层】，基于链路状态的路由选择算法（即Dijkstra算法），较大规模的AS ，适合大型网络，直接封装在IP数据报传输。</p>
+<h4 id="OSPF协议优点："><a href="#OSPF协议优点：" class="headerlink" title="OSPF协议优点："></a>OSPF协议优点：</h4><ol>
+<li>安全；</li>
+<li>支持多条相同费用路径；</li>
+<li>支持区别化费用度量；</li>
+<li>支持单播路由和多播路由；</li>
+<li>分层路由。</li>
+</ol>
+<h3 id="4-10外部网关路由协议之BGP协议"><a href="#4-10外部网关路由协议之BGP协议" class="headerlink" title="4.10外部网关路由协议之BGP协议"></a><strong>4.10外部网关路由协议之BGP协议</strong></h3><p>BGP（Border Gateway Protocol）边际网关协议【应用层】：是运行在AS之间的一种协议,寻找一条好路由：首次交换全部信息，以后只交换变化的部分,BGP封装进TCP报文段.</p>
+<h2 id="五、传输层"><a href="#五、传输层" class="headerlink" title="五、传输层"></a><strong>五、传输层</strong></h2><p>第一个端到端，即主机到主机的层次。传输层负责将上层数据分段并提供端到端的、可靠的或不可靠的传输。此外，传输层还要处理端到端的差错控制和流量控制问题。</p>
+<p>传输层的任务是根据通信子网的特性，最佳的利用网络资源，为两个端系统的会话层之间，提供建立、维护和取消传输连接的功能，负责端到端的可靠数据传输。在这一层，信息传送的协议数据单元称为段或报文。</p>
+<p>网络层只是根据网络地址将源结点发出的数据包传送到目的结点，而传输层则负责将数据可靠地传送到相应的端口。</p>
+<h4 id="有关网络层的重点："><a href="#有关网络层的重点：" class="headerlink" title="有关网络层的重点："></a>有关网络层的重点：</h4><ol>
+<li>传输层负责将上层数据分段并提供端到端的、可靠的或不可靠的传输以及端到端的差错控制和流量控制问题；</li>
+<li>包含的主要协议：TCP协议（Transmission Control Protocol，传输控制协议）、UDP协议（User Datagram Protocol，用户数据报协议）；</li>
+<li>重要设备：网关。</li>
+</ol>
+<p><img src="https://cdn.nlark.com/yuque/0/2022/gif/25875852/1650860280916-59dc1f9f-3809-4b07-9073-8bfeacf87585.gif" alt="img"></p>
+<p><img src="https://cdn.nlark.com/yuque/0/2022/gif/25875852/1650860281167-befc1890-5c56-4a4b-863c-49ce76e4f859.gif" alt="img"></p>
+<h3 id="5-1-UDP协议详解"><a href="#5-1-UDP协议详解" class="headerlink" title="5.1 UDP协议详解"></a><strong>5.1 UDP协议详解</strong></h3><p>UDP(User Datagram Protocol: 用户数据报协议)，是一个非常简单的协议，</p>
+<p>UDP协议的特点：</p>
+<ul>
+<li>UDP是无连接协议；</li>
+<li>UDP不能保证可靠的交付数据；</li>
+<li>UDP是面向报文传输的；</li>
+<li>UDP没有拥塞控制；</li>
+<li>UDP首部开销很小。</li>
+</ul>
+<h4 id="UDP数据报结构："><a href="#UDP数据报结构：" class="headerlink" title="UDP数据报结构："></a>UDP数据报结构：</h4><p>首部:8B，四字段&#x2F;2B【源端口 | 目的端口 | UDP长度 | 校验和】 数据字段：应用数据</p>
+<p><img src="https://cdn.nlark.com/yuque/0/2022/gif/25875852/1650860281371-55f01dbe-2280-4853-972f-3900bfb767fb.gif" alt="img"></p>
+<h3 id="5-2-TCP协议详解"><a href="#5-2-TCP协议详解" class="headerlink" title="5.2 TCP协议详解"></a><strong>5.2 TCP协议详解</strong></h3><p>TCP(Transmission Control Protocol: 传输控制协议)，是计算机网络中非常复杂的一个协议。</p>
+<img src="https://s2.loli.net/2023/09/08/mE21WAocShHL4QY.png" alt="img" style="zoom:80%;" />
+
+<h4 id="TCP协议的功能："><a href="#TCP协议的功能：" class="headerlink" title="TCP协议的功能："></a>TCP协议的功能：</h4><ol>
+<li>对应用层报文进行分段和重组；</li>
+<li>面向应用层实现复用与分解；</li>
+<li>实现端到端的流量控制；</li>
+<li>拥塞控制；</li>
+<li>传输层寻址；</li>
+<li>对收到的报文进行差错检测（首部和数据部分都检错）；</li>
+<li>实现进程间的端到端可靠数据传输控制。</li>
+</ol>
+<h4 id="TCP协议的特点："><a href="#TCP协议的特点：" class="headerlink" title="TCP协议的特点："></a>TCP协议的特点：</h4><ul>
+<li>TCP是面向连接的协议；</li>
+<li>TCP是面向字节流的协议；</li>
+<li>TCP的一个连接有两端，即点对点通信；</li>
+<li>TCP提供可靠的传输服务；</li>
+<li>TCP协议提供全双工通信（每条TCP连接只能一对一）；</li>
+</ul>
+<h4 id="5-2-1-TCP报文段结构："><a href="#5-2-1-TCP报文段结构：" class="headerlink" title="5.2.1 TCP报文段结构："></a>5.2.1 TCP报文段结构：</h4><p>最大报文段长度：报文段中封装的应用层数据的最大长度。</p>
+<img src="https://s2.loli.net/2023/09/08/TC9oEP8MBHexYRX.png" alt="img" style="zoom:80%;" />
+
+<p><strong>TCP首部：</strong></p>
+<ul>
+<li>序号字段：TCP的序号是对每个应用层数据的每个字节进行编号</li>
+<li>确认序号字段：期望从对方接收数据的字节序号，即该序号对应的字节尚未收到。用ack_seq标识；</li>
+<li>TCP段的首部长度最短是20B ，最长为60字节。但是长度必须为4B的整数倍</li>
+</ul>
+<h4 id="TCP标记的作用："><a href="#TCP标记的作用：" class="headerlink" title="TCP标记的作用："></a><strong>TCP标记的作用：</strong></h4><img src="https://s2.loli.net/2023/09/08/yWjGVg2cAOifF94.png" alt="img" style="zoom:80%;" />
+
+<h3 id="5-3-可靠传输的基本原理"><a href="#5-3-可靠传输的基本原理" class="headerlink" title="5.3 可靠传输的基本原理"></a><strong>5.3 可靠传输的基本原理</strong></h3><p>基本原理：</p>
+<ul>
+<li>不可靠传输信道在数据传输中可能发生的情况：比特差错、乱序、重传、丢失</li>
+<li>基于不可靠信道实现可靠数据传输采取的措施：</li>
+</ul>
+<p>差错检测：利用编码实现数据包传输过程中的比特差错检测 确认：接收方向发送方反馈接收状态 重传：发送方重新发送接收方没有正确接收的数据 序号：确保数据按序提交 计时器：解决数据丢失问题；</p>
+<p>停止等待协议：是最简单的可靠传输协议，但是该协议对信道的利用率不高。</p>
+<p>连续ARQ(Automatic Repeat reQuest：自动重传请求)协议：滑动窗口+累计确认，大幅提高了信道的利用率。</p>
+<h4 id="5-3-1TCP协议的可靠传输"><a href="#5-3-1TCP协议的可靠传输" class="headerlink" title="5.3.1TCP协议的可靠传输"></a>5.3.1TCP协议的可靠传输</h4><p>基于连续ARQ协议，在某些情况下，重传的效率并不高，会重复传输部分已经成功接收的字节。</p>
+<h4 id="5-3-2-TCP协议的流量控制"><a href="#5-3-2-TCP协议的流量控制" class="headerlink" title="5.3.2 TCP协议的流量控制"></a>5.3.2 TCP协议的流量控制</h4><p>流量控制：让发送方发送速率不要太快，TCP协议使用滑动窗口实现流量控制。</p>
+<p><img src="https://cdn.nlark.com/yuque/0/2022/gif/25875852/1650860281874-0174dc6e-b507-46d4-9deb-34b937812254.gif" alt="img"></p>
+<h3 id="5-4-TCP协议的拥塞控制"><a href="#5-4-TCP协议的拥塞控制" class="headerlink" title="5.4 TCP协议的拥塞控制"></a><strong>5.4 TCP协议的拥塞控制</strong></h3><p>拥塞控制与流量控制的区别：流量控制考虑点对点的通信量的控制，而拥塞控制考虑整个网络，是全局性的考虑。拥塞控制的方法：慢启动算法+拥塞避免算法。</p>
+<p>慢开始和拥塞避免：</p>
+<ol>
+<li>【慢开始】拥塞窗口从1指数增长；</li>
+<li>到达阈值时进入【拥塞避免】，变成+1增长；</li>
+<li>【超时】，阈值变为当前cwnd的一半（不能&lt;2）；</li>
+<li>再从【慢开始】，拥塞窗口从1指数增长。</li>
+</ol>
+<p><img src="https://s2.loli.net/2023/09/08/4UHmYbJVZWMIALi.png" alt="img"></p>
+<p>快重传和快恢复：</p>
+<ol>
+<li>发送方连续收到3个冗余ACK，执行【快重传】，不必等计时器超时；</li>
+<li>执行【快恢复】，阈值变为当前cwnd的一半（不能&lt;2），并从此新的ssthresh点进入【拥塞避免】。</li>
+</ol>
+<p><img src="https://cdn.nlark.com/yuque/0/2022/gif/25875852/1650860282412-eebc23e7-2fed-4923-80bc-b5b7af6262bf.gif" alt="img"></p>
+<h3 id="5-5-TCP连接的三次握手（重要）"><a href="#5-5-TCP连接的三次握手（重要）" class="headerlink" title="5.5 TCP连接的三次握手（重要）"></a><strong>5.5 TCP连接的三次握手（重要）</strong></h3><p>TCP三次握手使用指令：</p>
+<img src="https://s2.loli.net/2023/09/08/a3DFMkfYVsGLrlT.jpg" alt="img" style="zoom: 80%;" />
+
+<p>面试常客：为什么需要三次握手？</p>
+<ol>
+<li>第一次握手：客户发送请求，此时服务器知道客户能发；</li>
+<li>第二次握手：服务器发送确认，此时客户知道服务器能发能收；</li>
+<li>第三次握手：客户发送确认，此时服务器知道客户能收。</li>
+</ol>
+<p>客户端的请求到达服务器，首先就是建立TCP连接(<strong>三次握手</strong>):</p>
+<ol>
+<li>Client首先发送一个连接试探(syn: 连接请求标识;ack: 确认标识; seq: 初始序号) 同时这个数据报不能携带数据（seq &#x3D; 0 就代表这是第0号包），这时候Client进入syn_sent状态，表示客户端等待服务器的回复</li>
+<li>Server监听到连接请求报文后，如同意建立连接，则向Client发送确认。TCP报文首部中的SYN 和 ACK都置1 ，ack &#x3D; x + 1表示期望收到对方下一个报文段的第一个数据字节序号是x+1，同时表明x为止的所有数据都已正确收到，seq &#x3D; y 表示Server 自己的初始序号。这时服务器进入syn_rcvd，表示服务器已经收到Client的连接请求，等待client的确认。</li>
+<li>Client收到确认后还需再次发送确认，同时携带要发送给Server的数据。ACK 置1 表示确认号ack&#x3D; y + 1 有效（代表期望收到服务器的第1个包），Client自己的序号seq&#x3D; x + 1（表示这就是我的第1个包，相对于第0个包来说的），一旦收到Client的确认之后，这个TCP连接就进入Established状态，就可以发起http请求了。</li>
+</ol>
+<p><img src="https://cdn.nlark.com/yuque/0/2022/gif/25875852/1650860282473-6b1a0cab-9aa0-4c7d-b285-161b68b1abfb.gif" alt="img"></p>
+<h3 id="5-6-TCP连接的四次挥手（重要）"><a href="#5-6-TCP连接的四次挥手（重要）" class="headerlink" title="5.6  TCP连接的四次挥手（重要）"></a><strong>5.6  TCP连接的四次挥手（重要）</strong></h3><img src="https://s2.loli.net/2023/09/08/tSUK8h1NE4RYwaF.jpg" alt="img" style="zoom: 80%;" />
+
+<p>   当数据传送完毕，断开TCP连接(<strong>四次挥手</strong>):</p>
+<ol>
+<li>主机1（可以是客户端，也可以是服务器端），设置Sequence Number，向主机2发送一个FIN报文段；此时，主机1进入FIN_WAIT_1状态；这表示主机1没有数据要发送给主机2了;</li>
+<li>主机2收到了主机1发送的FIN报文段，向主机1回一个ACK报文段，Ack为Seq加1；主机1进入FIN_WAIT_2状态；主机2告诉主机1，我“同意”你的关闭请求；</li>
+<li>主机2向主机1发送FIN报文段，请求关闭连接，同时主机2进入LAST_ACK状态；</li>
+<li>主机1收到主机2发送的FIN报文段，向主机2发送ACK报文段，然后主机1进入TIME_WAIT状态；主机2收到主机1的ACK报文段以后，就关闭连接；此时，主机1<strong>等待2MSL</strong>(msl为报文最大寿命)后依然没有收到回复，则证明Server端已正常关闭，那好，主机1也可以关闭连接了。</li>
+</ol>
+<img src="https://s2.loli.net/2023/09/08/tAUrlHkdpwevcZy.png" alt="img" style="zoom:80%;" />
+
+<p><strong>为什么需要等待2MSL?</strong></p>
+<ol>
+<li>最后一个报文没有确认；</li>
+<li>确保发送方的ACK可以到达接收方；</li>
+<li>2MSL时间内没有收到，则接收方会重发；</li>
+<li>确保当前连接的所有报文都已经过期。</li>
+</ol>
+<h2 id="六、应用层"><a href="#六、应用层" class="headerlink" title="六、应用层"></a><strong>六、应用层</strong></h2><p>为操作系统或网络应用程序提供访问网络服务的接口。<strong>应用层重点：</strong></p>
+<ol>
+<li>数据传输基本单位为报文；</li>
+<li>包含的主要协议：FTP（文件传送协议）、Telnet（远程登录协议）、DNS（域名解析协议）、SMTP（邮件传送协议），POP3协议（邮局协议），HTTP协议（Hyper Text Transfer Protocol）。</li>
+</ol>
+<h3 id="6-1-DNS详解"><a href="#6-1-DNS详解" class="headerlink" title="6.1 DNS详解"></a><strong>6.1 DNS详解</strong></h3><p>DNS（Domain Name System:域名系统）【C&#x2F;S，UDP，端口53】：解决IP地址复杂难以记忆的问题,存储并完成自己所管辖范围内主机的 域名 到 IP 地址的映射。</p>
+<p>即: IP—&gt;DNS服务—&gt;便于记忆的域名</p>
+<p><strong>域名解析的顺序：</strong></p>
+<ul>
+<li><p>【1】浏览器缓存，</p>
+</li>
+<li><p>【2】找本机的hosts文件，</p>
+</li>
+<li><p>【3】路由缓存，</p>
+</li>
+<li><p>【4】找DNS服务器（本地域名、顶级域名、根域名）–&gt;迭代解析、递归查询。</p>
+<p><strong>解析步骤详细说明:</strong></p>
+<p>检查浏览器缓存–&gt;操作系统hosts–&gt;路由缓存–&gt;DNS服务器–&gt;通过根DNS服务器返回的一个顶级DNS服务器地址访问顶级DNS服务器–&gt;通过上一步访问 Name Server服务器…….(其中有一步成功即可解析成功)</p>
+</li>
+</ul>
+<p><strong>域名结构</strong>:</p>
+<ol>
+<li>域名由点、字母和数字组成，分为顶级域（com，cn，net，gov，org）、二级域（baidu,taobao,qq,alibaba）、三级域（www）(12-2-0852)</li>
+</ol>
+<img src="https://s2.loli.net/2023/09/08/w7T2fu9VSAyabYc.png" alt="img" style="zoom: 67%;" />
+
+<ul>
+<li><p><strong>解析步骤说明:</strong></p>
+<p>检查浏览器缓存–&gt;操作系统hosts–&gt;路由缓存–&gt;DNS服务器–&gt;通过根DNS服务器返回的一个顶级DNS服务器地址访问顶级DNS服务器–&gt;通过上一步访问 Name Server服务器…….(其中有一步成功即可解析成功)</p>
+</li>
+<li><p><img src="https://s2.loli.net/2023/09/08/qiBSOm21DWeLsRg.webp"></p>
+<p>如上图所示，域名结构是树状结构，树的最顶端代表根服务器，根的下一层就是由我们所熟知的.com、.net、.cn等通用域和.cn、.uk等国家域组成，称为顶级域。网上注册的域名基本都是二级域名，比如<a href="https://link.zhihu.com/?target=http://baidu.com">http://baidu.com</a>、<a href="https://link.zhihu.com/?target=http://taobao.com">http://taobao.com</a>等等二级域名，它们基本上是归企业和运维人员管理。接下来是三级或者四级域名，这里不多赘述。总体概括来说域名是由整体到局部的机制结构。</p>
+</li>
+<li><p><strong>DNS解析流程:</strong></p>
+<img src="https://s2.loli.net/2023/09/08/GxuCg6W8Av3VmI5.png" alt="img" style="zoom:80%;" />
+
+<ol>
+<li>首先客户端位置是一台电脑或手机，在打开浏览器以后，比如输入<a href="https://link.zhihu.com/?target=http://www.zdns.cn">http://www.zdns.cn</a>的域名，它首先是由浏览器发起一个DNS解析请求，如果本地缓存服务器中找不到结果，则首先会向根服务器查询，根服务器里面记录的都是各个顶级域所在的服务器的位置，当向根请求<a href="https://link.zhihu.com/?target=http://www.zdns.cn">http://www.zdns.cn</a>的时候，根服务器就会返回.cn服务器的位置信息。</li>
+<li>递归服务器拿到.cn的权威服务器地址以后，就会寻问cn的权威服务器，知不知道<a href="https://link.zhihu.com/?target=http://www.zdns.cn">http://www.zdns.cn</a>的位置。这个时候cn权威服务器查找并返回<a href="https://link.zhihu.com/?target=http://zdns.cn">http://zdns.cn</a>服务器的地址。</li>
+<li>继续向<a href="https://link.zhihu.com/?target=http://zdns.cn">http://zdns.cn</a>的权威服务器去查询这个地址，由<a href="https://link.zhihu.com/?target=http://zdns.cn">http://zdns.cn</a>的服务器给出了地址：202.173.11.10</li>
+<li>最终才能进行http的链接，顺利访问网站。</li>
+<li>这里补充说明，一旦递归服务器拿到解析记录以后，就会在本地进行缓存，如果下次客户端再请求本地的递归域名服务器相同域名的时候，就不会再这样一层一层查了，因为本地服务器里面已经有缓存了，这个时候就直接把<a href="https://link.zhihu.com/?target=http://www.zdns.cn">http://www.zdns.cn</a>的A记录返回给客户端就可以了。</li>
+</ol>
+</li>
+</ul>
+<h4 id="6-1-1-DNS资源记录"><a href="#6-1-1-DNS资源记录" class="headerlink" title="6.1.1 DNS资源记录:"></a>6.1.1 DNS资源记录:</h4><img src="https://s2.loli.net/2023/09/08/NcO5dtgT8XC2kJ7.png" alt="img" style="zoom:80%;" />
+
+<p>记录一条域名信息映射关系，称之为资源记录（RR）。</p>
+<p>当我们查询域名<a href="https://link.zhihu.com/?target=http://www.zdns.cn">http://www.zdns.cn</a>的时候，查询结果得到的资源记录结构体中有如下数据：</p>
+<ol>
+<li><p>TTL，就是生存周期，是递归服务器会在缓存中保存该资源记录的时长。</p>
+</li>
+<li><p>网络&#x2F;协议类型，它的代表的标识是IN，IN就是internet，目前DNS系统主要支持的协议是IN。</p>
+</li>
+<li><p>type，就是资源记录类型，一般的网站都是都是A记录（IPv4的主机地址）。</p>
+</li>
+<li><p>rdata是资源记录数据，就是域名关联的信息数据。</p>
+</li>
+</ol>
+<ul>
+<li><p><strong>小知识：</strong></p>
+<p>下面我们列出几条常用的资源记录类型：</p>
+<ul>
+<li><p><strong>A</strong> ：Address地址， IPv4</p>
+<p><strong>AAAA</strong>：Address地址 IPv6</p>
+<p><strong>NS</strong> ：Name Server域名服务器</p>
+<p><strong>SOA</strong>：Start of Authority起始授权机构</p>
+<p><strong>MX</strong>：Mail Exchanger邮件交换</p>
+<p><strong>CNAME</strong>：Canonical Name规范名</p>
+<p><strong>PTR</strong>：Pointer指针</p>
+<p><strong>TXT</strong>：Text</p>
+<p><strong>SRV</strong>：Service</p>
+</li>
+</ul>
+</li>
+<li><p><strong>DNS服务器的分类</strong></p>
+<ul>
+<li><p><strong>权威解析服务器</strong>:</p>
+<p>DNS权威服务器保存着域名空间中部分区域的数据。如果DNS服务器负责管辖一个或多个区域时，称此DNS服务器为这些区域的权威服务器。</p>
+<p>根权威DNS或者二级权威服务器中的资源记录标记被指定为区域权威服务器的DNS服务器。通过资源记录中列出服务器，其他服务器就认为它是该区域的权威服务器。这意味着在 NS 资源记录中指定的任何服务器都被其他服务器当作权威的来源，并且能肯定应答区域内所含名称的查询。</p>
+</li>
+<li><p><strong>递归服务器</strong>:</p>
+<p>递归服务器在正常情况下，初始的时候里面没有任何域名解析数据，里面所有的域名解析数据都来自于它到权威解析服务器的查询结果，一旦查询完毕，递归服务器就会根据TTL时间在本地形成一条缓存记录，并为用户提供DNS解析的查询服务，这是递归服务器的功能。(所有的DNS解析记录里面类型的修改都是在权威解析服务器里面做修改)</p>
+</li>
+</ul>
+</li>
+</ul>
+<h3 id="6-2-DHCP协议详解"><a href="#6-2-DHCP协议详解" class="headerlink" title="6.2 DHCP协议详解"></a><strong>6.2 DHCP协议详解</strong></h3><p>DHCP（Dynamic Configuration Protocol:动态主机设置协议）：是一个局域网协议，是应用UDP协议的应用层协议。作用：为临时接入局域网的用户自动分配IP地址。</p>
+<h3 id="6-3-HTTP协议详解"><a href="#6-3-HTTP协议详解" class="headerlink" title="6.3 HTTP协议详解"></a><strong>6.3 HTTP协议详解</strong></h3><p>文件传输协议（FTP）：控制连接（端口21）：传输控制信息（连接、传输请求），以7位ASCII码的格式。整个会话期间一直打开。</p>
+<p>HTTP（HyperText Transfer Protocol:超文本传输协议）【TCP，端口80】：是可靠的数据传输协议，浏览器向服务器发收报文前，先建立TCP连接，HTTP使用TCP连接方式（HTTP自身无连接）。</p>
+<p>HTTP请求报文方式：</p>
+<ol>
+<li>GET：请求指定的页面信息，并返回实体主体；</li>
+<li>POST：向指定资源提交数据进行处理请求；</li>
+<li>DELETE：请求服务器删除指定的页面；</li>
+<li>HEAD：请求读取URL标识的信息的首部，只返回报文头；</li>
+<li>OPETION：请求一些选项的信息；</li>
+<li>PUT：在指明的URL下存储一个文档。</li>
+</ol>
+<img src="https://s2.loli.net/2023/09/08/zydg1R3tIjSBFmX.png" alt="img" style="zoom:67%;" />
+
+<img src="https://s2.loli.net/2023/09/08/KtoUTmBxI7zhC3H.png" alt="img" style="zoom: 80%;" />
+
+<h4 id="6-3-1-HTTP工作的结构"><a href="#6-3-1-HTTP工作的结构" class="headerlink" title="6.3.1 HTTP工作的结构"></a>6.3.1 HTTP工作的结构</h4><img src="https://s2.loli.net/2023/09/08/FSHTUroJz6KBEI7.png" alt="img" style="zoom:80%;" />
+
+<h3 id="6-4-HTTP-HTTPS代理"><a href="#6-4-HTTP-HTTPS代理" class="headerlink" title="6.4 HTTP&#x2F;HTTPS代理"></a><strong>6.4 HTTP&#x2F;HTTPS代理</strong></h3><ul>
+<li><p>HTTP&#x2F;HTTPS代理是一种在<strong>HTTP&#x2F;HTTPS协议层级</strong>上运行的<strong>代理服务器</strong>，用于在客户端和服务器之间<strong>中转HTTP&#x2F;HTTPS请求和响应</strong>。HTTP代理主要用于Web访问，充当客户端和服务器之间的中转站，可以对HTTP&#x2F;HTTPS请求进行处理、缓存、记录、修改等操作。</p>
+<p>HTTP&#x2F;HTTPS代理可以分为两种类型：</p>
+<ol>
+<li>HTTP代理：仅处理HTTP请求和响应，不对请求和响应进行加密和解密处理。客户端发送HTTP请求时，请求首先发送到HTTP代理服务器，然后由代理服务器转发请求到目标服务器，并将服务器返回的HTTP响应传递给客户端。HTTP代理在处理请求和响应时，可以进行请求的过滤、缓存、记录、修改等操作。</li>
+<li>HTTPS代理：处理HTTPS请求和响应，并对其进行加密和解密处理。HTTPS代理在客户端和服务器之间建立安全的TLS&#x2F;SSL连接，将客户端的请求加密后转发到目标服务器，并将服务器返回的加密的HTTPS响应解密后传递给客户端。HTTPS代理可以解决客户端与服务器之间的加密通信问题，从而能够处理HTTPS协议的请求和响应。</li>
+</ol>
+</li>
+</ul>
+<h3 id="6-5-SOCKS代理"><a href="#6-5-SOCKS代理" class="headerlink" title="6.5 SOCKS代理"></a><strong>6.5 SOCKS代理</strong></h3><h4 id="SOCKS协议"><a href="#SOCKS协议" class="headerlink" title="SOCKS协议:"></a>SOCKS协议:</h4><ul>
+<li>SOCKS（Socket Secure）是一种<strong>网络代理协议</strong>，用于在<strong>客户端和服务器</strong>之间进行网络通信。它允许客户端通过代理服务器与远程服务器进行通信，从而<strong>隐藏客户端的真实IP地址和身份</strong>。</li>
+</ul>
+<h4 id="SOCKS代理服务器"><a href="#SOCKS代理服务器" class="headerlink" title="SOCKS代理服务器:"></a>SOCKS代理服务器:</h4><ul>
+<li><p>SOCKS代理服务器是一种在传输控制协议（TCP）和用户数据报协议（UDP）层级上运行的部署了SOCKS协议的代理服务器，用于在客户端和服务器之间中转网络流量,实现SOCKS协议的功能。</p>
+<p>如果没有代理服务器，你的 IP 地址在互联网上是可见的。代理服务器只是一台拥有 IP 地址的计算机。现在，代替你的计算机或设备将直接请求转发到 Internet 资源，代理服务器从你的设备获取请求，并代表您的计算机将其发送到 Internet 资源。然后通过代理服务器将反馈传送回你的设备。这样，你的 IP 地址被屏蔽，你将保持匿名。</p>
+</li>
+</ul>
+<h4 id="SOCKS代理"><a href="#SOCKS代理" class="headerlink" title="SOCKS代理:"></a>SOCKS代理:</h4><ul>
+<li><p>SOCKS代理则是通过SOCKS协议进行网络中继和中转的代理方式,在传输层（TCP&#x2F;UDP）上运行。</p>
+<p>SOCKS代理有几个主要特点：</p>
+<ol>
+<li><p>在传输层（TCP&#x2F;UDP）上运行：SOCKS代理在传输层上进行操作，能够代理各种类型的应用层协议。</p>
+</li>
+<li><p>不关心应用层协议：SOCKS代理不关心应用层协议，可以用于代理多种类型的应用层协议。</p>
+</li>
+<li><p>独立于应用程序：SOCKS代理与应用程序独立，可以在操作系统或网络设备上配置，对应用程序透明。</p>
+</li>
+<li><p>支持认证：SOCKS协议支持客户端和服务器之间的认证，可以增加访问控制和安全性。</p>
+</li>
+<li><p>跨平台支持：SOCKS协议是一种通用的协议，可以在不同的操作系统和设备上使用。</p>
+</li>
+</ol>
+<p>SOCKS代理通常被用于以下情况：</p>
+<ol>
+<li>防火墙穿越：在一些网络环境中，防火墙可能会限制对特定端口或协议的访问。通过使用SOCKS代理，客户端可以绕过这些限制，建立与远程服务器之间的连接。</li>
+<li>匿名性：SOCKS代理可以隐藏客户端的真实IP地址和身份，从而保护用户的隐私和匿名性。</li>
+<li>地理位置伪装：通过使用位于其他地理位置的SOCKS代理，客户端可以伪装自己的地理位置，从而绕过地理位置限制的访问控制。</li>
+<li>流量转发：SOCKS代理可以将客户端的网络流量转发到不同的目标服务器，从而实现网络流量的管理、优化和分配。</li>
+</ol>
+<p>SOCKS代理可以在客户端和服务器之间建立连接，支持TCP和UDP协议，并且可以使用不同的认证和加密方式来保护通信安全。常见的SOCKS代理版本包括SOCKS4、SOCKS4a和SOCKS5，其中SOCKS5是最常用和功能最丰富的版本，支持更多的认证和加密方式，并且可以进行远程DNS解析。</p>
+</li>
+</ul>
+<h1 id="二-http、https解析过程"><a href="#二-http、https解析过程" class="headerlink" title="二.http、https解析过程"></a>二.<strong>http、https解析过程</strong></h1><p><a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/">https://zhuanlan.zhihu.com/</a></p>
+<h4 id="1-1-整体流程"><a href="#1-1-整体流程" class="headerlink" title="1.1 整体流程"></a>1.1 <strong>整体流程</strong></h4><p>图解: <a target="_blank" rel="noopener" href="https://www.yuque.com/0xzs/zekaq0/vl9zva">https://www.yuque.com/0xzs/zekaq0/vl9zva</a></p>
+<ul>
+<li><p><strong>与服务器建立连接:</strong></p>
+<ul>
+<li><strong>TCP连接的建立</strong></li>
+</ul>
+  <img src="https://s2.loli.net/2023/09/08/a3DFMkfYVsGLrlT.jpg" alt="img" style="zoom: 80%;" />
+
+<p>  客户端的请求到达服务器，首先就是建立TCP连接(<strong>三次握手</strong>):</p>
+<ol>
+<li>Client首先发送一个连接试探(syn: 连接请求标识;ack: 确认标识; seq: 初始序号) 同时这个数据报不能携带数据（seq &#x3D; 0 就代表这是第0号包），这时候Client进入syn_sent状态，表示客户端等待服务器的回复</li>
+<li>Server监听到连接请求报文后，如同意建立连接，则向Client发送确认。TCP报文首部中的SYN 和 ACK都置1 ，ack &#x3D; x + 1表示期望收到对方下一个报文段的第一个数据字节序号是x+1，同时表明x为止的所有数据都已正确收到，seq &#x3D; y 表示Server 自己的初始序号。这时服务器进入syn_rcvd，表示服务器已经收到Client的连接请求，等待client的确认。</li>
+<li>Client收到确认后还需再次发送确认，同时携带要发送给Server的数据。ACK 置1 表示确认号ack&#x3D; y + 1 有效（代表期望收到服务器的第1个包），Client自己的序号seq&#x3D; x + 1（表示这就是我的第1个包，相对于第0个包来说的），一旦收到Client的确认之后，这个TCP连接就进入Established状态，就可以发起http请求了。</li>
+</ol>
+<ul>
+<li><p><strong>TCP连接断开:</strong></p>
+<img src="https://s2.loli.net/2023/09/08/WtgN5kIMnY8P1if.jpg" alt="img" style="zoom: 80%;" />
+
+<p>   当数据传送完毕，断开TCP连接(<strong>四次挥手</strong>):</p>
+<ol>
+<li>主机1（可以是客户端，也可以是服务器端），设置Sequence Number，向主机2发送一个FIN报文段；此时，主机1进入FIN_WAIT_1状态；这表示主机1没有数据要发送给主机2了;</li>
+<li>主机2收到了主机1发送的FIN报文段，向主机1回一个ACK报文段，Ack为Seq加1；主机1进入FIN_WAIT_2状态；主机2告诉主机1，我“同意”你的关闭请求；</li>
+<li>主机2向主机1发送FIN报文段，请求关闭连接，同时主机2进入LAST_ACK状态；</li>
+<li>主机1收到主机2发送的FIN报文段，向主机2发送ACK报文段，然后主机1进入TIME_WAIT状态；主机2收到主机1的ACK报文段以后，就关闭连接；此时，主机1等待2MSL(msl为报文最大寿命)后依然没有收到回复，则证明Server端已正常关闭，那好，主机1也可以关闭连接了。</li>
+</ol>
+</li>
+</ul>
+</li>
+<li><p><strong>发起HTTP请求</strong>:</p>
+<p>HTTP是一个客户端和服务器端请求和应答的标准（TCP）。通过Web浏览器、网络爬虫或者其它的工具，客户端发起一个到服务器上指定端口（默认端口为80）的HTTP请求。</p>
+<p>通俗来讲，他就是计算机通过网络进行通信的规则，是一个基于请求与响应，无状态的，应用层的协议，常基于TCP&#x2F;IP协议传输数据。目前任何终端（手机，笔记本电脑。。）之间进行任何一种通信都必须按照Http协议进行，否则无法连接。</p>
+<ul>
+<li><strong>四个基于</strong>：</li>
+</ul>
+<ol>
+<li><strong>请求与响应：</strong>客户端发送请求，服务器端响应数据</li>
+<li><strong>无状态的：</strong>协议对于事务处理没有记忆能力。</li>
+<li><strong>应用层：</strong> Http是属于应用层的协议，配合TCP&#x2F;IP使用。</li>
+<li><strong>TCP&#x2F;IP：</strong> Http使用TCP作为它的支撑运输协议。HTTP客户机发起一个与服务器的TCP连接，一旦连接建立，浏览器（客户机）和服务器进程就可以通过套接字接口访问TCP。</li>
+</ol>
+<ul>
+<li><p><strong>一个HTTP请求报文</strong>由<strong>请求行</strong>（request line）、<strong>请求头部</strong>（header）、<strong>空行</strong>和<strong>请求数据</strong>4个部分组成，下图给出了请求报文的一般格式。</p>
+<p><img src="https://s2.loli.net/2023/09/08/QNcPb4ZwfMRxh7t.webp" alt="img"></p>
+</li>
+<li><p><strong>请求行</strong>：</p>
+<p>请求行分为三个部分：请求方法、请求地址和协议版本</p>
+<ul>
+<li><p>请求方法：HTTP&#x2F;1.1 定义的请求方法有8种：GET、POST、PUT、DELETE、PATCH、HEAD、OPTIONS、TRACE。</p>
+</li>
+<li><p>请求地址：URL:统一资源定位符，是一种自愿位置的抽象唯一识别方法。<br>组成：&lt;协议&gt;：&#x2F;&#x2F;&lt;主机&gt;：&lt;端口&gt;&#x2F;&lt;路径&gt;</p>
+</li>
+<li><p>协议版本：协议版本的格式为：HTTP&#x2F;主版本号.次版本号，常用的有HTTP&#x2F;1.0和HTTP&#x2F;1.1</p>
+<p><strong>请求方法：</strong></p>
+<h3 id="GET"><a href="#GET" class="headerlink" title="GET"></a><strong>GET</strong></h3><ul>
+<li>最常见的请求方式</li>
+<li>指定请求路径，向服务器请求资源</li>
+</ul>
+</li>
+<li><p>只获取资源，不对服务器数据进行修改</p>
+<ul>
+<li>不发送 body</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">GET  /users/<span class="number">1</span>  HTTP/<span class="number">1.1</span></span><br><span class="line">Host: api.github.com</span><br></pre></td></tr></table></figure>
+
+<p>对应的 Retrofit 的代码：</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">@GET(&quot;/users/&#123;id&#125;&quot;)</span><br><span class="line">Call&lt;User&gt; getUser(@Path(&quot;id&quot;) String id, @Query(&quot;gender&quot;) String gender);</span><br></pre></td></tr></table></figure>
+
+<h3 id="Post"><a href="#Post" class="headerlink" title="Post"></a><strong>Post</strong></h3></li>
+<li><p>用户增加或者修改资源</p>
+<ul>
+<li>包含 body，发送给服务器的内容写在 body 里面</li>
+</ul>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">POST  /users  HTTP/1.1</span><br><span class="line">Host: api.github.com</span><br><span class="line">Content-Type: application/x-www-form-urlencoded</span><br><span class="line">Content-Length: 13</span><br></pre></td></tr></table></figure>
+
+<p>对应的 Retrofit 的代码：</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">@FormUrlEncoded</span><br><span class="line">@POST(&quot;/users&quot;)</span><br><span class="line">Call&lt;User&gt; addUser(@Field(&quot;name&quot;) String name, @Field(&quot;gender&quot;) String</span><br><span class="line">gender);</span><br></pre></td></tr></table></figure>
+
+<h3 id="PUT"><a href="#PUT" class="headerlink" title="PUT"></a><strong>PUT</strong></h3></li>
+<li><p>用于修改资源</p>
+<ul>
+<li>包含 body，发送给服务器的内容写在 body 里面</li>
+</ul>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">PUT  /users/1  HTTP/1.1</span><br><span class="line">Host: api.github.com</span><br><span class="line">Content-Type: application/x-www-form-urlencoded</span><br><span class="line">Content-Length: 13</span><br></pre></td></tr></table></figure>
+
+<p>对应的 Retrofit 的代码：</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">@FormUrlEncoded</span><br><span class="line">@PUT(&quot;/users/&#123;id&#125;&quot;)</span><br><span class="line">Call&lt;User&gt; updateGender(@Path(&quot;id&quot;) String id, @Field(&quot;gender&quot;) String</span><br><span class="line">gender);</span><br></pre></td></tr></table></figure>
+
+<h3 id="DELETE"><a href="#DELETE" class="headerlink" title="DELETE"></a><strong>DELETE</strong></h3></li>
+<li><p>用于删除资源</p>
+<ul>
+<li>不发送 body</li>
+</ul>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">DELETE  /users/1  HTTP/1.1</span><br><span class="line">Host: api.github.com</span><br></pre></td></tr></table></figure>
+
+<p>对应的 Retrofit 的代码：</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">@DELETE(&quot;/users/&#123;id&#125;&quot;)</span><br><span class="line">Call&lt;User&gt; getUser(@Path(&quot;id&quot;) String id, @Query(&quot;gender&quot;) String gender);</span><br></pre></td></tr></table></figure>
+
+<h3 id="HEAD"><a href="#HEAD" class="headerlink" title="HEAD"></a><strong>HEAD</strong></h3><ul>
+<li><code>HEAD</code> 与 <code>GET</code> 的使用方式完全相同。</li>
+</ul>
+</li>
+<li><p>区别在于，<code>HEAD</code> 请求的返回响应中没有 <code>Body</code></p>
+<ul>
+<li>用途：比如下载需求，返回的 Headers 中有下载内容的大小，可以用于显示进度。</li>
+</ul>
+<h3 id="小知识点"><a href="#小知识点" class="headerlink" title="小知识点"></a><strong>小知识点</strong></h3></li>
+</ul>
+<p><code>GET</code>、<code>PUT</code>、<code>DELETE</code> 都是<strong>幂等</strong>操作，就是说，请求一次和请求多次的结果是一样的。<br>  比如，GET 请求一个数据，请求一次和请求十次返回的结果是一样的，PUT 同样修改一个数据，修改一次和修改十次，结果也都是一样的。</p>
+</li>
+<li><p><strong>服务器响应HTTP请求，浏览器得到html代码</strong>:</p>
+<ul>
+<li><strong>负载均衡</strong>:</li>
+</ul>
+<p>  接收到HTTP请求之后，就轮到负载均衡登场了，它位于网站的最前端，把短时间内较高的访问量分摊到不同机器上处理。负载均衡方案有软件、硬件两种</p>
+</li>
+</ul>
+</li>
+</ul>
+<h4 id="1-2-状态行"><a href="#1-2-状态行" class="headerlink" title="1.2 状态行"></a>1.2 <strong>状态行</strong></h4><ul>
+<li><p><strong>状态码(status code)</strong>:</p>
+<p>状态码是对结果进行类型化的描述的，比如「请求成功」、「内容未找到」等<br>主要分为 5 类。</p>
+<p><strong>1xx：临时性消息。</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">100：继续发送 101：正在切换协议</span><br></pre></td></tr></table></figure>
+
+<p><strong>2xx：成功。</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">200：OK (最常见) 201：创建成功</span><br></pre></td></tr></table></figure>
+
+<p><strong>3xx：重定向。</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">301：域名永久移动 302：暂时移动 304：内容未改变，请求被重定向到客户端本地缓存</span><br></pre></td></tr></table></figure>
+
+<p><strong>4xx：客户端错误</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">400：客户端请求错误，服务器不理解请求的语法。 401：未授权，要求进行身份验证。 403：被禁止，服务器拒绝请求。 404：找不到内容，服务器找不到请求的网页。(最常见)</span><br></pre></td></tr></table></figure>
+
+<p><strong>5xx：服务器错误</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">500：服务器内部错误 (最常见) 503：服务不可用</span><br></pre></td></tr></table></figure></li>
+</ul>
+<h4 id="1-3-首部-Headers"><a href="#1-3-首部-Headers" class="headerlink" title="1.3 首部(Headers)"></a>1.3 <strong>首部(Headers)</strong></h4><ul>
+<li><p>首部包含多个请求头，是用来描述消息的元数据(meta data)。</p>
+<p>首部字段有很多，主要分为以下几类：</p>
+<ul>
+<li><p>通用首部 &#x3D;&gt; 提供了与报文相关的最基本的信息</p>
+</li>
+<li><p>请求首部 &#x3D;&gt; 只在请求报文中有意义的首部</p>
+</li>
+<li><p>响应首部 &#x3D;&gt; 只在响应报文中有意义的首部</p>
+</li>
+<li><p>body 首部 &#x3D;&gt; 描述 body 的首部</p>
+<p><strong>常用的:</strong></p>
+</li>
+</ul>
+<ol>
+<li><p><strong>通用首部</strong>:</p>
+<ul>
+<li><p><strong>Date</strong></p>
+<p>提供日期和时间标志，说明报文是在什么时间创建的。</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Date: Tue, 12 Feb 2019 07:32:07 GMT</span><br></pre></td></tr></table></figure>
+</li>
+<li><p><strong>Connection</strong></p>
+<p>允许客户端和服务器指定与请求&#x2F;响应连接有关的选项。</p>
+<figure class="highlight txt"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Connection: keep-alive</span><br></pre></td></tr></table></figure>
+</li>
+<li><p><strong>Via</strong> </p>
+<p>显示报文经过的中间节点（代理、网关）。</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">via: cache25.l2ot7-1[0,304-0,H], cache25.l2ot7-1[1,0], cache5.us14[342,200-0,H]</span><br></pre></td></tr></table></figure>
+</li>
+<li><p><strong>Transfer-Encoding</strong> </p>
+<p>告知接收端为了保证报文的可靠传输，对报文采用了什么编码方式。</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Transfer-Encoding: chunked</span><br></pre></td></tr></table></figure>
+</li>
+<li><p><strong>Cache-Control</strong> </p>
+<p>指定缓存的控制方式。</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">cache-control: no-store, no-cache, must-revalidate, proxy-revalidate</span><br></pre></td></tr></table></figure></li>
+</ul>
+</li>
+<li><p><strong>请求首部</strong></p>
+<ul>
+<li><p><strong>Host</strong></p>
+<p>给出了接收请求的服务器的主机名和端口。</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Host: api.github.com</span><br></pre></td></tr></table></figure>
+</li>
+<li><p><strong>Accept</strong></p>
+<p>用来告诉<strong>服务端</strong>客户端会接受的媒体类型，包括客户端需要什么，可以使用什么，以及不想要什么。</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">Accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8</span><br><span class="line"></span><br><span class="line">&#x27;*&#x27; 用来表示通配符。</span><br><span class="line">;q= (q-factor weighting)</span><br><span class="line">值代表优先顺序，用相对质量价值表示，又称为权重。</span><br></pre></td></tr></table></figure>
+</li>
+<li><p><strong>Accept-Charset</strong></p>
+<p>用来告知服务器，客户端可以处理的字符集类型。</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Accept-Charset: utf-8, iso-8859-1;q=0.5</span><br></pre></td></tr></table></figure>
+</li>
+<li><h3 id="Accept-Encoding"><a href="#Accept-Encoding" class="headerlink" title="Accept-Encoding"></a><strong>Accept-Encoding</strong></h3><p>用来将客户端能够理解的内容编码方式告知服务器，服务端会选择一个客户端提议的方式。</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">Accept-Encoding: gzip, deflate, br</span><br><span class="line"></span><br><span class="line">gzip：表示采用 Lempel-Ziv coding (LZ77) 压缩算法，以及32位CRC校验的编码方式。</span><br><span class="line">compress：采用 Lempel-Ziv-Welch (LZW) 压缩算法。</span><br><span class="line">deflate：采用 zlib 结构和 deflate 压缩算法。</span><br><span class="line">br：表示采用 Brotli 算法的编码方式。</span><br><span class="line">identity：用于指代自身（例如：未经过压缩和修改）。除非特别指明，这个标记始终可以被接受。</span><br></pre></td></tr></table></figure>
+</li>
+<li><p><strong>Accept-Language</strong></p>
+<p>用来告诉服务器，客户端能够理解<strong>哪些语言</strong></p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Accept-Language: zh-CN,zh;q=0.9,en;q=0.8</span><br></pre></td></tr></table></figure>
+</li>
+<li><p><strong>From</strong></p>
+<p>提供了客户端用户的 E-mail 地址，<br>用处：比如你有一个爬虫程序，那么 Form 首部应该随请求一起发送，这样的话，在服务器遇到问题的时候，例如爬虫发送了过量的、不希望收到的或者不合法的请求时，站点管理员可以联系到你。</p>
+</li>
+</ul>
+</li>
+<li><p><strong>响应首部</strong></p>
+<ul>
+<li><h3 id="Server"><a href="#Server" class="headerlink" title="Server"></a><strong>Server</strong></h3><p>包含了处理请求的源头服务器所用到的软件相关信息</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Server: Apache-Coyote/1.1</span><br></pre></td></tr></table></figure>
+</li>
+<li><h3 id="Set-Cookie"><a href="#Set-Cookie" class="headerlink" title="Set-Cookie"></a><strong>Set-Cookie</strong></h3><p>用来由服务器端向客户端发送 cookie。</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">会话期 cookies 将会在客户端关闭时被移除。 </span><br><span class="line">Set-Cookie: id=a3fWa; Expires=Wed, 21 Oct 2015 07:28:00 GMT; Secure; HttpOnly</span><br></pre></td></tr></table></figure>
+</li>
+<li><h3 id="Accept-Ranges"><a href="#Accept-Ranges" class="headerlink" title="Accept-Ranges"></a><strong>Accept-Ranges</strong></h3><p>响应中出现，表示服务器支持按字节来取范围数据</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">语法：</span><br><span class="line">Accept-Ranges: bytes</span><br><span class="line">Accept-Ranges: none</span><br><span class="line">none：不支持任何范围请求单位，由于其等同于没有返回此头部，因此很少使用。</span><br><span class="line">bytes：范围请求的单位是 bytes （字节）。</span><br><span class="line"></span><br><span class="line">Accept-Ranges: bytes</span><br></pre></td></tr></table></figure></li>
+</ul>
+</li>
+<li><p><strong>Body 首部</strong></p>
+<p>由于请求与响应中都可以包含 body部分，所以在请求报文与响应报文中都可以出现这部分字段。	</p>
+<ul>
+<li><p><strong>Location</strong></p>
+<p>指定的是需要将页面重新定向至的地址。一般在响应码为 3xx 的响应中才会有意义。</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Location: /index.html</span><br></pre></td></tr></table></figure>
+</li>
+<li><p><strong>Content-Type</strong></p>
+<p>告诉客户端实际返回的内容的内容类型。</p>
+<figure class="highlight txt"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line">主要分为一下 4 类:</span><br><span class="line">1.text/html</span><br><span class="line">  请求 Web ⻚面时返回响应的类型，Body 中返回 html文本。</span><br><span class="line">  Content-Type: text/html;</span><br><span class="line">  </span><br><span class="line">2.x-www-form-urlencoded</span><br><span class="line">  Web ⻚面纯⽂本表单的提交方式 </span><br><span class="line">  Content-Type: application/x-www-form-urlencoded;</span><br><span class="line">  </span><br><span class="line">3.multitype/form-data</span><br><span class="line">  Web ⻚面含有⼆制⽂件时的提交方式。</span><br><span class="line">  Content-Type: multipart/form-data; </span><br><span class="line">  </span><br><span class="line">4.application/json , image/jpeg , application/zip …</span><br><span class="line">  单项内容(⽂本或非⽂本都可以)，用于 Web Api 的响应或者   POST / PUT 的请求。</span><br><span class="line">  4.1 请求中提交 JSON</span><br><span class="line">  	Content-Type: application/json;</span><br><span class="line">  4.2 响应中返回 JSON</span><br><span class="line">  	Content-Type: application/json;</span><br><span class="line">  4.3 请求中提交⼆进制内容</span><br><span class="line">  	Content-Type: image/jpeg</span><br><span class="line">  4.4 相应中返回⼆进制内容</span><br><span class="line">  	content-type: image/jpeg</span><br></pre></td></tr></table></figure>
+</li>
+<li><h3 id="Content-length"><a href="#Content-length" class="headerlink" title="Content-length"></a><strong>Content-length</strong></h3><p>用来指明发送给接收方的消息主体的大小。</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Content-Length: &lt;length&gt;</span><br></pre></td></tr></table></figure>
+</li>
+<li><h3 id="Content-Encoding"><a href="#Content-Encoding" class="headerlink" title="Content-Encoding"></a><strong>Content-Encoding</strong></h3><p>用于对特定媒体类型的数据进行压缩。<br>这个消息用来告知客户端应该怎样解码才能获取在 Content-Type 中的媒体类型内容。</p>
+<p>与此对应，Content-Language 也与 Accept-Language 对应。</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">Content-Encoding: gzip</span><br><span class="line"></span><br><span class="line">其值受 Accept-Encoding 影响</span><br></pre></td></tr></table></figure></li>
+</ul>
+</li>
+</ol>
+</li>
+</ul>
+<h4 id="1-4-解析并请求html中的资源"><a href="#1-4-解析并请求html中的资源" class="headerlink" title="1.4 解析并请求html中的资源"></a>1.4 <strong>解析并请求html中的资源</strong></h4><ul>
+<li><p>浏览器拿到index.html文件后，就开始解析其中的html代码，遇到js&#x2F;css&#x2F;image等静态资源时，就向服务器端去请求下载（会使用多线程下载，每个浏览器的线程数不一样），这个时候就用上keep-alive特性了，建立一次HTTP连接，可以请求多个资源，下载资源的顺序就是按照代码里的顺序，但是由于每个资源大小不一样，而浏览器又多线程请求请求资源，所以从下图看出，这里显示的顺序并不一定是代码里面的顺序。</p>
+<p>浏览器在请求静态资源时（在未过期的情况下），向服务器端发起一个http请求（询问自从上一次修改时间到现在有没有对资源进行修改），如果服务器端返回304状态码（告诉浏览器服务器端没有修改），那么浏览器会直接读取本地的该资源的缓存文件。</p>
+</li>
+</ul>
+<img src="https://s2.loli.net/2023/09/08/iGdu85yKsxYSpO2.webp" alt="img" style="zoom: 67%;" />
+
+<h4 id="1-5-HTTPS协议"><a href="#1-5-HTTPS协议" class="headerlink" title="1.5 HTTPS协议"></a>1.5 <strong>HTTPS协议</strong></h4><ul>
+<li><p>为了解决HTTP协议明文传输不安全的缺陷，需要使用另一种协议：<strong>安全套接字</strong>层超文本传输协议HTTPS，为了数据传输的安全，HTTPS在HTTP的基础上加入了<strong>SSL&#x2F;TLS协议</strong>，SSL&#x2F;TLS依靠证书来验证服务器的身份，并为浏览器和服务器之间的通信加密。</p>
+</li>
+<li><p>HTTP和HTTPS的区别:</p>
+<p>HTTPS协议可以理解为HTTP协议的升级，就是在HTTP的基础上增加了数据加密。在数据进行传输之前，对数据进行加密，然后再发送到服务器。这样，就算数据被第三者所截获，但是由于数据是加密的，所以你的个人信息仍然是安全的。这就是HTTP和HTTPS的最大区别。</p>
+<img src="https://s2.loli.net/2023/09/08/dXj83WFsUMx62hJ.jpg" alt="img" style="zoom:80%;" /></li>
+</ul>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta">文章作者: </span><span class="post-copyright-info"><a href="http://RuiJiLuo.github.io">Rui Ji</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta">文章链接: </span><span class="post-copyright-info"><a href="http://ruijiluo.github.io/2023/09/07/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/">http://ruijiluo.github.io/2023/09/07/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta">版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来自 <a href="http://RuiJiLuo.github.io" target="_blank">RJ の 博客</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"></div><div class="post_share"><div class="social-share" data-image="https://s2.loli.net/2023/09/07/1e3XvsuNQrkL7aV.jpg" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><div class="prev-post pull-left"><a href="/2023/12/15/%E6%9A%B4%E5%8A%9B%E7%A0%B4%E8%A7%A3/" title="暴力破解"><img class="cover" src="https://s2.loli.net/2023/12/15/eFXEOHPdqrBkgKI.jpg" onerror="onerror=null;src='/img/404.jpg'" alt="cover of previous post"><div class="pagination-info"><div class="label">上一篇</div><div class="prev_info">暴力破解</div></div></a></div><div class="next-post pull-right"><a href="/2023/09/07/hello-world/" title="Hello Elysia"><img class="cover" src="https://s2.loli.net/2024/03/02/FDPTWtXMoQ7Z5ea.jpg" onerror="onerror=null;src='/img/404.jpg'" alt="cover of next post"><div class="pagination-info"><div class="label">下一篇</div><div class="next_info">Hello Elysia</div></div></a></div></nav></div><div class="aside-content" id="aside-content"><div class="card-widget card-info"><div class="is-center"><div class="avatar-img"><img src="https://s2.loli.net/2023/09/07/oZOaspjYrzmT5e9.jpg" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info__name">Rui Ji</div><div class="author-info__description">私 の hacker 夢</div></div><div class="card-info-data site-data is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">27</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">1</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">0</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/ruijiluo"><i class="fab fa-github"></i><span>Follow Me</span></a></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%B8%80-%E8%AE%A1%E7%BD%91%E7%9F%A5%E8%AF%86%E6%80%BB%E7%BB%93"><span class="toc-text">一.计网知识总结</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%80%E3%80%81%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E6%A6%82%E8%BF%B0"><span class="toc-text">一、计算机网络概述</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-1-%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E7%9A%84%E5%88%86%E7%B1%BB"><span class="toc-text">1.1 计算机网络的分类</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#1-2-%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E7%9A%84%E5%B1%82%E6%AC%A1%E7%BB%93%E6%9E%84"><span class="toc-text">1.2 计算机网络的层次结构</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#1-3-%E5%B1%82%E6%AC%A1%E7%BB%93%E6%9E%84%E8%AE%BE%E8%AE%A1%E7%9A%84%E5%9F%BA%E6%9C%AC%E5%8E%9F%E5%88%99"><span class="toc-text">1.3 层次结构设计的基本原则</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#1-4-%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E7%9A%84%E6%80%A7%E8%83%BD%E6%8C%87%E6%A0%87"><span class="toc-text">1.4 计算机网络的性能指标</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-text"></span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BA%8C%E3%80%81%E7%89%A9%E7%90%86%E5%B1%82"><span class="toc-text">二、物理层</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%89%E3%80%81%E6%95%B0%E6%8D%AE%E9%93%BE%E8%B7%AF%E5%B1%82"><span class="toc-text">三、数据链路层</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#3-1-%E6%95%B0%E6%8D%AE%E9%93%BE%E8%B7%AF%E5%B1%82%E6%A6%82%E8%BF%B0"><span class="toc-text">3.1 数据链路层概述</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-2-%E6%95%B0%E6%8D%AE%E9%93%BE%E8%B7%AF%E5%B1%82%E7%9A%84%E5%B7%AE%E9%94%99%E7%9B%91%E6%B5%8B"><span class="toc-text">3.2 数据链路层的差错监测</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-3-%E6%9C%80%E5%A4%A7%E4%BC%A0%E8%BE%93%E5%8D%95%E5%85%83MTU"><span class="toc-text">3.3 最大传输单元MTU</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-4-%E4%BB%A5%E5%A4%AA%E7%BD%91%E5%8D%8F%E8%AE%AE%E8%AF%A6%E8%A7%A3"><span class="toc-text">3.4 以太网协议详解</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%B1%80%E5%9F%9F%E7%BD%91%E5%88%86%E7%B1%BB%EF%BC%9A"><span class="toc-text">局域网分类：</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E4%BB%A5%E5%A4%AA%E7%BD%91%E5%B8%A7%E7%BB%93%E6%9E%84%EF%BC%9A"><span class="toc-text">以太网帧结构：</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#MAC%E5%9C%B0%E5%9D%80%EF%BC%88%E7%89%A9%E7%90%86%E5%9C%B0%E5%9D%80%E3%80%81%E5%B1%80%E5%9F%9F%E7%BD%91%E5%9C%B0%E5%9D%80%EF%BC%89"><span class="toc-text">MAC地址（物理地址、局域网地址）</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%9B%9B%E3%80%81%E7%BD%91%E7%BB%9C%E5%B1%82"><span class="toc-text">四、网络层</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#4-1-IP%E5%8D%8F%E8%AE%AE%E8%AF%A6%E8%A7%A3"><span class="toc-text">4.1 IP协议详解</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4-2-IP%E5%8D%8F%E8%AE%AE%E7%9A%84%E8%BD%AC%E5%8F%91%E6%B5%81%E7%A8%8B"><span class="toc-text">4.2 IP协议的转发流程</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4-3-IP%E5%9C%B0%E5%9D%80%E7%9A%84%E5%AD%90%E7%BD%91%E5%88%92%E5%88%86"><span class="toc-text">4.3 IP地址的子网划分</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4-4-%E7%BD%91%E7%BB%9C%E5%9C%B0%E5%9D%80%E8%BD%AC%E6%8D%A2NAT%E6%8A%80%E6%9C%AF"><span class="toc-text">4.4 网络地址转换NAT技术</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#NAT-%E5%B7%A5%E4%BD%9C%E5%8E%9F%E7%90%86%EF%BC%9A"><span class="toc-text">NAT 工作原理：</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4-5-ARP%E5%8D%8F%E8%AE%AE%E4%B8%8ERARP%E5%8D%8F%E8%AE%AE"><span class="toc-text">4.5 ARP协议与RARP协议</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4-6-ICMP%E5%8D%8F%E8%AE%AE%E8%AF%A6%E8%A7%A3"><span class="toc-text">4.6 ICMP协议详解</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#ICMP%E5%8D%8F%E8%AE%AE%E7%9A%84%E5%BA%94%E7%94%A8%EF%BC%9A"><span class="toc-text">ICMP协议的应用：</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4-7%E8%B7%AF%E7%94%B1%E8%BD%AC%E5%8F%91"><span class="toc-text">4.7路由转发</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4-8-%E5%86%85%E9%83%A8%E7%BD%91%E5%85%B3%E8%B7%AF%E7%94%B1%E5%8D%8F%E8%AE%AE%E4%B9%8BRIP%E5%8D%8F%E8%AE%AE"><span class="toc-text">4.8 内部网关路由协议之RIP协议</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#RIP%E5%8D%8F%E8%AE%AE%E7%89%B9%E6%80%A7%EF%BC%9A"><span class="toc-text">RIP协议特性：</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4-9-%E5%86%85%E9%83%A8%E7%BD%91%E5%85%B3%E8%B7%AF%E7%94%B1%E5%8D%8F%E8%AE%AE%E4%B9%8BOSPF%E5%8D%8F%E8%AE%AE"><span class="toc-text">4.9 内部网关路由协议之OSPF协议</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#OSPF%E5%8D%8F%E8%AE%AE%E4%BC%98%E7%82%B9%EF%BC%9A"><span class="toc-text">OSPF协议优点：</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4-10%E5%A4%96%E9%83%A8%E7%BD%91%E5%85%B3%E8%B7%AF%E7%94%B1%E5%8D%8F%E8%AE%AE%E4%B9%8BBGP%E5%8D%8F%E8%AE%AE"><span class="toc-text">4.10外部网关路由协议之BGP协议</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BA%94%E3%80%81%E4%BC%A0%E8%BE%93%E5%B1%82"><span class="toc-text">五、传输层</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E6%9C%89%E5%85%B3%E7%BD%91%E7%BB%9C%E5%B1%82%E7%9A%84%E9%87%8D%E7%82%B9%EF%BC%9A"><span class="toc-text">有关网络层的重点：</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#5-1-UDP%E5%8D%8F%E8%AE%AE%E8%AF%A6%E8%A7%A3"><span class="toc-text">5.1 UDP协议详解</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#UDP%E6%95%B0%E6%8D%AE%E6%8A%A5%E7%BB%93%E6%9E%84%EF%BC%9A"><span class="toc-text">UDP数据报结构：</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#5-2-TCP%E5%8D%8F%E8%AE%AE%E8%AF%A6%E8%A7%A3"><span class="toc-text">5.2 TCP协议详解</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#TCP%E5%8D%8F%E8%AE%AE%E7%9A%84%E5%8A%9F%E8%83%BD%EF%BC%9A"><span class="toc-text">TCP协议的功能：</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#TCP%E5%8D%8F%E8%AE%AE%E7%9A%84%E7%89%B9%E7%82%B9%EF%BC%9A"><span class="toc-text">TCP协议的特点：</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#5-2-1-TCP%E6%8A%A5%E6%96%87%E6%AE%B5%E7%BB%93%E6%9E%84%EF%BC%9A"><span class="toc-text">5.2.1 TCP报文段结构：</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#TCP%E6%A0%87%E8%AE%B0%E7%9A%84%E4%BD%9C%E7%94%A8%EF%BC%9A"><span class="toc-text">TCP标记的作用：</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#5-3-%E5%8F%AF%E9%9D%A0%E4%BC%A0%E8%BE%93%E7%9A%84%E5%9F%BA%E6%9C%AC%E5%8E%9F%E7%90%86"><span class="toc-text">5.3 可靠传输的基本原理</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#5-3-1TCP%E5%8D%8F%E8%AE%AE%E7%9A%84%E5%8F%AF%E9%9D%A0%E4%BC%A0%E8%BE%93"><span class="toc-text">5.3.1TCP协议的可靠传输</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#5-3-2-TCP%E5%8D%8F%E8%AE%AE%E7%9A%84%E6%B5%81%E9%87%8F%E6%8E%A7%E5%88%B6"><span class="toc-text">5.3.2 TCP协议的流量控制</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#5-4-TCP%E5%8D%8F%E8%AE%AE%E7%9A%84%E6%8B%A5%E5%A1%9E%E6%8E%A7%E5%88%B6"><span class="toc-text">5.4 TCP协议的拥塞控制</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#5-5-TCP%E8%BF%9E%E6%8E%A5%E7%9A%84%E4%B8%89%E6%AC%A1%E6%8F%A1%E6%89%8B%EF%BC%88%E9%87%8D%E8%A6%81%EF%BC%89"><span class="toc-text">5.5 TCP连接的三次握手（重要）</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#5-6-TCP%E8%BF%9E%E6%8E%A5%E7%9A%84%E5%9B%9B%E6%AC%A1%E6%8C%A5%E6%89%8B%EF%BC%88%E9%87%8D%E8%A6%81%EF%BC%89"><span class="toc-text">5.6  TCP连接的四次挥手（重要）</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%85%AD%E3%80%81%E5%BA%94%E7%94%A8%E5%B1%82"><span class="toc-text">六、应用层</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#6-1-DNS%E8%AF%A6%E8%A7%A3"><span class="toc-text">6.1 DNS详解</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#6-1-1-DNS%E8%B5%84%E6%BA%90%E8%AE%B0%E5%BD%95"><span class="toc-text">6.1.1 DNS资源记录:</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#6-2-DHCP%E5%8D%8F%E8%AE%AE%E8%AF%A6%E8%A7%A3"><span class="toc-text">6.2 DHCP协议详解</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#6-3-HTTP%E5%8D%8F%E8%AE%AE%E8%AF%A6%E8%A7%A3"><span class="toc-text">6.3 HTTP协议详解</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#6-3-1-HTTP%E5%B7%A5%E4%BD%9C%E7%9A%84%E7%BB%93%E6%9E%84"><span class="toc-text">6.3.1 HTTP工作的结构</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#6-4-HTTP-HTTPS%E4%BB%A3%E7%90%86"><span class="toc-text">6.4 HTTP&#x2F;HTTPS代理</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#6-5-SOCKS%E4%BB%A3%E7%90%86"><span class="toc-text">6.5 SOCKS代理</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#SOCKS%E5%8D%8F%E8%AE%AE"><span class="toc-text">SOCKS协议:</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#SOCKS%E4%BB%A3%E7%90%86%E6%9C%8D%E5%8A%A1%E5%99%A8"><span class="toc-text">SOCKS代理服务器:</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#SOCKS%E4%BB%A3%E7%90%86"><span class="toc-text">SOCKS代理:</span></a></li></ol></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%BA%8C-http%E3%80%81https%E8%A7%A3%E6%9E%90%E8%BF%87%E7%A8%8B"><span class="toc-text">二.http、https解析过程</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#1-1-%E6%95%B4%E4%BD%93%E6%B5%81%E7%A8%8B"><span class="toc-text">1.1 整体流程</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#GET"><span class="toc-text">GET</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Post"><span class="toc-text">Post</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#PUT"><span class="toc-text">PUT</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#DELETE"><span class="toc-text">DELETE</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#HEAD"><span class="toc-text">HEAD</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%B0%8F%E7%9F%A5%E8%AF%86%E7%82%B9"><span class="toc-text">小知识点</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#1-2-%E7%8A%B6%E6%80%81%E8%A1%8C"><span class="toc-text">1.2 状态行</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#1-3-%E9%A6%96%E9%83%A8-Headers"><span class="toc-text">1.3 首部(Headers)</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Accept-Encoding"><span class="toc-text">Accept-Encoding</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Server"><span class="toc-text">Server</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Set-Cookie"><span class="toc-text">Set-Cookie</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Accept-Ranges"><span class="toc-text">Accept-Ranges</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Content-length"><span class="toc-text">Content-length</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Content-Encoding"><span class="toc-text">Content-Encoding</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#1-4-%E8%A7%A3%E6%9E%90%E5%B9%B6%E8%AF%B7%E6%B1%82html%E4%B8%AD%E7%9A%84%E8%B5%84%E6%BA%90"><span class="toc-text">1.4 解析并请求html中的资源</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#1-5-HTTPS%E5%8D%8F%E8%AE%AE"><span class="toc-text">1.5 HTTPS协议</span></a></li></ol></li></ol></li></ol></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item"><a class="thumbnail" href="/2024/11/14/pwn/" title="pwn"><img src="https://s2.loli.net/2024/03/07/Dxc6Z5vWzdCfQIP.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="pwn"/></a><div class="content"><a class="title" href="/2024/11/14/pwn/" title="pwn">pwn</a><time datetime="2024-11-14T09:15:12.000Z" title="发表于 2024-11-14 17:15:12">2024-11-14</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2024/09/12/app%E6%B8%97%E9%80%8F/" title="app渗透"><img src="https://s2.loli.net/2024/03/07/Dxc6Z5vWzdCfQIP.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="app渗透"/></a><div class="content"><a class="title" href="/2024/09/12/app%E6%B8%97%E9%80%8F/" title="app渗透">app渗透</a><time datetime="2024-09-12T11:35:21.000Z" title="发表于 2024-09-12 19:35:21">2024-09-12</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2024/09/12/%E5%86%85%E7%BD%91%E6%B8%97%E9%80%8F/" title="内网渗透"><img src="https://s2.loli.net/2024/03/07/Dxc6Z5vWzdCfQIP.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="内网渗透"/></a><div class="content"><a class="title" href="/2024/09/12/%E5%86%85%E7%BD%91%E6%B8%97%E9%80%8F/" title="内网渗透">内网渗透</a><time datetime="2024-09-12T11:32:28.000Z" title="发表于 2024-09-12 19:32:28">2024-09-12</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2024/09/12/%E4%BB%A3%E7%A0%81%E5%AE%A1%E8%AE%A1/" title="代码审计"><img src="https://s2.loli.net/2024/03/07/Dxc6Z5vWzdCfQIP.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="代码审计"/></a><div class="content"><a class="title" href="/2024/09/12/%E4%BB%A3%E7%A0%81%E5%AE%A1%E8%AE%A1/" title="代码审计">代码审计</a><time datetime="2024-09-12T11:31:50.000Z" title="发表于 2024-09-12 19:31:50">2024-09-12</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2024/09/12/js%E9%80%86%E5%90%91/" title="js逆向"><img src="https://s2.loli.net/2024/03/07/Dxc6Z5vWzdCfQIP.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="js逆向"/></a><div class="content"><a class="title" href="/2024/09/12/js%E9%80%86%E5%90%91/" title="js逆向">js逆向</a><time datetime="2024-09-12T11:31:20.000Z" title="发表于 2024-09-12 19:31:20">2024-09-12</time></div></div></div></div></div></div></main><footer id="footer"><div id="footer-wrap"><div class="copyright">&copy;2020 - 2025 By Rui Ji</div><div class="framework-info"><span>框架 </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo</a><span class="footer-separator">|</span><span>主题 </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly</a></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="浅色和深色模式转换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside_config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><button id="go-up" type="button" title="回到顶部"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox/fancybox.umd.min.js"></script><div class="js-pjax"></div><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div></body></html>
