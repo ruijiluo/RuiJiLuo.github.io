@@ -1,0 +1,2034 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>面试笔记1 | RJ の 博客</title><meta name="author" content="Rui Ji"><meta name="copyright" content="Rui Ji"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="ffffff"><meta name="description" content="二、7 天详细安排（每天主题明确） Day 1：找回“安全整体感”和面试框架渗透测试标准流程 信息收集 ip(ping)、域名(Whois)、子域名(oneforall)、端口(nmap)、邮箱(企查查)、公众号、小程序(企查查)、生活号、应用、指纹(Wappalyzer,eho)、操作系统(nmap)、版本、中间件、waf、网盘(网盘聚合搜索)、github、gitee、语雀、股权架构  漏洞探">
+<meta property="og:type" content="article">
+<meta property="og:title" content="面试笔记1">
+<meta property="og:url" content="http://ruijiluo.github.io/2023/12/20/%E9%9D%A2%E8%AF%95%E7%AC%94%E8%AE%B0/index.html">
+<meta property="og:site_name" content="RJ の 博客">
+<meta property="og:description" content="二、7 天详细安排（每天主题明确） Day 1：找回“安全整体感”和面试框架渗透测试标准流程 信息收集 ip(ping)、域名(Whois)、子域名(oneforall)、端口(nmap)、邮箱(企查查)、公众号、小程序(企查查)、生活号、应用、指纹(Wappalyzer,eho)、操作系统(nmap)、版本、中间件、waf、网盘(网盘聚合搜索)、github、gitee、语雀、股权架构  漏洞探">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://s2.loli.net/2024/03/07/Dxc6Z5vWzdCfQIP.jpg">
+<meta property="article:published_time" content="2023-12-20T12:57:43.000Z">
+<meta property="article:modified_time" content="2026-05-08T08:49:55.760Z">
+<meta property="article:author" content="Rui Ji">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://s2.loli.net/2024/03/07/Dxc6Z5vWzdCfQIP.jpg"><link rel="shortcut icon" href="https://s2.loli.net/2023/09/07/hRcHvbPo15QmB7T.png"><link rel="canonical" href="http://ruijiluo.github.io/2023/12/20/%E9%9D%A2%E8%AF%95%E7%AC%94%E8%AE%B0/index.html"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css" media="print" onload="this.media='all'"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox/fancybox.min.css" media="print" onload="this.media='all'"><script>const GLOBAL_CONFIG = {
+  root: '/',
+  algolia: undefined,
+  localSearch: undefined,
+  translate: undefined,
+  noticeOutdate: undefined,
+  highlight: {"plugin":"highlighjs","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false},
+  copy: {
+    success: '复制成功',
+    error: '复制错误',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  dateSuffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  lightbox: 'fancybox',
+  Snackbar: undefined,
+  source: {
+    justifiedGallery: {
+      js: 'https://cdn.jsdelivr.net/npm/flickr-justified-gallery/dist/fjGallery.min.js',
+      css: 'https://cdn.jsdelivr.net/npm/flickr-justified-gallery/dist/fjGallery.min.css'
+    }
+  },
+  isPhotoFigcaption: false,
+  islazyload: false,
+  isAnchor: false,
+  percent: {
+    toc: true,
+    rightside: false,
+  },
+  autoDarkmode: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: '面试笔记1',
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: false,
+  isToc: true,
+  postUpdate: '2026-05-08 16:49:55'
+}</script><noscript><style type="text/css">
+  #nav {
+    opacity: 1
+  }
+  .justified-gallery img {
+    opacity: 1
+  }
+
+  #recent-posts time,
+  #post-meta time {
+    display: inline !important
+  }
+</style></noscript><script>(win=>{
+    win.saveToLocal = {
+      set: function setWithExpiry(key, value, ttl) {
+        if (ttl === 0) return
+        const now = new Date()
+        const expiryDay = ttl * 86400000
+        const item = {
+          value: value,
+          expiry: now.getTime() + expiryDay,
+        }
+        localStorage.setItem(key, JSON.stringify(item))
+      },
+
+      get: function getWithExpiry(key) {
+        const itemStr = localStorage.getItem(key)
+
+        if (!itemStr) {
+          return undefined
+        }
+        const item = JSON.parse(itemStr)
+        const now = new Date()
+
+        if (now.getTime() > item.expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return item.value
+      }
+    }
+  
+    win.getScript = url => new Promise((resolve, reject) => {
+      const script = document.createElement('script')
+      script.src = url
+      script.async = true
+      script.onerror = reject
+      script.onload = script.onreadystatechange = function() {
+        const loadState = this.readyState
+        if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+        script.onload = script.onreadystatechange = null
+        resolve()
+      }
+      document.head.appendChild(script)
+    })
+  
+    win.getCSS = (url,id = false) => new Promise((resolve, reject) => {
+      const link = document.createElement('link')
+      link.rel = 'stylesheet'
+      link.href = url
+      if (id) link.id = id
+      link.onerror = reject
+      link.onload = link.onreadystatechange = function() {
+        const loadState = this.readyState
+        if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+        link.onload = link.onreadystatechange = null
+        resolve()
+      }
+      document.head.appendChild(link)
+    })
+  
+      win.activateDarkMode = function () {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      win.activateLightMode = function () {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', 'ffffff')
+        }
+      }
+      const t = saveToLocal.get('theme')
+    
+          if (t === 'dark') activateDarkMode()
+          else if (t === 'light') activateLightMode()
+        
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        if (asideStatus === 'hide') {
+          document.documentElement.classList.add('hide-aside')
+        } else {
+          document.documentElement.classList.remove('hide-aside')
+        }
+      }
+    
+    const detectApple = () => {
+      if(/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)){
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+    })(window)</script><link rel="stylesheet" href="./themes/butterfly/source/css/bg_color.css"><meta name="generator" content="Hexo 6.3.0"></head><body><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img is-center"><img src="https://s2.loli.net/2023/09/07/oZOaspjYrzmT5e9.jpg" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="sidebar-site-data site-data is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">37</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">9</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">0</div></a></div><hr class="custom-hr"/><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page group" href="javascript:void(0);"><i class="fa-fw fas fa-book"></i><span> 文章</span><i class="fas fa-chevron-down"></i></a><ul class="menus_item_child"><li><a class="site-page child" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 归档</span></a></li><li><a class="site-page child" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></li><li><a class="site-page child" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></li></ul></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header" style="background-image: url('https://s2.loli.net/2024/03/07/Dxc6Z5vWzdCfQIP.jpg')"><nav id="nav"><span id="blog-info"><a href="/" title="RJ の 博客"><span class="site-name">RJ の 博客</span></a></span><div id="menus"><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page group" href="javascript:void(0);"><i class="fa-fw fas fa-book"></i><span> 文章</span><i class="fas fa-chevron-down"></i></a><ul class="menus_item_child"><li><a class="site-page child" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 归档</span></a></li><li><a class="site-page child" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></li><li><a class="site-page child" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></li></ul></div></div><div id="toggle-menu"><a class="site-page" href="javascript:void(0);"><i class="fas fa-bars fa-fw"></i></a></div></div></nav><div id="post-info"><h1 class="post-title">面试笔记1</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2023-12-20T12:57:43.000Z" title="发表于 2023-12-20 20:57:43">2023-12-20</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2026-05-08T08:49:55.760Z" title="更新于 2026-05-08 16:49:55">2026-05-08</time></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title="面试笔记1"><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">阅读量:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="post-content" id="article-container"><h2 id="二、7-天详细安排（每天主题明确）"><a href="#二、7-天详细安排（每天主题明确）" class="headerlink" title="二、7 天详细安排（每天主题明确）"></a>二、7 天详细安排（每天主题明确）</h2><hr>
+<h2 id="Day-1：找回“安全整体感”和面试框架"><a href="#Day-1：找回“安全整体感”和面试框架" class="headerlink" title="Day 1：找回“安全整体感”和面试框架"></a>Day 1：找回“安全整体感”和面试框架</h2><h3 id="渗透测试标准流程"><a href="#渗透测试标准流程" class="headerlink" title="渗透测试标准流程"></a>渗透测试标准流程</h3><ul>
+<li><p><strong>信息收集</strong></p>
+<p>ip(ping)、域名(Whois)、子域名(oneforall)、端口(nmap)、邮箱(企查查)、公众号、小程序(企查查)、生活号、应用、指纹(Wappalyzer,eho)、操作系统(nmap)、版本、中间件、waf、网盘(网盘聚合搜索)、github、gitee、语雀、股权架构</p>
+</li>
+<li><p><strong>漏洞探测</strong></p>
+<p>端口漏洞</p>
+<ul>
+<li>22（SSH）</li>
+<li>21（FTP）</li>
+<li>3306（MySQL）</li>
+<li>6379（Redis）</li>
+<li>8080 &#x2F; 8443（Web 管理后台）</li>
+<li>3389（RDP）</li>
+</ul>
+<p>端口弱口令</p>
+<p>目录探测</p>
+<p>Web 应用漏洞-poc扫描</p>
+<p>管理后台漏洞</p>
+<p>逻辑漏洞</p>
+</li>
+<li><p><strong>漏洞利用</strong></p>
+<p>绕waf 进行漏洞利用 </p>
+<p>1.注释替换空格 </p>
+<ul>
+<li>使用<code>/**/</code>代替空格，waf如果没有语法级还原，就会将[关键字&#x2F;**&#x2F;关键字]识别为一个关键字，进而绕过，后端会把注释忽略或当成空格分隔两个关键字</li>
+</ul>
+<p>2.字符集绕过 </p>
+<ul>
+<li>使用url等编码或字符集转换，使得waf无法识别恶意关键字，但后端又会进行解码或字符集转换，导致恶意payload生效</li>
+</ul>
+<p>3.chunked 绕过 </p>
+<ul>
+<li><code>chunked</code>允许请求分段发送，waf通常按照单块(chunk)检测无法发现恶意payload，后端重组多个chunk后payload生效</li>
+</ul>
+<p>4.上传请求 multipart 绕过 </p>
+<ul>
+<li><code>multipart/form-data</code>不同于其他content-type通常是上传文件时的MIME类型，通常waf只检测文件名，后端解析文件内容</li>
+</ul>
+<p>5.参数污染 </p>
+<ul>
+<li>多个同一名称参数出现时，waf检测的和后端获取的不是同一个，通常waf取第一个，后端取最后一个</li>
+</ul>
+<p>6.垃圾数据污染</p>
+<ul>
+<li>通过插入无意义字段&#x2F;冗余参数&#x2F;超长内容导致waf超过检测阈值，匹配失败，性能退化，但是后端通常忽略垃圾参数，只取对应参数</li>
+</ul>
+<p>7.大小写&#x2F;语义等价</p>
+<ul>
+<li>利用waf大小写敏感，后端不敏感将关键字大小写绕过waf规则匹配</li>
+</ul>
+<p>8.业务逻辑层绕过</p>
+<ul>
+<li>waf一般只关注攻击特征，业务逻辑漏洞没有攻击特征</li>
+</ul>
+</li>
+<li><p><strong>提权，内网横向，权限维持</strong></p>
+<p><strong>提权思路</strong>：先上传信息收集脚本，枚举系统内核和配置；再结合系统开启的服务，进行有针对性的提权操作。</p>
+<p><strong>windows 提权:</strong></p>
+<p>1.systeminfo+wmic 查看系统信息和更新补丁，根据系统补丁提权 </p>
+<ul>
+<li><code>pr</code>提权(古老)，补丁号KB952004，wmic没有看到这个补丁就可以上传pr.exe提权</li>
+<li><code>WinSystemHelper</code>，检测系统可利用漏洞，用对应exp提权</li>
+<li><code>Sherlock</code>上传Sherlock，检测系统可利用漏洞，用对应exp提权</li>
+</ul>
+<p>2.第三方服务提权 </p>
+<p>3.数据库提权</p>
+<p><strong>linux 提权:</strong></p>
+<p><strong>系统信息收集</strong>：**<a target="_blank" rel="noopener" href="https://github.com/rebootuser/LinEnum">LinEnum</a>**</p>
+<p>1.利用系统内核漏洞进行提权 </p>
+<ul>
+<li>上传工具自动收集收集系统信息查找对应可利用漏洞和对应的EXP提权</li>
+<li><a target="_blank" rel="noopener" href="https://github.com/mzet-/linux-exploit-suggester">https://github.com/mzet-/linux-exploit-suggester</a></li>
+</ul>
+<p>2.SUID 提权</p>
+<ul>
+<li>当文件设置SUID权限时，执行该文件可以临时获得拥有者权限，寻找有SUID且拥有者为root的可执行文件来越权</li>
+<li>SUID敏感程序有：<code>find</code>，<code>vim / vi</code>，<code>python / python3</code>，<code>perl</code>，<code>env</code>，<code>bash</code>…</li>
+<li>自动收集并查找提权方式工具：<a target="_blank" rel="noopener" href="https://github.com/IvanGlinkin/AutoSUID/">AutoSUID</a></li>
+</ul>
+<p>3.sudo 提权 </p>
+<ul>
+<li>当sudo的配置文件sudoers被修改为不需要密码时可以提权</li>
+</ul>
+<p><strong>权限维持：</strong></p>
+<ul>
+<li><p><strong>windows</strong>:</p>
+<ul>
+<li>用cmd.exe把sethc.exe替换掉，5次shift用system权限去启动cmd.exe[替换不了就使用映像劫持方式(修改注册表)]</li>
+<li>注册表注入后门（启动项【run或runRce键】，计划任务）</li>
+<li>WMI后门，代码加密存储于WMI；系统自启动powershell去执行后门，执行后极短的时间内进程消失，优势在于无文件、无进程</li>
+</ul>
+</li>
+<li><p><strong>linux：</strong></p>
+<ul>
+<li>Cymothoa后门：这是一款kali自带的Linux后门利用工具，可以把shellcode注入到系统进程中，使用的时候需要把它扔到目标机器中运行</li>
+<li>webshell，SSP维持域控权限，SID history域后门，Golden ticket&amp;Silver ticket，Skeleton Key，Hook PasswordChangeNotify</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p><strong>清理痕迹</strong></p>
+<p><a target="_blank" rel="noopener" href="https://www.freebuf.com/articles/system/266458.html">清理痕迹方式总结</a></p>
+<p>修改文件时间：touch -a -t 202112311200.00 testfile.txt</p>
+</li>
+<li><p><strong>输出报告</strong></p>
+</li>
+</ul>
+<hr>
+<p><strong>3️⃣ 写一份你的「通用面试回答模板」</strong><br> 例如：</p>
+<blockquote>
+<p>“一般在项目中，我们会先进行资产梳理，通过 Nmap、指纹识别确认端口和服务，再结合漏洞扫描工具发现潜在漏洞，之后通过手工方式进行验证，避免误报，最终形成风险评估和修复建议。”</p>
+</blockquote>
+<hr>
+<h2 id="Day-2：Web-渗透"><a href="#Day-2：Web-渗透" class="headerlink" title="Day 2：Web 渗透"></a>Day 2：Web 渗透</h2><hr>
+<h3 id="通用漏洞"><a href="#通用漏洞" class="headerlink" title="通用漏洞"></a>通用漏洞</h3><h4 id="SQL-注入"><a href="#SQL-注入" class="headerlink" title="SQL 注入"></a>SQL 注入</h4><p> 原理：用户输入被拼接进 SQL 语句中执行，数据被当作代码。<br> 关键点：数字型&#x2F;字符型&#x2F;盲注，回显差异、报错、时间延迟。<br> 实战：登录、搜索、ID 参数最常见。<br> 防御：预编译、参数化查询、最小权限。</p>
+<p>1️⃣ CTF 中的典型入口</p>
+<ul>
+<li>登录框</li>
+<li>搜索框</li>
+<li>ID 参数（<code>id=1</code>）</li>
+<li>排行榜 &#x2F; 统计接口</li>
+<li>JSON API 参数</li>
+</ul>
+<p>2️⃣ 实战打法分层</p>
+<p>第一层：判断是否可注入</p>
+<ul>
+<li>报错</li>
+<li>页面内容变化</li>
+<li>响应时间变化</li>
+</ul>
+<p>第二层：确认类型</p>
+<ul>
+<li>数字型 &#x2F; 字符型</li>
+<li>回显注入 &#x2F; 盲注</li>
+</ul>
+<p>第三层：CTF 常见目标</p>
+<ul>
+<li><code>flag</code> 表 &#x2F; 字段</li>
+<li><code>information_schema</code></li>
+<li>配置表</li>
+</ul>
+<p>3️⃣ CTF 常见坑点</p>
+<ul>
+<li><strong>只有盲注</strong></li>
+<li><strong>过滤空格 &#x2F; 关键字</strong></li>
+<li><strong>只允许数字</strong></li>
+<li><strong>WAF 黑名单</strong></li>
+</ul>
+<p>4️⃣ 实战绕过思路（CTF 常见）</p>
+<ul>
+<li>布尔盲注（页面差异）</li>
+<li>时间盲注（延时）</li>
+<li>利用函数、副查询</li>
+<li>利用报错信息拼字段</li>
+</ul>
+<hr>
+<h4 id="XSS"><a href="#XSS" class="headerlink" title="XSS"></a>XSS</h4><p> 原理：用户输入被浏览器当作脚本执行。<br> 类型：反射、存储、DOM。<br> 实战用途：偷 Cookie、绕过 CSRF、前端劫持、管理员提权。<br> 关键：输出上下文不同，防御方式不同。<br> 防御：输出编码、CSP、避免危险 DOM API。</p>
+<p>1️⃣ CTF 中的真实意义</p>
+<p>在 CTF 里，XSS <strong>很少是最终目的</strong>，而是用来：</p>
+<ul>
+<li>偷 Cookie</li>
+<li>绕过 CSRF</li>
+<li>提权 &#x2F; 获取后台权限</li>
+<li>配合 Bot &#x2F; Admin 访问</li>
+</ul>
+<p>2️⃣ CTF 常见场景</p>
+<ul>
+<li>留言板</li>
+<li>用户名</li>
+<li>个人简介</li>
+<li>搜索结果回显</li>
+<li>管理后台审核页面</li>
+</ul>
+<p>3️⃣ DOM XSS 是 CTF 高发点</p>
+<ul>
+<li>前端 JS 处理 URL 参数</li>
+<li>hash (<code>#</code>) 不经后端</li>
+</ul>
+<p>4️⃣ CTF 攻防关键</p>
+<ul>
+<li>判断 <strong>输出上下文</strong><ul>
+<li>HTML</li>
+<li>属性</li>
+<li>JS</li>
+</ul>
+</li>
+<li>判断是否被 <strong>HTML Encode</strong></li>
+<li>判断是否有 <strong>CSP</strong></li>
+</ul>
+<hr>
+<h4 id="SSRF"><a href="#SSRF" class="headerlink" title="SSRF"></a>SSRF</h4><p> 原理：服务器根据用户输入发起请求。<br> 实战目标：内网服务、云元数据、本地服务。<br> 常见入口：图片、URL 预览、下载功能。<br> 防御：限制协议、IP 白名单、禁止内网访问。</p>
+<p>1️⃣ CTF 中 SSRF 的真实目标</p>
+<ul>
+<li><strong>内网端口扫描</strong></li>
+<li><strong>云元数据</strong></li>
+<li><strong>Redis &#x2F; MySQL 未授权</strong></li>
+<li><strong>flag 在内网服务</strong></li>
+</ul>
+<p>2️⃣ 常见 SSRF 入口</p>
+<ul>
+<li>图片加载</li>
+<li>URL 预览</li>
+<li>webhook</li>
+<li>文件下载</li>
+<li>PDF &#x2F; 转码服务</li>
+<li>XML</li>
+</ul>
+<p>3️⃣ CTF 常见链路</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">SSRF → 内网端口 → 未授权服务 → RCE / 读 flag</span><br></pre></td></tr></table></figure>
+
+<p>4️⃣ 卡点 &amp; 突破</p>
+<ul>
+<li>禁止 127.0.0.1</li>
+<li>DNS 不可控</li>
+<li>只允许 http</li>
+</ul>
+<p>👉 思路不是“能不能访问”，而是：</p>
+<ul>
+<li>能不能<strong>让服务端帮你探测</strong></li>
+</ul>
+<p><strong>SSRF拿AKSK</strong></p>
+<p>1、发现服务器为云主机，云主机通常自带防护，但还是按常规思路进行信息收集。<br>2、虽然通过工具探测到JS文件中存在大量接口，但尝试访问后发现时存在鉴权措施。<br>3、发现开发者遗留在网站注释中的用户名信息，手动审计 JS 发现一些可能存在逻辑绕过的痕迹，进一步 FUZZ 后成功加载了后台初始化获取用户信息的接口。<br>4、经过测试发现该接口可未授权获取用户登录密码。（所以就明白之前访问后的报错说未登录可能只是个返回的统一错误信息，实际上部分接口可未授权获取数据）<br>5、在进入后台界面后，发现加载了 Ueditor 配置文件，手工拼接默认路径发现其 Demo 页面，则针对该编辑器历史公开漏洞进行尝试。<br>6、远程图片抓取功能的 SSRF 漏洞还是存在，并且可以回显成功后的路径。结合服务器为阿里云主机的特性，利用 SSRF 漏洞成功获取到了实例元数据。<br>7、使用 CF 工具尝试获取信息，从OSS存储桶里翻找到了配置文件，包含有AK SK，尝试使用该凭证再次进行接管，发现权限为 AdministratorAccess 可管理所有阿里云资源，成功创建RAM角色并登录控制台。</p>
+<p><strong>技巧：</strong></p>
+<p>1、如果服务器获取元数据的路径访问不了，可能是目标没有配置 RAM 用户。<br>2、如果列出的可用资源为空，可能是没有权限，或者本身就没有 ECS 和 RDS 资源。<br>3、云场景下横向移动，可通过控制台看到网段情况。<br>4、从低权限下的泄露，也可横向扩到到其他云服务，例如从 OSS 到 ECS 再到 RAM 。<br>5、当你命令执行创建RAM用户时，就会短信收到严重告警。创建恶意函数上传恶意镜像，可能会被直接拦截。权限够高我们可以尝试在接管控制台后可在安全中心关掉监控。<br>6、同样遇到其他云主机时想获取元数据时候，参考其官方文档，不同云服务供应商的利用路径也是不同的。<br>7、习惯性地先进行被动信息收集，当思路无法开展后再使用扫描类的工具，尽量减少自己的暴漏面。<br>8、为什么一切都这么顺利，其实大部分尝试都是基于实践中去总结，可能是个错误的方向，但还是有必要把能想到的都试一试。</p>
+<hr>
+<h4 id="文件上传"><a href="#文件上传" class="headerlink" title="文件上传"></a>文件上传</h4><p> 原理：上传文件类型或内容校验不严，导致恶意文件可执行。<br> 实战关键：文件存储路径、是否解析、是否可访问。<br> 常见绕过：后缀、MIME、文件头、重命名。<br> 防御：白名单、重命名、隔离执行权限。</p>
+<p>1️⃣ CTF 上传题本质</p>
+<blockquote>
+<p><strong>不是“能不能上传”，而是“上传后能不能执行 &#x2F; 读取”</strong></p>
+</blockquote>
+<p>2️⃣ 三个关键判断</p>
+<ul>
+<li>文件存哪？</li>
+<li>会不会被解析？</li>
+<li>能不能被访问？</li>
+</ul>
+<p>3️⃣ CTF 常见组合拳</p>
+<ul>
+<li>上传 → 文件包含</li>
+<li>上传 → 反序列化</li>
+<li>上传 → SSRF &#x2F; LFI（本地文件包含）</li>
+</ul>
+<p>4️⃣ 常见卡点</p>
+<ul>
+<li>只能传图片</li>
+<li>自动重命名</li>
+<li>存 OSS &#x2F; CDN</li>
+</ul>
+<hr>
+<h4 id="命令执行"><a href="#命令执行" class="headerlink" title="命令执行"></a>命令执行</h4><p> 原理：用户输入拼接进系统命令。<br> 实战：ping、系统工具、脚本调用参数。<br> 难点：无回显、权限低、过滤字符。<br> 防御：避免系统命令、参数白名单。</p>
+<p>1️⃣ CTF 中命令执行的来源</p>
+<ul>
+<li>ping &#x2F; traceroute</li>
+<li>压缩 &#x2F; 解压</li>
+<li>调用系统工具</li>
+<li>参数传递</li>
+</ul>
+<p>2️⃣ 实战关键不是“执行命令”</p>
+<p>而是：</p>
+<ul>
+<li><strong>回显在哪里</strong></li>
+<li><strong>权限是谁</strong></li>
+<li><strong>能否持久化</strong></li>
+</ul>
+<p>3️⃣ 常见 CTF 限制</p>
+<ul>
+<li>过滤分隔符</li>
+<li>无回显</li>
+<li>执行用户权限低</li>
+</ul>
+<p>👉 思路：<br> <strong>无回显 ≠ 无利用</strong>（时间 &#x2F; 文件 &#x2F; 网络）</p>
+<hr>
+<h4 id="文件包含"><a href="#文件包含" class="headerlink" title="文件包含"></a>文件包含</h4><p> 原理：用户输入参与文件加载。<br> 类型：LFI、RFI。<br> 实战：读配置、读源码、日志包含到 RCE。<br> 防御：路径白名单、禁用动态 include。</p>
+<p>1️⃣ LFI 在 CTF 的真实用途</p>
+<ul>
+<li>读配置</li>
+<li>读源码</li>
+<li>日志注入 → RCE</li>
+<li>Session 文件利用</li>
+</ul>
+<p>2️⃣ 典型 CTF 链</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">LFI → 读源码 → 找数据库密码 → SQLi → flag</span><br></pre></td></tr></table></figure>
+
+<p>3️⃣ 常见卡点</p>
+<ul>
+<li>自动加后缀</li>
+<li>路径限制</li>
+<li>过滤 <code>../</code></li>
+</ul>
+<p>👉 思维要转为：<br> <strong>“服务器上还有哪些我能控制的文件？”</strong></p>
+<hr>
+<h4 id="CSRF"><a href="#CSRF" class="headerlink" title="CSRF"></a>CSRF</h4><p> 原理：浏览器自动携带身份凭证，攻击者诱导用户发起请求。<br> 条件：已登录、无有效防护、存在状态变更操作。<br> 实战：改资料、改密码、转账。<br> 防御：CSRF Token、SameSite、Referer 校验。</p>
+<p>1️⃣ CTF 中 CSRF 很少单独出</p>
+<p>常见为：</p>
+<ul>
+<li>XSS + CSRF</li>
+<li>CSRF + 权限提升</li>
+<li>CSRF + 修改 admin 配置</li>
+</ul>
+<p>2️⃣ 关键点</p>
+<ul>
+<li>是否需要 Token</li>
+<li>Token 是否可预测</li>
+<li>是否校验 Referer</li>
+</ul>
+<p>3️⃣ CTF 常见目标</p>
+<ul>
+<li>创建管理员</li>
+<li>修改密码</li>
+<li>上传文件</li>
+</ul>
+<hr>
+<h4 id="XXE"><a href="#XXE" class="headerlink" title="XXE"></a>XXE</h4><p> 原理：XML 解析器允许加载外部实体。<br> 实战：文件读取、SSRF、无回显带外。<br> 常见入口：XML 接口、文件导入。<br> 防御：禁用外部实体、升级解析器。</p>
+<p>1️⃣ CTF 中 XXE 的定位</p>
+<ul>
+<li><strong>文件读取型漏洞</strong></li>
+<li><strong>SSRF 入口</strong></li>
+<li><strong>无回显也可打</strong></li>
+</ul>
+<p>2️⃣ 常见入口</p>
+<ul>
+<li>XML API</li>
+<li>文件导入</li>
+<li>Office &#x2F; SVG &#x2F; 配置文件</li>
+</ul>
+<p>3️⃣ CTF 卡点</p>
+<ul>
+<li>无回显</li>
+<li>禁外连</li>
+<li>实体被部分禁用</li>
+</ul>
+<h4 id="失效的访问控制"><a href="#失效的访问控制" class="headerlink" title="失效的访问控制"></a>失效的访问控制</h4><p> 原理：后端未正确校验用户身份或权限。<br> 类型：水平越权、垂直越权、未授权访问、IDOR。<br> 实战：改 ID、直接访问 admin 接口、绕过前端限制。<br> 防御：后端统一鉴权、对象归属校验。</p>
+<hr>
+<h4 id="反序列化"><a href="#反序列化" class="headerlink" title="反序列化"></a>反序列化</h4><p> 原理：反序列化不可信数据触发危险逻辑。<br> 实战：Java&#x2F;PHP 常见，利用 POP 链。<br> 危害：RCE、文件操作。<br> 防御：不反序列化用户输入、白名单类。</p>
+<p>Q: 解释php序列化和java序列化的输出结果的区别，列出php反序列化和java反序列化使用的魔术方法或构造函数</p>
+<ul>
+<li><p>PHP 序列化和输出结果：</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="title function_ invoke__">serialize</span>(<span class="keyword">new</span> <span class="title class_">User</span>());</span><br><span class="line">O:<span class="number">4</span>:<span class="string">&quot;User&quot;</span>:<span class="number">1</span>:&#123;s:<span class="number">4</span>:<span class="string">&quot;name&quot;</span>;s:<span class="number">5</span>:<span class="string">&quot;admin&quot;</span>;&#125;</span><br><span class="line"><span class="comment"># 序列化后为&#123;类型:类型长度:类名&#125;的可读文本结构</span></span><br></pre></td></tr></table></figure>
+</li>
+<li><p>Java 序列化和输出结果：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> java.io.Serializable;</span><br><span class="line"><span class="comment">// Serializable可以自动序列化所有非 transient、非 static 字段</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">User</span> <span class="keyword">implements</span> <span class="title class_">Serializable</span> &#123;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="type">long</span> <span class="variable">serialVersionUID</span> <span class="operator">=</span> <span class="number">1L</span>;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> String username;</span><br><span class="line">    <span class="keyword">private</span> <span class="type">int</span> age;</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">DeserializeDemo</span> &#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">main</span><span class="params">(String[] args)</span> <span class="keyword">throws</span> Exception &#123;</span><br><span class="line"><span class="comment">// 序列化示例</span></span><br><span class="line">	<span class="type">User</span> <span class="variable">user</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">User</span>();</span><br><span class="line"><span class="comment">//打开（或创建）文件 user.ser，得到一个字节输出通道，把 Java 对象序列化再交给底层 FileOutputStream 写入文件</span></span><br><span class="line">	<span class="type">ObjectOutputStream</span> <span class="variable">oos</span> <span class="operator">=</span></span><br><span class="line">    	<span class="keyword">new</span> <span class="title class_">ObjectOutputStream</span>(<span class="keyword">new</span> <span class="title class_">FileOutputStream</span>(<span class="string">&quot;user.ser&quot;</span>));</span><br><span class="line">	oos.writeObject(user);</span><br><span class="line">	oos.close();   </span><br><span class="line"><span class="comment">// 反序列化示例</span></span><br><span class="line"><span class="comment">//打开（或创建）文件 user.ser，得到一个字节输入通道，把Java 序列化字节流解析为：类信息，字段值，对象图恢复为Java对象</span></span><br><span class="line">    <span class="type">ObjectInputStream</span> <span class="variable">ois</span> <span class="operator">=</span></span><br><span class="line">        <span class="keyword">new</span> <span class="title class_">ObjectInputStream</span>(<span class="keyword">new</span> <span class="title class_">FileInputStream</span>(<span class="string">&quot;user.ser&quot;</span>));</span><br><span class="line">    <span class="type">User</span> <span class="variable">user</span> <span class="operator">=</span> (User) ois.readObject();</span><br><span class="line">    ois.close();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">// ObjectOutputStream + witeObject用于序列化</span></span><br><span class="line"><span class="comment">// ObjectInputStream + readObject用于反序列化</span></span><br><span class="line"><span class="comment">// 二进制对象流以AD EC...开头</span></span><br><span class="line"></span><br></pre></td></tr></table></figure>
+</li>
+<li><p>php魔术方法：</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#常用的</span></span><br><span class="line">序列化 (<span class="title function_ invoke__">__sleep</span>())：在对象序列化时调用，可以清理对象并返回一个包含所有应被序列化的变量名称的数组。</span><br><span class="line">反序列化 (<span class="title function_ invoke__">__wakeup</span>())：在对象反序列化时调用，可以重新建立数据库连接或执行其他初始化操作。</span><br><span class="line">反序列化(<span class="title function_ invoke__">__unserialize</span>())：PHP <span class="number">7.4</span>+ 反序列化</span><br><span class="line">转换为字符串 (<span class="title function_ invoke__">__toString</span>())：当尝试将对象转换为字符串时调用，必须返回一个字符串。</span><br><span class="line">调用对象 (<span class="title function_ invoke__">__invoke</span>())：当尝试以调用函数的方式调用一个对象时调用。</span><br><span class="line">对象被销毁 (<span class="title function_ invoke__">__destruct</span>())：对象被销毁时调用</span><br><span class="line">获取属性 (<span class="title function_ invoke__">__get</span>())：尝试访问不可访问的属性时调用。</span><br><span class="line">设置属性 (<span class="title function_ invoke__">__set</span>())：尝试设置不可访问的属性时调用。</span><br><span class="line"><span class="comment">#不常用</span></span><br><span class="line">检查属性 (<span class="title function_ invoke__">__isset</span>())：当对不可访问的属性调用<span class="keyword">isset</span>()或<span class="keyword">empty</span>()时调用。</span><br><span class="line">销毁属性 (<span class="title function_ invoke__">__unset</span>())：当对不可访问的属性调用<span class="keyword">unset</span>()时调用。</span><br><span class="line">调用方法 (<span class="title function_ invoke__">__call</span>())：尝试调用不可访问的方法时调用。</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>java反序列化中可能触发的方法：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">readObject() <span class="comment">//主执行入口,可以RCE，例如 Runtime.getRuntime().exec(&quot;calc&quot;);</span></span><br><span class="line"><span class="comment">// HashMap.readObject() → 调用 hashCode()</span></span><br><span class="line"><span class="comment">// PriorityQueue.readObject() → 调用 compare()</span></span><br><span class="line">readResolve() <span class="comment">// 对象替换 / 绕过校验 / 二次触发 / 绕过黑名单 / 白名单</span></span><br><span class="line"><span class="comment">// private Object readResolve() &#123;return new DangerousObject();&#125;</span></span><br><span class="line">readExternal() <span class="comment">//完全可控执行点，内存马注入，可以读取字节码，也可以直接执行任意代码</span></span><br></pre></td></tr></table></figure></li>
+</ul>
+<hr>
+<h4 id="逻辑漏洞"><a href="#逻辑漏洞" class="headerlink" title="逻辑漏洞"></a>逻辑漏洞</h4><p> 原理：业务流程设计缺陷，不是技术漏洞。<br> 实战：越权、重复提交、状态绕过。<br> 特点：扫描器难发现。<br> 防御：完整业务校验、幂等设计。</p>
+<hr>
+<h4 id="弱口令"><a href="#弱口令" class="headerlink" title="弱口令"></a>弱口令</h4><p> 原理：使用简单或默认密码。<br> 实战：后台、设备、中间件。<br> 防御：复杂度策略、禁止默认口令。</p>
+<hr>
+<h4 id="敏感信息泄露"><a href="#敏感信息泄露" class="headerlink" title="敏感信息泄露"></a>敏感信息泄露</h4><p> 原理：配置、源码、日志暴露。<br> 实战：备份文件、Git、Debug 接口。<br> 利用：配合 SQLi、登录、提权。<br> 防御：最小暴露、访问控制。</p>
+<h4 id="任意文件下载"><a href="#任意文件下载" class="headerlink" title="任意文件下载"></a>任意文件下载</h4><p> 原理：下载接口未校验路径或权限。<br> 实战：下载配置、源码、flag。<br> 防御：路径白名单、权限校验。</p>
+<hr>
+<h4 id="CORS-配置不当"><a href="#CORS-配置不当" class="headerlink" title="CORS 配置不当"></a>CORS 配置不当</h4><p> 原理：跨域策略配置错误。<br> 实战：配合 XSS、Token 泄露。<br> 危险点：允许任意 Origin 且携带凭证。<br> 防御：严格 Origin 白名单。</p>
+<hr>
+<h4 id="JWT-安全问题"><a href="#JWT-安全问题" class="headerlink" title="JWT 安全问题"></a>JWT 安全问题</h4><p> 原理：签名或算法校验不严。<br> 实战：alg none、弱密钥、Token 泄露。<br> 防御：强密钥、严格校验、合理存储。</p>
+<hr>
+<h4 id="HTTP-请求走私"><a href="#HTTP-请求走私" class="headerlink" title="HTTP 请求走私"></a>HTTP 请求走私</h4><p> 原理：前后端对请求解析不一致。<br> 实战：绕过鉴权、缓存投毒。<br> 防御：统一解析、关闭不必要特性。</p>
+<hr>
+<h3 id="组件-框架-系统级漏洞"><a href="#组件-框架-系统级漏洞" class="headerlink" title="组件 &#x2F; 框架 &#x2F; 系统级漏洞"></a>组件 &#x2F; 框架 &#x2F; 系统级漏洞</h3><h4 id="Tomcat"><a href="#Tomcat" class="headerlink" title="Tomcat"></a>Tomcat</h4><p> 常见问题：弱口令、后台未授权、示例应用未删除。<br> 历史漏洞：PUT 文件上传、反序列化、AJP 协议问题。</p>
+<ul>
+<li><strong>AJP 漏洞</strong>(幽灵猫漏洞)本质是内部通信协议被暴露到不可信网络，导致攻击者可以绕过正常访问流程，这是典型的架构信任边界问题（可以使用PUT上传jsp文件后结合幽灵猫漏洞包含jsp文件[浏览器不能直接支持AJP协议。所以实际通过Apache的proxy_ajp模块进行反向代理，暴露成http协议（8009端口）给客户端访问]）。</li>
+<li><strong>PUT上传</strong>问题源于服务器支持写操作但未做方法和路径限制，是配置与安全策略缺失导致的（写入文件后可以结合危险反序列化方法触发反序列化漏洞）</li>
+<li><strong>Tomcat 管理后台</strong>属于高权限接口，生产环境应严格限制访问，否则即使没有代码漏洞也会带来严重风险。</li>
+</ul>
+<p> 面试会问：manager、host-manager 是否限制，生产环境如何加固。</p>
+<hr>
+<h4 id="Spring-Spring-Boot"><a href="#Spring-Spring-Boot" class="headerlink" title="Spring &#x2F; Spring Boot"></a>Spring &#x2F; Spring Boot</h4><p> 常见问题：Actuator 未授权、配置泄露。<br> 典型漏洞：SpEL 注入、反序列化链、Spring Cloud Config 泄露。<br> 面试会问：Actuator 暴露哪些接口，如何限制访问。</p>
+<ul>
+<li><p><strong>Actuator 未授权访问</strong>:运维监控组件</p>
+<p>用于：</p>
+<ul>
+<li>健康检查</li>
+<li>配置查看</li>
+<li>环境信息</li>
+<li>运行状态</li>
+</ul>
+</li>
+<li><p><strong>配置泄露</strong>：application.yml &#x2F; properties泄露数据库和中间件地址或第三方密钥</p>
+</li>
+<li><p><strong>SpEL注入</strong>：Spring 的表达式注入，用户输入被当作 SpEL 表达式解析，可执行逻辑、访问对象、调用方法</p>
+</li>
+<li><p><strong>Cloud Config</strong>：集中式配置中心，为多个服务提供配置</p>
+</li>
+</ul>
+<hr>
+<h4 id="Struts2"><a href="#Struts2" class="headerlink" title="Struts2"></a>Struts2</h4><p> 典型问题：OGNL 表达式注入导致 RCE（不同于SSTI模板注入的2，OGNL注入使用%{‘123’}测试）。<br> 特点：历史漏洞多，CVE 集中。<br> 面试会问：为什么 Struts2 容易出 RCE，本质是什么。</p>
+<hr>
+<h4 id="ThinkPHP"><a href="#ThinkPHP" class="headerlink" title="ThinkPHP"></a>ThinkPHP</h4><p> 典型问题：变量覆盖、命令执行、路由解析问题。<br> 特点：国内项目多，历史漏洞常考。<br> 面试会问：为什么调试模式危险。</p>
+<ul>
+<li>2.x：url无严格过滤机制，存在大量<code>preg_replace /e</code>代码执行漏洞</li>
+<li>3.x：引入基础过滤，默认开启 DEBUG 模式，可以写入恶意代码形成日志，通过控制<strong>assign</strong>函数包含默认路径的日志文件执行代码</li>
+<li>5.x：<ul>
+<li>Request 类的<code>method</code>方法未正确过滤<code>_method</code>参数，导致构造函数注入。</li>
+<li><code>where</code>条件构造时未过滤数组键名，导致 SQL 注入</li>
+</ul>
+</li>
+<li>6.x：lang 文件包含漏洞，<code>lang</code>参数控制语言包加载路径，导致目录遍历与文件包含。</li>
+</ul>
+<hr>
+<h4 id="Fastjson"><a href="#Fastjson" class="headerlink" title="Fastjson"></a>Fastjson</h4><p> 典型问题：反序列化导致 RCE。<br> 关键点：AutoType、黑名单绕过。<br> 面试会问：为什么禁 AutoType 仍可能被绕过。</p>
+<ul>
+<li><p>AutoType被禁用：如果反序列化类型在代码中已确定，就不依赖 AutoType。</p>
+</li>
+<li><p>AutoType白名单：利用 Fastjson 白名单中的“可实例化类”作为利用链的起点，再通过方法调用或对象组合触发危险行为。</p>
+</li>
+<li><p>在不出网环境下，常见的利用方式包括<em>TemplatesImpl</em>类和<em>BCEL</em>编码</p>
+<ul>
+<li><strong><em>TemplatesImpl</em>类</strong>：JSON → Fastjson反序列化→生成 TemplatesImpl 对象→内部方法触发 defineClass()→类初始化 &#x2F; 构造执行</li>
+<li><strong>BCEL</strong>编码函数会判断类名是否以$$BCEL$$​开头，之后调用createClass()方法拿到一个JavaClass对象最终通过defineClass()加载字节码还原类触发构造函数。</li>
+</ul>
+</li>
+</ul>
+<hr>
+<h4 id="Log4j"><a href="#Log4j" class="headerlink" title="Log4j"></a>Log4j</h4><p> 典型问题：JNDI 注入导致 RCE。<br> 本质：日志内容触发外部加载。<br> 面试会问：为什么打印日志也能 RCE。</p>
+<ul>
+<li>Log4j 的 JNDI 注入点不在反序列化流程中，而是在日志字符串解析阶段。只要用户可控数据被记录到日志中，在解析日志内容时就可能触发 JNDI Lookup 查找，通过控制日志内容可以导致远程类加载(带有静态代码块执行的class 或 反序列化数据)。</li>
+</ul>
+<hr>
+<h4 id="Shiro"><a href="#Shiro" class="headerlink" title="Shiro"></a>Shiro</h4><p> 典型问题：rememberMe 反序列化。<br> 关键点：默认密钥、AES 解密。<br> 面试会问：为什么 Cookie 会导致 RCE。</p>
+<ul>
+<li>回显方式 :AllEcho ，TomcatEcho ，SpringEcho</li>
+</ul>
+<hr>
+<h4 id="Redis"><a href="#Redis" class="headerlink" title="Redis"></a>Redis</h4><p> 常见问题：未授权访问。<br> 实战：写文件、计划任务、SSH key。<br> 面试会问：为什么 Redis 未授权这么危险。 </p>
+<hr>
+<h4 id="MongoDB"><a href="#MongoDB" class="headerlink" title="MongoDB"></a>MongoDB</h4><p> 常见问题：未授权访问。<br> 实战：数据泄露、账号接管。<br> 面试会问：为什么默认配置不安全。</p>
+<ul>
+<li>不限制ip，没有mi’m</li>
+</ul>
+<hr>
+<h4 id="Nginx"><a href="#Nginx" class="headerlink" title="Nginx"></a>Nginx</h4><p> 常见问题：目录遍历（目录穿透）、配置错误。<br> 实战：源码泄露、文件下载。<br> 面试会问：alias 和 root 的区别。</p>
+<ul>
+<li><p>当你在 <code>location</code> 块中使用它们时，区别至关重要：</p>
+<table>
+<thead>
+<tr>
+<th align="left">指令</th>
+<th align="left">工作方式</th>
+<th align="left">示例配置</th>
+<th align="left">请求 <code>/static/img/logo.png</code></th>
+<th align="left">服务器实际访问的文件路径</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left"><strong><code>root</code></strong></td>
+<td align="left"><strong>路径拼接</strong>。将 <code>location</code> 匹配的 URI <strong>附加</strong> 到 <code>root</code> 指令定义的路径后面。</td>
+<td align="left"><code>location /static/ &#123;</code>  <code>root /var/www/html;</code> <code>&#125;</code></td>
+<td align="left"><code>/static/img/logo.png</code></td>
+<td align="left"><strong><code>/var/www/html/static/img/logo.png</code></strong></td>
+</tr>
+<tr>
+<td align="left"><strong><code>alias</code></strong></td>
+<td align="left"><strong>路径替换</strong>。用 <code>alias</code> 定义的路径 <strong>替换</strong> <code>location</code> 中已匹配的部分。</td>
+<td align="left"><code>location /static/ &#123;</code>  <code>alias /var/www/static_files/;</code> <code>&#125;</code></td>
+<td align="left"><code>/static/img/logo.png</code></td>
+<td align="left"><strong><code>/var/www/static_files/img/logo.png</code></strong></td>
+</tr>
+</tbody></table>
+<p><strong>关键点与注意事项：</strong></p>
+<ol>
+<li><p><strong>结尾的斜杠 <code>/</code><strong>：对于 <code>alias</code>，如果 <code>location</code> 以 <code>/</code> 结尾，<code>alias</code> 的路径</strong>强烈建议</strong>也以 <code>/</code> 结尾，反之亦然，否则可能导致路径拼接错误。<code>root</code> 指令对此不敏感。</p>
+</li>
+<li><p><strong>目录遍历风险</strong>：**<code>alias</code> 的误用极易导致目录遍历漏洞**。例如：</p>
+<p>nginx</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">location /files &#123;</span><br><span class="line">     alias /home/user/uploads/;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+
+<p>如果请求 <code>/files../etc/passwd</code>，Nginx 可能（取决于版本和配置）将其替换为 <code>/home/user/uploads/../etc/passwd</code>，最终访问到 <code>/etc/passwd</code>。<strong>最佳实践是：使用 <code>root</code> 更安全，如果必须用 <code>alias</code>，location 的正则匹配和 alias 的目标路径必须严格控制。</strong></p>
+</li>
+</ol>
+</li>
+</ul>
+<hr>
+<h4 id="Apache-HTTPD"><a href="#Apache-HTTPD" class="headerlink" title="Apache HTTPD"></a>Apache HTTPD</h4><p> 常见问题：目录遍历、解析漏洞。<br> 历史问题：多后缀解析。<br> 面试会问：文件解析顺序。</p>
+<ul>
+<li><p>多后缀解析漏洞</p>
+<p>原理：Apache从右向左解析文件后缀，若遇到无法识别的扩展名（如.xxx），会继续向左匹配，直到找到有效后缀（如.php）。例如，上传shell.php.jpg时，.jpg未被识别，最终解析为PHP文件执行。<br>案例：攻击者上传test.php.png绕过文件上传白名单限制，触发代码执行。<br>防御：在配置中使用正则严格匹配.php$，禁用模糊匹配。</p>
+</li>
+<li><p>换行符解析漏洞（CVE-2017-15715）</p>
+<p>原理：文件名末尾添加换行符%0A可绕过FilesMatch规则。例如evil.php%0A被误认为合法PHP文件。<br>复现：通过Burp修改上传请求，插入\x0A字符绕过检测。<br>防御：代码层使用$_FILES[‘file’][‘name’]自动过滤特殊字符。</p>
+</li>
+<li><p>路径穿越漏洞（CVE-2021-41773）</p>
+<p>原理：Apache 2.4.49版本未正确处理URL编码路径，导致攻击者构造&#x2F;icons&#x2F;.%2e&#x2F;etc&#x2F;passwd读取系统文件。<br>利用：结合CGI模块可执行命令（如&#x2F;cgi-bin&#x2F;.%2e&#x2F;bin&#x2F;sh）。<br>修复：升级至Apache 2.4.51+，并限制目录权限。</p>
+</li>
+<li><p>SSI远程命令执行漏洞</p>
+<p>场景：若服务器禁用PHP上传但开启SSI，可上传.shtml文件并插入<!--#exec cmd="id" -->执行命令。<br>防御：禁用mod_include模块或限制SSI文件执行权限。</p>
+</li>
+</ul>
+<hr>
+<h4 id="WebLogic"><a href="#WebLogic" class="headerlink" title="WebLogic"></a>WebLogic</h4><p> 典型问题：反序列化 RCE。<br> 特点：企业常用，中间件级漏洞。<br> 面试会问：T3 协议风险。</p>
+<p> weblogic常用弱口令：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">system:password</span><br><span class="line">weblogic:weblogic</span><br><span class="line">admin:secruity</span><br><span class="line">joe:password</span><br><span class="line">mary:password</span><br><span class="line">system:sercurity</span><br><span class="line">wlcsystem: wlcsystem</span><br><span class="line">weblogic:Oracle@123</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>WebLogic 常见的高危漏洞是反序列化 RCE，主要源于其对 T3 协议请求中 Java 对象的反序列化处理在认证和过滤之前，接受到请求就先反序列化。T3 是 WebLogic 的私有协议，用于 RMI 和 EJB 通信，早期版本中未授权请求即可触发反序列化漏洞，同时 WebLogic 自身 classpath 中包含大量可用 gadget，也可以直接导致静态代码远程执行。</li>
+<li>XMLDecoder 反序列化，不需要 T3，走 HTTP SOAP协议传递序列化XML配置数据</li>
+<li>弱口令war包上传getshell</li>
+</ul>
+<hr>
+<h4 id="Jenkins"><a href="#Jenkins" class="headerlink" title="Jenkins"></a>Jenkins</h4><p> 常见问题：未授权访问、命令执行。<br> 实战：直接拿服务器权限。<br> 面试会问：CI&#x2F;CD 为什么是高危点。</p>
+<hr>
+<h4 id="Jackson"><a href="#Jackson" class="headerlink" title="Jackson"></a>Jackson</h4><p> 典型问题：反序列化漏洞。<br> 特点：多态反序列化依赖配置，误用即危险。</p>
+<hr>
+<h4 id="Docker"><a href="#Docker" class="headerlink" title="Docker"></a>Docker</h4><p> 常见问题：Docker API 未授权。<br> 实战：容器逃逸、控制宿主机。<br> 面试会问：Docker 不是隔离吗为什么还能逃逸。</p>
+<hr>
+<h4 id="IIS"><a href="#IIS" class="headerlink" title="IIS"></a>IIS</h4><p> 典型问题：解析漏洞、权限配置错误。<br> 面试会问：为什么 IIS 容易出现多后缀或分号解析漏洞，IIS 权限配置错误为什么往往会放大漏洞影响。</p>
+<p>IIS6.0解析漏洞分两种：<br>1、目录解析：<br>以xx.asp命名的文件夹里的文件都将会被当成ASP文件执行。<br>2、文件解析：<br>xx.asp;.jpg 像这种畸形文件名在;后面的直接被忽略（从左往右解析），也就是说当成xx.asp文件执行。</p>
+<p>IIS6.0 默认的可执行文件除了asp还包含这三种 .asa .cer .cdx。</p>
+<hr>
+<h3 id="数据库提权"><a href="#数据库提权" class="headerlink" title="数据库提权"></a>数据库提权</h3><h4 id="笔记—-E-hexo-blog-MyBlog-source-posts"><a href="#笔记—-E-hexo-blog-MyBlog-source-posts" class="headerlink" title="笔记—&gt;E:\hexo\blog\MyBlog\source_posts"></a>笔记—&gt;E:\hexo\blog\MyBlog\source_posts</h4><hr>
+<h3 id="渗透流程"><a href="#渗透流程" class="headerlink" title="渗透流程"></a>渗透流程</h3><p><strong>信息收集</strong> 这是渗透测试的第一步，目的是尽可能多地收集目标系统的信息。包括域名、IP地址、开放端口、操作系统版本、服务和应用程序等。常用工具有Nmap、Whois、Shodan等。</p>
+<p><strong>漏洞扫描</strong> 通过自动化工具对目标系统进行漏洞扫描，识别已知的安全漏洞。常用工具包括网神漏洞扫描器、Nessus和OpenVAS等。此阶段可以快速发现系统中的弱点。</p>
+<p><strong>手工测试与漏洞验证</strong> 结合自动化扫描结果，使用手工测试进一步验证漏洞的真实性和可利用性。工具如Burp Suite和Xray可以帮助深入分析潜在风险。</p>
+<p><strong>漏洞利用</strong> 在确保不会对目标系统造成破坏的前提下，尝试利用已发现的漏洞，模拟真实攻击场景。这一步可以帮助评估漏洞的实际危害。</p>
+<p><strong>权限提升</strong> 如果成功获得初始访问权限，进一步尝试提升权限以获取更高的访问级别。这通常涉及利用系统配置错误或其他漏洞。</p>
+<p><strong>保持访问(权限维持&#x2F;持久化)</strong> 模拟攻击者在系统中保持访问权限的行为，例如安装后门或创建隐藏账户，以便后续访问。</p>
+<p><strong>清理痕迹</strong> 在测试结束后，清除所有测试过程中留下的痕迹，包括日志文件、后门程序等，确保目标系统恢复到原始状态。</p>
+<p><strong>报告编写</strong> 最后，编写详细的渗透测试报告。报告应包括发现的漏洞、利用过程、潜在影响以及修复建议。这是渗透测试的核心输出，帮助企业改进安全防护。</p>
+<p>渗透测试的每个阶段都需要严格遵守道德和法律规范，并获得目标系统所有者的授权。</p>
+<hr>
+<h2 id="Day-3：移动端渗透"><a href="#Day-3：移动端渗透" class="headerlink" title="Day 3：移动端渗透"></a>Day 3：移动端渗透</h2><h3 id="App渗透-泛"><a href="#App渗透-泛" class="headerlink" title="App渗透(泛)"></a>App渗透(泛)</h3><p>常见问题：App 渗透主要测什么<br> 回答：<br> 本质还是接口安全，重点在鉴权、数据传输、业务逻辑和客户端安全。</p>
+<p>常见问题：App 和 Web 渗透最大区别<br> 回答：<br> App 前端不可直接改，但接口更集中；很多校验在客户端，容易被绕过。</p>
+<p>常见问题：如何抓 App 的包<br> 回答：<br> 代理抓包，绕过证书校验和 SSL Pinning。</p>
+<p>常见问题：常见 App 漏洞有哪些<br> 回答：<br> 未授权接口、IDOR、参数可控、业务逻辑漏洞、弱加密、本地数据泄露。</p>
+<p>常见问题：App 常见反编译点<br> 回答：<br> 硬编码密钥、接口地址、签名算法、调试开关。</p>
+<p>常见问题：App 本地存储风险<br> 回答：<br> 明文存 Token、密码、日志信息。</p>
+<p>常见问题：为什么 App 容易出现越权<br> 回答：<br> 服务端信任客户端传的用户标识。</p>
+<p>常见问题：App 防护如何绕过<br> 回答：<br> 客户端校验都不可信，核心校验必须在服务端</p>
+<h3 id="小程序渗透-细"><a href="#小程序渗透-细" class="headerlink" title="小程序渗透(细)"></a>小程序渗透(细)</h3><h4 id="深度解析微信小程序漏洞挖掘-先知社区"><a href="#深度解析微信小程序漏洞挖掘-先知社区" class="headerlink" title="深度解析微信小程序漏洞挖掘-先知社区"></a><a target="_blank" rel="noopener" href="https://xz.aliyun.com/news/17139">深度解析微信小程序漏洞挖掘-先知社区</a></h4><p>常见问题：小程序和 App 本质区别<br> 回答：<br> 小程序本质是 WebView + JS，接口完全暴露。</p>
+<p>常见问题：小程序能不能抓包<br> 回答：<br> 可以，接口走 HTTPS，但可代理抓取。</p>
+<p>常见问题：小程序代码是否可读<br> 回答：<br> 可反编译，前端逻辑基本透明。</p>
+<p>常见问题：小程序常见漏洞<br> 回答：<br> 未授权接口、IDOR、参数篡改、业务逻辑漏洞。</p>
+<p>常见问题：小程序登录风险<br> 回答：<br> code 换 session 逻辑设计不当。</p>
+<p>常见问题：小程序签名是否安全<br> 回答：<br> 签名算法在前端，不能作为安全依据。</p>
+<p>常见问题：小程序文件下载风险<br> 回答：<br> 临时文件、OSS 访问控制不严。</p>
+<p>常见问题：小程序为什么容易被刷<br> 回答：<br> 接口暴露、风控依赖前端。</p>
+<h4 id="小程序常见漏洞"><a href="#小程序常见漏洞" class="headerlink" title="小程序常见漏洞"></a>小程序常见漏洞</h4><p>未授权访问<br> 接口未校验登录态。</p>
+<p>IDOR水平越权<br> 通过修改 userId、orderId 访问他人数据。</p>
+<p>垂直越权<br> 普通用户调用管理员接口。</p>
+<p>参数篡改<br> 价格、数量、状态由前端控制。</p>
+<p>业务逻辑漏洞<br> 跳流程、重复提交、并发刷接口。</p>
+<p>签名 &#x2F; 加密逻辑缺陷<br> 签名算法在前端，可复现。</p>
+<p>验证码 &#x2F; 风控绕过<br> 校验点只在前端。</p>
+<p>文件下载 &#x2F; OSS 泄露<br> 对象存储权限配置错误。</p>
+<p>敏感信息泄露<br> 接口返回过多字段。</p>
+<p>调试接口残留<br> 测试接口未下线。</p>
+<p>接口限速缺失<br> 易被刷接口、撞库。</p>
+<h6 id="任意用户登录漏洞（session-key-手机号解密场景）"><a href="#任意用户登录漏洞（session-key-手机号解密场景）" class="headerlink" title="任意用户登录漏洞（session_key + 手机号解密场景）"></a>任意用户登录漏洞（session_key + 手机号解密场景）</h6><p><strong>漏洞成因：</strong></p>
+<ol>
+<li><strong>session_key 使用不当</strong><ul>
+<li>后端未将 session_key 与当前登录用户（openid &#x2F; unionid）强绑定</li>
+<li>session_key 可被重放或跨接口使用</li>
+</ul>
+</li>
+<li><strong>解密接口信任模型错误</strong><ul>
+<li>仅校验 encryptedData 是否可被 session_key 成功解密</li>
+<li>不校验解密行为是否由当前用户、当前会话真实触发</li>
+</ul>
+</li>
+<li><strong>登录逻辑设计不规范</strong><ul>
+<li>将“成功解密手机号”直接等同于“用户身份认证成功”</li>
+<li>登录态仅依赖手机号建立</li>
+</ul>
+</li>
+<li><strong>业务接口隐式更新登录态</strong><ul>
+<li>漏洞通常不在显式登录接口</li>
+<li>而是在绑定手机号、用户操作等接口中自动刷新或切换登录态</li>
+</ul>
+</li>
+</ol>
+<hr>
+<p><strong>漏洞利用方式：</strong></p>
+<ul>
+<li>攻击者先正常登录自身账号获取 session_key</li>
+<li>构造解密请求注入他人手机号</li>
+<li>后端基于手机号直接更新建立登录态</li>
+<li>实现无需凭证的任意用户登录</li>
+</ul>
+<hr>
+<p><strong>漏洞本质：</strong></p>
+<blockquote>
+<p>后端未建立 code → session_key → openid → 用户身份 的完整信任链，<br> 将“数据解密能力”错误当成“身份认证能力”。</p>
+</blockquote>
+<h4 id="微信小程序授权登录流程（精炼版）"><a href="#微信小程序授权登录流程（精炼版）" class="headerlink" title="微信小程序授权登录流程（精炼版）"></a><strong>微信小程序授权登录流程（精炼版）</strong></h4><ol>
+<li>用户在小程序中触发登录</li>
+<li>小程序前端调用微信客户端提供的 <code>wx.login</code> 接口</li>
+<li>微信客户端与微信服务器通信，获取一次性登录凭证 <code>code</code> 并返回给小程序</li>
+<li>小程序前端将 <code>code</code> 发送至业务后端</li>
+<li>业务后端使用自身保存的 <code>appid</code> 和 <code>secret</code>，调用微信 <code>jscode2session</code> 接口校验 <code>code</code>，获取 <code>openid</code> 和 <code>session_key</code></li>
+<li>后端根据 <code>openid</code> 关联或创建用户，生成业务系统登录态（如 token &#x2F; session）并返回给前端（登录态标识加用户信息用session_key和偏移iv进行加密）</li>
+<li>前端持有该登录态，完成登录</li>
+</ol>
+<blockquote>
+<p><code>session_key</code> 仅用于后端解密微信加密数据，不会返回给前端。</p>
+</blockquote>
+<hr>
+<h2 id="Day-4：工具专项（非常重要）"><a href="#Day-4：工具专项（非常重要）" class="headerlink" title="Day 4：工具专项（非常重要）"></a>Day 4：工具专项（非常重要）</h2><h3 id="信息收集工具"><a href="#信息收集工具" class="headerlink" title="信息收集工具"></a>信息收集工具</h3><p> Nmap<br> 用途：端口扫描、服务识别、基础指纹。<br> 面试常问：常用参数、TCP&#x2F;UDP 区别。</p>
+<ul>
+<li><h3 id="TCP-扫描"><a href="#TCP-扫描" class="headerlink" title="TCP 扫描"></a>TCP 扫描</h3><ul>
+<li>有明确的三次握手状态</li>
+<li>结果可靠</li>
+<li>扫描速度快</li>
+</ul>
+<p>面试一句话：</p>
+<blockquote>
+<p>TCP 扫描基于端口状态反馈，准确性高。</p>
+</blockquote>
+<hr>
+<h3 id="UDP-扫描"><a href="#UDP-扫描" class="headerlink" title="UDP 扫描"></a>UDP 扫描</h3><ul>
+<li>无连接</li>
+<li>没有明确响应</li>
+<li>容易被防火墙丢弃</li>
+</ul>
+<p>面试一句话：</p>
+<blockquote>
+<p>UDP 扫描不可靠但必要，常用于发现 DNS、SNMP 等服务。</p>
+</blockquote>
+</li>
+</ul>
+<p>OneForAll<br> 用途：子域名收集。<br> 面试常问：为什么子域重要。</p>
+<ul>
+<li>因为子域往往承载测试系统、旧系统或配置较弱的业务，是突破主域的重要入口。</li>
+</ul>
+<p>网络空间测绘引擎<br> 例如：fofa，鹰图<br> 用途：子域、资产发现。<br> 面试常问：主动和被动收集区别。</p>
+<ul>
+<li><p><strong>被动收集</strong></p>
+</li>
+<li><ul>
+<li>利用已有数据</li>
+<li>不直接触碰目标</li>
+<li>隐蔽性强</li>
+</ul>
+</li>
+<li><p>例子：</p>
+</li>
+<li><blockquote>
+<p>搜索引擎、证书日志、测绘平台</p>
+</blockquote>
+</li>
+<li><p><strong>主动收集</strong></p>
+</li>
+<li><ul>
+<li>自己发包</li>
+<li>扫描目标</li>
+<li>易被感知</li>
+</ul>
+</li>
+<li><p>例子：</p>
+</li>
+<li><blockquote>
+<p>Nmap、Dirsearch、爆破</p>
+</blockquote>
+</li>
+</ul>
+<p>Wappalyzer &#x2F; Ehole(棱镜) &#x2F; EZ<br> 用途：Web 技术栈识别。</p>
+<p>Dirsearch<br> 用途：目录、文件枚举。</p>
+<hr>
+<h3 id="渗透测试工具"><a href="#渗透测试工具" class="headerlink" title="渗透测试工具"></a>渗透测试工具</h3><p> Burp Suite<br> 用途：抓包、重放、修改请求、漏洞测试。<br> 面试必问：Repeater、Intruder、Proxy 用途。</p>
+<p>ApiFox &#x2F; Postman<br> 用途：API 测试、接口调试。<br> 面试常问：和 Burp 的使用场景区别。</p>
+<p>sqlmap<br> 用途：自动化 SQL 注入测试。<br> 面试常问：什么时候不用 sqlmap。</p>
+<p>Hydra<br> 支持大量协议：SSH、FTP、Telnet、RDP、SMTP、POP3、MySQL、MSSQL、VNC 等。<br> 典型用途：快速检测多个服务的弱口令。<br> 示例（SSH 弱口令爆破）：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">hydra -l root -P passwords.txt ssh://10.0.0.1</span><br></pre></td></tr></table></figure>
+
+<hr>
+<h3 id="Web-漏洞专项工具"><a href="#Web-漏洞专项工具" class="headerlink" title="Web 漏洞专项工具"></a>Web 漏洞专项工具</h3><p> XSStrike<br> 用途：XSS 测试辅助。</p>
+<p>SSRFTool<br> 用途：SSRF 场景测试。</p>
+<p>wfuzz<br> 用途：参数、接口 fuzz。</p>
+<p>ShiroExploit<br> 用途：shiro漏洞利用。</p>
+<p>JNDIExploit<br> 用途：JNDI+反序列化利用。</p>
+<p>ysoserial<br> 用途：java反序列化通用利用工具。</p>
+<hr>
+<h3 id="漏洞扫描工具"><a href="#漏洞扫描工具" class="headerlink" title="漏洞扫描工具"></a>漏洞扫描工具</h3><p> Nessus<br> 用途：主机、服务漏洞扫描。<br> 面试常问：扫描结果如何验证。</p>
+<p>OpenVAS<br> 用途：开源漏洞扫描。</p>
+<p>AWVS<br> 用途：Web 漏洞扫描。<br> 面试常问：扫描器的局限性。</p>
+<p>AppSacn<br> 用途：Web 漏洞扫描。<br> 面试常问：扫描器的局限性。</p>
+<p>GoBy<br> 用途：Web 漏洞扫描。<br> 面试常问：扫描器的局限性。</p>
+<hr>
+<h3 id="代码审计工具"><a href="#代码审计工具" class="headerlink" title="代码审计工具"></a>代码审计工具</h3><p>Seay 自动审计<br> 用途：自动代码审计。<br> 面试常问：有什么自动工具。</p>
+<p>IDE 审计<br> 用途：IDE + grep + 人工审计。<br> 面试常问：自动工具找不到什么。</p>
+<hr>
+<h3 id="远程控制-后渗透工具"><a href="#远程控制-后渗透工具" class="headerlink" title="远程控制 &#x2F; 后渗透工具"></a>远程控制 &#x2F; 后渗透工具</h3><p> Cobalt Strike<br> 用途：内网渗透、权限维持。<br> 面试常问：为什么红队常用。</p>
+<p><a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/656697509">【Cobalt-Strike-Start】深入了解 Beacon 种类及其原理 - 知乎</a></p>
+<p>E:\hexo\blog\MyBlog\source_posts\Cobalt Strike C2体系深度解析.md</p>
+<p>Metasploit(msf)<br> 用途：漏洞利用框架。<br> 面试常问：为什么实战中用得少。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">1.特征特征明显:payload静态特征被EDR收录</span><br><span class="line">2.动态/行为特征固定:Meterpreter的通信协议有固定模式，被Snort、Suricata等NIDS规则轻易识别</span><br><span class="line">3.内存特征明显:Meterpreter的内存结构，反射加载DLL方式，是EDR检测对象</span><br><span class="line">4.缺乏规避能力:MSF没有内置的流量混淆、睡眠加密、协议模仿等现代规避技术。</span><br><span class="line">5.直连通信:虽然可以设置ReverseHttp，但其心跳和抖动机制远不如专业C2灵活，无“域前置/CDN隐藏”支持。</span><br><span class="line">6.缺乏团队协作:本质上是个单用户工具，多个操作员同时管理会话、共享日志和任务极其困难。</span><br><span class="line">7.缺少攻击生命周期管理:横向移动、凭证窃取、信息收集等操作是分散的模块，需要手动串联，无法形成自动化流水线。</span><br></pre></td></tr></table></figure>
+
+<p>MSF实战用法<br>1.对外网边缘系统进行快速漏洞利用扫描和攻击。<br>2.用msfvenom生成Shellcode或基础Payload，然后用自定义加载器进行免杀处理，再投递。<br>3.可以作为“跳板”过渡到专业C2</p>
+<ul>
+<li>用MSF攻破第一台边缘主机（因为它漏洞利用模块全）。</li>
+<li>在获得的Shell中，立即执行命令下载并运行专业C2的Beacon。</li>
+<li>通过专业C2平台接管后续所有攻击，放弃MSF会话。</li>
+</ul>
+<hr>
+<h3 id="内网-运维相关工具"><a href="#内网-运维相关工具" class="headerlink" title="内网 &#x2F; 运维相关工具"></a>内网 &#x2F; 运维相关工具</h3><p>BloodHound<br> 用途：AD 域权限关系分析。</p>
+<p>Mimikatz<br> 用途：凭证提取。<br> 面试常问：为什么需要高权限。</p>
+<p>Fscan<br>用途：内网漏洞扫描。</p>
+<hr>
+<h3 id="webshell工具"><a href="#webshell工具" class="headerlink" title="webshell工具"></a>webshell工具</h3><p>菜刀<br> 用途：早期 WebShell 管理工具。<br> 面试常提：特征明显，已被大量查杀规则覆盖。</p>
+<p>冰蝎<br> 用途：加密通信的 WebShell 管理工具。<br> 特点：流量加密、功能模块化。<br> 面试常问：为什么比菜刀更隐蔽。</p>
+<p>哥斯拉<br> 用途：新一代 WebShell 管理工具。<br> 特点：多协议、多语言、内存马支持。<br> 面试常问：和冰蝎的区别。</p>
+<p>蚁剑<br> 用途：开源 WebShell 管理工具。<br> 特点：插件多、支持多语言。<br> 面试常问：为什么容易被检测。</p>
+<hr>
+<h3 id="蓝队工具"><a href="#蓝队工具" class="headerlink" title="蓝队工具"></a>蓝队工具</h3><h6 id="日志"><a href="#日志" class="headerlink" title="日志"></a>日志</h6><p> ELK（Elasticsearch &#x2F; Logstash &#x2F; Kibana）<br> 用途：日志集中、检索、可视化。<br> 面试常问：如何用日志发现攻击行为。</p>
+<ul>
+<li>Elasticsearch 用于海量安全日志的快速检索和关联分析，Logstash 负责安全日志的采集、解析和标准化，Kibana 提供安全可视化和交互分析能力，三者结合可构建集中式安全日志分析和轻量 SIEM 平台，用于攻击检测、审计和溯源</li>
+</ul>
+<p>SIEM<br>用途：SIEM 通过集中采集各类安全日志，进行关联分析和告警，帮助安全团队发现攻击、还原事件并满足审计合规，是安全运营体系的核心平台。</p>
+<ul>
+<li>在实际落地中，SIEM 的价值不只是存日志，而是通过统一字段、规则关联和时间窗口分析，把来自不同安全设备和业务系统的日志串成完整攻击链，从而支持告警、溯源和合规审计，是安全运营的中枢。</li>
+</ul>
+<h6 id="WAF-与-Web-防护"><a href="#WAF-与-Web-防护" class="headerlink" title="WAF 与 Web 防护"></a>WAF 与 Web 防护</h6><p> ModSecurity<br> 用途：Web 应用防火墙规则引擎。<br> 面试常问：规则拦截 vs 误报。</p>
+<p> 云 WAF（阿里云 &#x2F; 腾讯云 &#x2F; AWS）<br> 用途：Web 攻击防护、CC 防护。<br> 面试常问：WAF 能不能防 0day。</p>
+<h6 id="主机安全"><a href="#主机安全" class="headerlink" title="主机安全"></a>主机安全</h6><p> Windows Defender &#x2F; Defender for Endpoint<br> 用途：主机防护、行为检测。</p>
+<h6 id="EDR"><a href="#EDR" class="headerlink" title="EDR"></a>EDR</h6><p>CrowdStrike、火绒企业版等<br> 用途：进程、行为、溯源。<br> 面试常问：EDR 和杀软的区别。</p>
+<ul>
+<li>EDR 是以“行为检测 + 攻击溯源 + 响应处置”为核心的终端安全产品。</li>
+<li>主机安全侧重终端防护，Windows Defender 提供基础防御能力，而 EDR 通过进程和行为监控实现威胁检测、攻击溯源和集中响应，相比传统杀毒软件，更适合应对未知和高级攻击。</li>
+<li>EDR 在实战中的价值<ul>
+<li>检测：<ul>
+<li>文件less 攻击</li>
+<li>PowerShell 攻击</li>
+<li>C2 通信</li>
+</ul>
+</li>
+<li>溯源：<ul>
+<li>初始入侵点</li>
+<li>横向路径</li>
+</ul>
+</li>
+<li>响应：<ul>
+<li>快速止损</li>
+<li>减少攻击驻留时间</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h6 id="入侵检测与流量分析"><a href="#入侵检测与流量分析" class="headerlink" title="入侵检测与流量分析"></a>入侵检测与流量分析</h6><p> IDS &#x2F; IPS（Snort、Suricata）<br> 用途：网络层攻击检测。<br> 面试常问：IDS 和 IPS 区别。</p>
+<ul>
+<li>网络层检测侧重对流量和协议特征的分析，适合发现扫描和异常流量；应用层检测侧重对请求内容和业务行为的理解，适合发现 Web 攻击和业务逻辑问题，两者互为补充。</li>
+</ul>
+<p>Zeek（Bro）<br> 用途：网络流量分析。<br> 面试常问：为什么适合溯源。</p>
+<ul>
+<li><p>Zeek+Elastic Stack实现监控生存日志(Zeek)，日志采集整理(Logstash)，日志存储和检索(Elasticsearch)，日志可视化交互分析(Kibana)  </p>
+</li>
+<li><p>IDS 和 IPS 用于网络层攻击检测与防护，区别在于是否实时阻断；而 Zeek 通过协议语义分析生成高质量网络行为日志，非常适合用于攻击溯源和事后分析（不做阻断）。</p>
+</li>
+</ul>
+<h6 id="WebShell-与恶意代码检测"><a href="#WebShell-与恶意代码检测" class="headerlink" title="WebShell 与恶意代码检测"></a>WebShell 与恶意代码检测</h6><p> D 盾<br> 用途：WebShell 特征检测。</p>
+<p>河马 &#x2F; WEBDIR+<br> 用途：网站文件完整性监控。</p>
+<h6 id="RASP"><a href="#RASP" class="headerlink" title="RASP"></a>RASP</h6><p>安恒信息 · RASP&#x2F;青藤天睿·RASP<br> 用途：运行时应用防护。<br> 面试常问：和 WAF 的区别。</p>
+<ul>
+<li>RASP 是部署在应用内部的运行时安全防护技术，通过Agent &#x2F; 插桩的方式Hook关键函数监控真实的代码执行上下文，在攻击发生前进行精确识别和阻断，相比基于请求特征的 WAF，RASP 更能理解业务逻辑、误报更低，通常作为纵深防御体系中的补充而非替代。</li>
+</ul>
+<h6 id="账号与权限防护"><a href="#账号与权限防护" class="headerlink" title="账号与权限防护"></a>账号与权限防护</h6><p> 堡垒机<br> 用途：运维审计、权限控制。<br> 面试常问：为什么能降低内鬼风险。</p>
+<h6 id="Wireshark"><a href="#Wireshark" class="headerlink" title="Wireshark"></a>Wireshark</h6><p> 用途：抓包分析。<br> 面试常问：抓什么、看什么。</p>
+<h6 id="威胁情报与告警"><a href="#威胁情报与告警" class="headerlink" title="威胁情报与告警"></a>威胁情报与告警</h6><p> 威胁情报平台<br> 用途：IP、域名、样本情报。</p>
+<h6 id="SOAR"><a href="#SOAR" class="headerlink" title="SOAR"></a>SOAR</h6><p> 用途：自动化响应。<br> 面试常问：自动化能做哪些事。</p>
+<ul>
+<li>SOAR 是安全编排、自动化与响应平台，用于把告警处理流程自动化，提升安全运营效率和响应速度。</li>
+<li>AI 告警研判主要用于告警降噪、误报识别和风险评分，通过结合历史行为、上下文信息和威胁情报，辅助判断告警是否真实和是否需要响应，而不是直接替代人工分析。</li>
+<li>目前大多数 AI 研判仍以规则和统计模型为主，真正全自动决策的场景有限，通常作为 SOAR 自动化流程中的前置判断环节。</li>
+</ul>
+<h6 id="内存马查杀"><a href="#内存马查杀" class="headerlink" title="内存马查杀"></a>内存马查杀</h6><p>Arthas&#x2F;java-memshell-scanner<br> 用途：查杀内存马。<br> 面试常问：内存马查杀怎么搞。</p>
+<p><strong>枚举 Web 组件（最核心）</strong></p>
+<ul>
+<li><p><strong>查什么：</strong></p>
+<ul>
+<li>Filter</li>
+<li>Servlet</li>
+<li>Listener</li>
+<li>Spring Controller</li>
+<li>Tomcat Valve</li>
+</ul>
+</li>
+<li><p><strong>怎么看异常：</strong></p>
+<ul>
+<li>非配置文件声明</li>
+<li>运行时动态注册</li>
+<li>类名异常（随机、无包名）</li>
+<li>来源未知 ClassLoader</li>
+</ul>
+</li>
+</ul>
+<p><strong>枚举 ClassLoader（关键加分点）</strong></p>
+<ul>
+<li>列出所有 ClassLoader</li>
+<li>重点关注：<ul>
+<li>非标准 ClassLoader</li>
+<li>URL 为内存、Base64、JMX 注入的</li>
+</ul>
+</li>
+</ul>
+<p><strong>内存马特点：</strong></p>
+<ul>
+<li>自定义 ClassLoader</li>
+<li>无对应 jar 文件</li>
+</ul>
+<p><strong>枚举已加载类</strong></p>
+<ul>
+<li>查：<ul>
+<li>是否存在可疑类</li>
+<li>是否无源码 &#x2F; 无文件路径</li>
+</ul>
+</li>
+<li>关注：<ul>
+<li>命令执行</li>
+<li>反射</li>
+<li>动态代理</li>
+</ul>
+</li>
+</ul>
+<p><strong>行为层检测（结合 EDR &#x2F; RASP）</strong></p>
+<ul>
+<li>Java 进程：<ul>
+<li>异常命令执行</li>
+<li>反弹连接</li>
+</ul>
+</li>
+<li>Web 进程：<ul>
+<li>非正常接口触发命令</li>
+</ul>
+</li>
+</ul>
+<p><strong>工具在查杀中的作用</strong></p>
+<p>🔧 Arthas</p>
+<p><strong>用途：</strong></p>
+<ul>
+<li>attach 到 Java 进程</li>
+<li>查看：<ul>
+<li>ClassLoader</li>
+<li>已加载类</li>
+<li>Web 组件</li>
+</ul>
+</li>
+<li>定位异常内存对象</li>
+</ul>
+<hr>
+<p>🔧 java-memshell-scanner</p>
+<p><strong>用途：</strong></p>
+<ul>
+<li>自动扫描内存马特征</li>
+<li>支持：<ul>
+<li>Filter &#x2F; Listener &#x2F; Servlet</li>
+<li>常见内存马家族</li>
+</ul>
+</li>
+<li>输出：<ul>
+<li>可疑类</li>
+<li>注入方式</li>
+</ul>
+</li>
+</ul>
+<p><strong>标准回答步骤：</strong></p>
+<ol>
+<li><strong>定位</strong><ul>
+<li>枚举 Web 组件和 ClassLoader</li>
+</ul>
+</li>
+<li><strong>确认</strong><ul>
+<li>判断是否动态注入、来源异常、有无对应jar</li>
+</ul>
+</li>
+<li><strong>清除</strong><ul>
+<li>重启进程（最可靠）</li>
+<li>或动态卸载组件</li>
+</ul>
+</li>
+<li><strong>溯源</strong><ul>
+<li>查攻击入口（漏洞 &#x2F; 账号）</li>
+</ul>
+</li>
+<li><strong>加固</strong><ul>
+<li>补漏洞</li>
+<li>上 RASP &#x2F; EDR</li>
+</ul>
+</li>
+</ol>
+<p>内存马查杀的关键在于对运行时环境的可观测性，通过枚举 Web 组件、ClassLoader 和已加载类来定位动态注入的异常对象，结合 Arthas 或自动化扫描工具确认并清除，同时配合溯源和加固防止再次注入。</p>
+<h2 id="Day-5：Linux-Windows-安全运维-风险评估"><a href="#Day-5：Linux-Windows-安全运维-风险评估" class="headerlink" title="Day 5：Linux &#x2F; Windows + 安全运维+风险评估"></a>Day 5：Linux &#x2F; Windows + 安全运维+风险评估</h2><hr>
+<h3 id="Linux-必会"><a href="#Linux-必会" class="headerlink" title="Linux 必会"></a>Linux 必会</h3><ul>
+<li><p>常见目录</p>
+<ul>
+<li><p>1️⃣ 系统 &#x2F; 配置目录</p>
+<table>
+<thead>
+<tr>
+<th>目录</th>
+<th>用途</th>
+<th>应急关注点</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>/</code></td>
+<td>根目录</td>
+<td>权限是否异常</td>
+</tr>
+<tr>
+<td><code>/etc</code></td>
+<td>系统配置</td>
+<td>用户、SSH、cron</td>
+</tr>
+<tr>
+<td><code>/etc/passwd</code></td>
+<td>用户信息</td>
+<td>非法账号</td>
+</tr>
+<tr>
+<td><code>/etc/shadow</code></td>
+<td>密码</td>
+<td>权限被改</td>
+</tr>
+<tr>
+<td><code>/etc/ssh/</code></td>
+<td>SSH</td>
+<td>后门 key</td>
+</tr>
+<tr>
+<td><code>~/.bash_history</code></td>
+<td>历史命令</td>
+<td>恶意命令</td>
+</tr>
+</tbody></table>
+</li>
+<li><p>2️⃣ 命令 &#x2F; 可执行文件目录</p>
+<table>
+<thead>
+<tr>
+<th>目录</th>
+<th>用途</th>
+<th>风险点</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>/bin</code></td>
+<td>基础命令</td>
+<td>被替换</td>
+</tr>
+<tr>
+<td><code>/usr/bin</code></td>
+<td>用户命令</td>
+<td>PATH 劫持</td>
+</tr>
+<tr>
+<td><code>/sbin</code></td>
+<td>管理命令</td>
+<td>提权</td>
+</tr>
+<tr>
+<td><code>/usr/sbin</code></td>
+<td>服务命令</td>
+<td>后门服务</td>
+</tr>
+</tbody></table>
+</li>
+<li><p>3️⃣ 临时 &#x2F; 高危目录（反弹、内存执行）</p>
+<table>
+<thead>
+<tr>
+<th>目录</th>
+<th>特点</th>
+<th>应急说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>/tmp</code></td>
+<td>可写</td>
+<td>恶意脚本</td>
+</tr>
+<tr>
+<td><code>/var/tmp</code></td>
+<td>重启不清</td>
+<td>长驻</td>
+</tr>
+<tr>
+<td><code>/dev/shm</code></td>
+<td>内存</td>
+<td>无文件</td>
+</tr>
+<tr>
+<td><code>/run</code></td>
+<td>运行态</td>
+<td>IPC 滥用</td>
+</tr>
+</tbody></table>
+</li>
+<li><p>4️⃣ 定时任务目录&#x2F;日志目录</p>
+<table>
+<thead>
+<tr>
+<th>目录</th>
+<th>作用</th>
+<th>重点</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>/etc/crontab</code></td>
+<td>系统任务</td>
+<td>持久化</td>
+</tr>
+<tr>
+<td><code>/etc/cron.d/</code></td>
+<td>服务任务</td>
+<td>挖矿</td>
+</tr>
+<tr>
+<td><code>/etc/cron.daily/</code></td>
+<td>周期执行</td>
+<td>隐藏</td>
+</tr>
+<tr>
+<td><code>/var/spool/cron/</code></td>
+<td>用户任务</td>
+<td>非法</td>
+</tr>
+</tbody></table>
+<table>
+<thead>
+<tr>
+<th>日志类型</th>
+<th>路径</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>登录</td>
+<td><code>/var/log/auth.log</code></td>
+</tr>
+<tr>
+<td>登录失败</td>
+<td><code>/var/log/btmp</code>  ——  命令：<code>lastb</code></td>
+</tr>
+<tr>
+<td>最近登录</td>
+<td><code>/var/log/wtmp</code>  ——  命令：<code>last</code></td>
+</tr>
+<tr>
+<td>系统</td>
+<td><code>/var/log/messages</code></td>
+</tr>
+<tr>
+<td>Web</td>
+<td><code>/var/log/nginx/</code></td>
+</tr>
+<tr>
+<td>审计</td>
+<td><code>/var/log/audit/</code></td>
+</tr>
+<tr>
+<td>启动</td>
+<td><code>/var/log/boot.log</code></td>
+</tr>
+</tbody></table>
+</li>
+</ul>
+</li>
+<li><p>特殊权限</p>
+<ul>
+<li><table>
+<thead>
+<tr>
+<th>权限</th>
+<th>说明</th>
+<th>风险</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>SUID</td>
+<td>用所有者权限执行</td>
+<td>提权</td>
+</tr>
+<tr>
+<td>SGID</td>
+<td>用组权限</td>
+<td>提权</td>
+</tr>
+<tr>
+<td>Sticky</td>
+<td>防删</td>
+<td>&#x2F;tmp</td>
+</tr>
+</tbody></table>
+</li>
+</ul>
+</li>
+<li><p>常用命令（grep、ps、netstat）</p>
+<ul>
+<li><p>1️⃣ 进程排查</p>
+<table>
+<thead>
+<tr>
+<th>命令</th>
+<th>用途</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>ps</td>
+<td>进程信息</td>
+</tr>
+<tr>
+<td>top</td>
+<td>资源异常</td>
+</tr>
+<tr>
+<td>lsof</td>
+<td>打开文件</td>
+</tr>
+<tr>
+<td>pstree</td>
+<td>父子关系</td>
+</tr>
+</tbody></table>
+</li>
+<li><p>2️⃣ 网络排查</p>
+<table>
+<thead>
+<tr>
+<th>命令</th>
+<th>用途</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>netstat</td>
+<td>端口连接</td>
+</tr>
+<tr>
+<td>ss</td>
+<td>连接状态</td>
+</tr>
+<tr>
+<td>ip</td>
+<td>网卡</td>
+</tr>
+<tr>
+<td>ifconfig</td>
+<td>网络信息</td>
+</tr>
+</tbody></table>
+</li>
+<li><p>3️⃣ 日志查询</p>
+<table>
+<thead>
+<tr>
+<th>用途</th>
+<th>命令</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>关键字</td>
+<td>grep</td>
+</tr>
+<tr>
+<td>统计</td>
+<td>awk ：过滤特定条件的行： awk ‘$1&gt;2’ log.txt</td>
+</tr>
+<tr>
+<td>过滤</td>
+<td>sed</td>
+</tr>
+<tr>
+<td>systemd</td>
+<td>journalctl</td>
+</tr>
+</tbody></table>
+</li>
+<li><p>4️⃣ 定时任务</p>
+<table>
+<thead>
+<tr>
+<th>用途</th>
+<th>命令</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>用户任务</td>
+<td>crontab</td>
+</tr>
+<tr>
+<td>延迟执行</td>
+<td>at</td>
+</tr>
+</tbody></table>
+</li>
+<li><p>5️⃣ 历史命令</p>
+<table>
+<thead>
+<tr>
+<th>说明</th>
+<th>文件 &#x2F; 命令</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>历史</td>
+<td>history</td>
+</tr>
+<tr>
+<td>操作记录</td>
+<td>~&#x2F;.bash_history</td>
+</tr>
+</tbody></table>
+</li>
+<li><p>6️⃣ SSH 相关</p>
+<table>
+<thead>
+<tr>
+<th>说明</th>
+<th>项目</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>服务</td>
+<td>sshd</td>
+</tr>
+<tr>
+<td>免密</td>
+<td>authorized_keys</td>
+</tr>
+<tr>
+<td>登录</td>
+<td>auth.log</td>
+</tr>
+</tbody></table>
+</li>
+</ul>
+</li>
+</ul>
+<h3 id="Windows-必会"><a href="#Windows-必会" class="headerlink" title="Windows 必会"></a>Windows 必会</h3><ul>
+<li><p>系统目录</p>
+<ul>
+<li><table>
+<thead>
+<tr>
+<th>目录</th>
+<th>用途</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>System32</code></td>
+<td>核心程序</td>
+</tr>
+<tr>
+<td><code>Temp</code></td>
+<td>临时</td>
+</tr>
+<tr>
+<td><code>Prefetch</code></td>
+<td>启动记录</td>
+</tr>
+</tbody></table>
+</li>
+</ul>
+</li>
+<li><p>用户行为目录</p>
+<ul>
+<li><table>
+<thead>
+<tr>
+<th>目录</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>Recent</code></td>
+<td>最近文件</td>
+</tr>
+<tr>
+<td><code>Downloads</code></td>
+<td>钓鱼附件</td>
+</tr>
+<tr>
+<td><code>Desktop</code></td>
+<td>人工文件</td>
+</tr>
+<tr>
+<td><code>AppData\Roaming</code></td>
+<td>持久化</td>
+</tr>
+<tr>
+<td><code>Startup</code></td>
+<td>自启动</td>
+</tr>
+</tbody></table>
+</li>
+</ul>
+</li>
+<li><p>计划任务</p>
+<ul>
+<li><table>
+<thead>
+<tr>
+<th>位置</th>
+<th>用途</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Task Scheduler</td>
+<td>管理</td>
+</tr>
+<tr>
+<td><code>System32\Tasks</code></td>
+<td>存储</td>
+</tr>
+</tbody></table>
+</li>
+</ul>
+</li>
+<li><p>自启动项</p>
+<ul>
+<li><table>
+<thead>
+<tr>
+<th>项</th>
+<th>用途</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Run &#x2F; RunOnce</td>
+<td>开机启动</td>
+</tr>
+<tr>
+<td>Services</td>
+<td>服务</td>
+</tr>
+<tr>
+<td>Winlogon</td>
+<td>登录执行</td>
+</tr>
+</tbody></table>
+</li>
+</ul>
+</li>
+<li><p>日志<code>eventvwr.msc</code></p>
+</li>
+<li><p>注册表<code>regedit.msc</code></p>
+</li>
+<li><p>配置补丁信息<code>Systeminfo</code></p>
+</li>
+<li><p>常见攻击面</p>
+<ul>
+<li><table>
+<thead>
+<tr>
+<th>攻击面</th>
+<th>风险</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>RDP</td>
+<td>爆破</td>
+</tr>
+<tr>
+<td>SMB</td>
+<td>横向</td>
+</tr>
+<tr>
+<td>PowerShell</td>
+<td>无文件</td>
+</tr>
+<tr>
+<td>WMI</td>
+<td>远控</td>
+</tr>
+<tr>
+<td>计划任务</td>
+<td>持久化</td>
+</tr>
+<tr>
+<td>服务</td>
+<td>提权</td>
+</tr>
+</tbody></table>
+</li>
+</ul>
+</li>
+</ul>
+<h3 id="无文件落地攻击"><a href="#无文件落地攻击" class="headerlink" title="无文件落地攻击"></a>无文件落地攻击</h3><ul>
+<li><p><strong>利用smf的meterpreter实现无文件攻击</strong></p>
+<ul>
+<li><p>Meterpreter 通过内存注入方式将 payload 直接加载到目标进程中运行，整个过程不生成落地文件，通信通过加密通道与 C2 交互。</p>
+</li>
+<li><p><strong>处理手段：</strong></p>
+<p><strong>主机侧：</strong></p>
+<ul>
+<li>EDR 检测：<ul>
+<li>内存注入</li>
+<li>异常进程通信</li>
+</ul>
+</li>
+<li>隔离主机</li>
+<li>结束被注入进程</li>
+</ul>
+<p><strong>网络侧：</strong></p>
+<ul>
+<li>封禁 C2 IP &#x2F; 域名</li>
+<li>检测异常加密隧道</li>
+</ul>
+<p><strong>恢复：</strong></p>
+<ul>
+<li>重启进程 &#x2F; 系统</li>
+<li>溯源初始入侵点</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p><strong>利用powershell实现无文件攻击</strong></p>
+<ul>
+<li><p>攻击者滥用 PowerShell 的脚本解释和内存执行能力，通过命令或脚本直接在内存中加载并执行恶意代码，而不生成可执行文件。</p>
+</li>
+<li><p><strong>处理手段：</strong></p>
+<p><strong>检测：</strong></p>
+<ul>
+<li>开启 PowerShell Script Block Logging(脚本块日志记录)</li>
+<li>EDR 监控：<ul>
+<li>命令行参数</li>
+<li>父子进程关系</li>
+</ul>
+</li>
+</ul>
+<p><strong>处置：</strong></p>
+<ul>
+<li>终止 PowerShell 进程</li>
+<li>隔离主机</li>
+<li>清理计划任务 &#x2F; 启动项</li>
+<li>计划任务：HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Schedule\TaskCache\Task</li>
+<li>启动项：HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Run</li>
+</ul>
+<p><strong>PowerShell加固（面试加分）：</strong></p>
+<ul>
+<li><strong>限制 PowerShell 执行策略</strong><br>通过 <code>Set-ExecutionPolicy Restricted</code> 或 <code>AllSigned</code>，确保只有可信签名的脚本可以运行。</li>
+<li><strong>禁止互联网下载的脚本</strong><br>使用 <code>Set-ItemProperty</code> 在注册表中禁用 <code>Internet Explorer</code> 首次运行弹窗，并配合 <code>-ExecutionPolicy</code> 限制，阻止直接运行来自网络的脚本。</li>
+<li><strong>禁止高风险参数</strong><br>在 PowerShell 配置文件或组策略中限制使用 <code>-ExecutionPolicy Bypass</code>、<code>-NoProfile</code>、<code>-NonInteractive</code>、<code>-EncodedCommand</code> 等绕过参数。</li>
+<li><strong>禁止内存执行、反射加载</strong><br>启用 PowerShell 的 <code>ConstrainedLanguage</code> 模式或启用 Windows Defender 应用程序控制（WDAC），阻止反射加载与非托管代码交互。</li>
+<li><strong>禁止隐藏窗口执行</strong><br>通过组策略或监控进程参数，阻止 PowerShell 使用 <code>-WindowStyle Hidden</code> 或通过 COM&#x2F;WMI 隐藏窗口执行。</li>
+<li><strong>最小权限原则</strong><br>对 PowerShell 执行环境启用用户权限降级，确保普通用户无法执行高危操作，结合 AppLocker 或 WDAC 限制脚本执行范围。</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p><strong>利用java内存码实现无文件攻击</strong></p>
+<ul>
+<li>处理方式上面有写</li>
+</ul>
+</li>
+</ul>
+<h3 id="应急响应"><a href="#应急响应" class="headerlink" title="应急响应"></a>应急响应</h3><h4 id="应急响应流程："><a href="#应急响应流程：" class="headerlink" title="应急响应流程："></a>应急响应流程：</h4><blockquote>
+<p><strong>发现 → 研判 → 遏制 → 清除 → 恢复 → 复盘</strong></p>
+</blockquote>
+<p>这是面试中<strong>最标准、最不容易被打断</strong>的一条主线。</p>
+<hr>
+<h5 id="1️⃣-发现（Detection）"><a href="#1️⃣-发现（Detection）" class="headerlink" title="1️⃣ 发现（Detection）"></a>1️⃣ 发现（Detection）</h5><p><strong>来源：</strong></p>
+<ul>
+<li>SIEM 告警</li>
+<li>EDR 异常行为</li>
+<li>WAF &#x2F; IDS 告警</li>
+<li>业务方反馈</li>
+</ul>
+<p><strong>要点：</strong></p>
+<ul>
+<li>确认是否为真实事件</li>
+<li>判断影响范围（主机 &#x2F; 账号 &#x2F; 业务）</li>
+</ul>
+<hr>
+<h5 id="2️⃣-研判（Analysis）"><a href="#2️⃣-研判（Analysis）" class="headerlink" title="2️⃣ 研判（Analysis）"></a>2️⃣ 研判（Analysis）</h5><p><strong>做什么：</strong></p>
+<ul>
+<li>关联多源日志（SIEM）</li>
+<li>判断攻击类型：<ul>
+<li>漏洞利用</li>
+<li>账号入侵</li>
+<li>内存马 &#x2F; 木马</li>
+</ul>
+</li>
+<li>评估风险等级和紧急程度</li>
+</ul>
+<p><strong>面试加分点：</strong></p>
+<blockquote>
+<p>先研判再处置，避免误封业务。</p>
+</blockquote>
+<hr>
+<h5 id="3️⃣-遏制（Containment）"><a href="#3️⃣-遏制（Containment）" class="headerlink" title="3️⃣ 遏制（Containment）"></a>3️⃣ 遏制（Containment）</h5><p><strong>短期遏制（快速止血）：</strong></p>
+<ul>
+<li>封禁攻击 IP</li>
+<li>冻结被盗账号</li>
+<li>隔离受害主机（EDR）</li>
+</ul>
+<p><strong>原则：</strong></p>
+<ul>
+<li>控制扩散</li>
+<li>不破坏现场（尽量）</li>
+</ul>
+<hr>
+<h5 id="4️⃣-清除（Eradication）"><a href="#4️⃣-清除（Eradication）" class="headerlink" title="4️⃣ 清除（Eradication）"></a>4️⃣ 清除（Eradication）</h5><p><strong>做什么：</strong></p>
+<ul>
+<li>删除恶意进程 &#x2F; 文件</li>
+<li>查杀内存马</li>
+<li>清除后门账号</li>
+<li>修复被篡改配置</li>
+</ul>
+<p><strong>重点一句话：</strong></p>
+<blockquote>
+<p>清除不仅是“删”，还要确认是否还有残留。</p>
+</blockquote>
+<hr>
+<h5 id="5️⃣-恢复（Recovery）"><a href="#5️⃣-恢复（Recovery）" class="headerlink" title="5️⃣ 恢复（Recovery）"></a>5️⃣ 恢复（Recovery）</h5><p><strong>操作：</strong></p>
+<ul>
+<li>恢复业务服务</li>
+<li>验证系统完整性</li>
+<li>监控是否再次异常</li>
+</ul>
+<p><strong>面试官爱听：</strong></p>
+<blockquote>
+<p>恢复后要观察一段时间。</p>
+</blockquote>
+<hr>
+<h5 id="6️⃣-复盘（Lessons-Learned）"><a href="#6️⃣-复盘（Lessons-Learned）" class="headerlink" title="6️⃣ 复盘（Lessons Learned）"></a>6️⃣ 复盘（Lessons Learned）</h5><p><strong>做什么：</strong></p>
+<ul>
+<li>还原攻击路径</li>
+<li>确认初始入侵点</li>
+<li>完善检测规则</li>
+<li>优化响应流程</li>
+</ul>
+<p><strong>体现你有体系：</strong></p>
+<blockquote>
+<p>把事件转化为能力提升。</p>
+</blockquote>
+<p><strong>应急响应 PDCERF 模型</strong></p>
+<ul>
+<li><p>Prepare(准备)</p>
+</li>
+<li><p>Detection(检测):</p>
+<p>紧急事件监测:包括防火墙、系统、web 服务器、IDS&#x2F;WAF&#x2F;SIEM 中的日志,不正常或者是执行了越权操作的用户,甚至还有管理员的报告</p>
+</li>
+<li><p>Containment(抑制):</p>
+<p>首先先控制受害范围,不要让攻击的影响继续蔓延到其他的 IT 资产和业务环境,切记不要直接一股脑的投入全部精力到封堵后门.紧接着要做的是去寻找根源原因,彻底解决,封堵攻击源,把业务恢复到更张水平</p>
+</li>
+<li><p>Eradication(根除)</p>
+</li>
+<li><p>Recover(恢复)</p>
+</li>
+<li><p>Follow-Up(跟踪)</p>
+</li>
+</ul>
+<p>纵深防御模型：PDRR 【保护，检测，响应，恢复】</p>
+<p>动态闭环防御框架：WPDRRC 【预警，保护，检测，响应，恢复，反击】</p>
+<hr>
+<h4 id="应急响应中的工具角色（简述）"><a href="#应急响应中的工具角色（简述）" class="headerlink" title="应急响应中的工具角色（简述）"></a>应急响应中的工具角色（简述）</h4><ul>
+<li><strong>SIEM</strong>：发现与关联分析</li>
+<li><strong>EDR</strong>：主机隔离、进程溯源</li>
+<li><strong>WAF &#x2F; 防火墙</strong>：快速止血</li>
+<li><strong>SOAR</strong>：自动化处置</li>
+<li><strong>Arthas &#x2F; Scanner</strong>：内存马排查</li>
+</ul>
+<hr>
+<p>四、面试中常见追问 &amp; 标准接法</p>
+<p>Q：什么时候可以直接重启服务器？</p>
+<blockquote>
+<p>在确认业务可接受、且无法快速清除内存马或后门时，重启是有效的止血手段，但必须结合溯源和漏洞修复，否则可能复发。</p>
+</blockquote>
+<hr>
+<p>Q：应急时最容易犯的错误？</p>
+<blockquote>
+<p>未充分研判就大范围封禁，导致业务误伤；或者只做表面清理，没有找到入侵源头。</p>
+</blockquote>
+<hr>
+<p>五、终极面试总结（一段话）</p>
+<blockquote>
+<p>应急响应的核心是快速、可控地降低风险，通过发现、研判、遏制、清除、恢复和复盘六个阶段，既保证业务连续性，又确保攻击被彻底根除，并将经验沉淀为长期防御能力。</p>
+</blockquote>
+<hr>
+<p>六、10 秒极简版（被打断时用）</p>
+<blockquote>
+<p>发现告警后先研判，确认攻击后快速遏制扩散，清除威胁并恢复业务，最后复盘溯源和加固。</p>
+</blockquote>
+<h4 id="常见应急事件："><a href="#常见应急事件：" class="headerlink" title="常见应急事件："></a>常见应急事件：</h4><ul>
+<li><p>WEB入侵类：网页挂马、主页篡改、Webshell</p>
+<ul>
+<li><p>网页挂马：</p>
+<ul>
+<li><p>立即下线受影响页面或切只读</p>
+</li>
+<li><p>比对正常版本，定位被注入的恶意 JS &#x2F; iframe</p>
+</li>
+<li><p>全站文件完整性校验（重点 header&#x2F;footer）</p>
+</li>
+<li><p>排查写权限来源（上传点 &#x2F; 漏洞 &#x2F; Webshell）</p>
+</li>
+<li><p>修复漏洞并恢复干净版本</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">“挂马通常不是单点，优先全站排查”</span><br></pre></td></tr></table></figure></li>
+</ul>
+</li>
+<li><p>主页篡改：</p>
+<ul>
+<li><p>第一时间恢复备份，止血</p>
+</li>
+<li><p>检查 Web 目录权限和账号变更</p>
+</li>
+<li><p>排查是否存在 Webshell 或后门账户</p>
+</li>
+<li><p>审计 Web 日志确认入侵入口</p>
+</li>
+<li><p>加固发布流程和文件权限</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">“先恢复展示，再查入侵源”//其实上多数企业直接下行系统</span><br></pre></td></tr></table></figure></li>
+</ul>
+</li>
+<li><p>Webshell：</p>
+<ul>
+<li><p>立即隔离主机或关闭外联</p>
+</li>
+<li><p>搜索特征（一句话、混淆、异常时间文件）</p>
+</li>
+<li><p>结合 Web 日志定位上传或写入来源</p>
+</li>
+<li><p>清除 Webshell 并排查关联后门</p>
+</li>
+<li><p>修补漏洞、重置相关账号密码</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">“清一个不够，要查有没有二次落点”</span><br></pre></td></tr></table></figure></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p>病毒感染类：病毒、挖矿木马、蠕虫、勒索病毒</p>
+<ul>
+<li><p>病毒：</p>
+<ul>
+<li><p>EDR 隔离主机</p>
+</li>
+<li><p>终止恶意进程、删除落地文件</p>
+</li>
+<li><p>检查启动项、计划任务、注册表</p>
+</li>
+<li><p>全盘查杀同类特征</p>
+</li>
+<li><p>溯源传播路径</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">“不光杀进程，还要断持久化”</span><br></pre></td></tr></table></figure></li>
+</ul>
+</li>
+<li><p>挖矿木马：</p>
+<ul>
+<li><p>通过 CPU 异常定位主机</p>
+<ul>
+<li><p>windows命令行查看</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">wmic cpu get loadpercentage</span><br></pre></td></tr></table></figure></li>
+</ul>
+</li>
+<li><p>终止矿工进程，封堵矿池地址</p>
+</li>
+<li><p>排查 cron &#x2F; systemd &#x2F; 计划任务</p>
+</li>
+<li><p>查漏洞或弱口令入口</p>
+</li>
+<li><p>修补漏洞并加固权限</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">“挖矿必有持久化，不处理会反复起”</span><br></pre></td></tr></table></figure></li>
+</ul>
+</li>
+<li><p>蠕虫：</p>
+<ul>
+<li>立即隔离受感染主机（网络层）<ul>
+<li>如果有 EDR，优先用 EDR 一键隔离；否则内网终端用交换机端口隔离，服务器用防火墙或云安全组。</li>
+</ul>
+</li>
+<li>封堵传播端口和协议</li>
+<li>批量排查同网段主机</li>
+<li>修复利用漏洞或关闭服务</li>
+<li>恢复系统并监控复发</li>
+</ul>
+</li>
+<li><p>勒索病毒：</p>
+<ul>
+<li><p>立即断网，防止横向扩散</p>
+</li>
+<li><p>隔离感染主机</p>
+</li>
+<li><p>评估加密范围和业务影响</p>
+</li>
+<li><p>使用备份恢复数据（不建议支付赎金）</p>
+</li>
+<li><p>排查初始入侵点并加固</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">“断网优先级高于一切”</span><br></pre></td></tr></table></figure></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p>系统入侵类：漏洞利用、弱口令、远控后门、钓鱼攻击</p>
+<ul>
+<li>漏洞利用：<ul>
+<li>通过日志确认漏洞利用成功与否</li>
+<li>临时封禁攻击源 IP</li>
+<li>升级或打补丁</li>
+<li>排查是否落地后门</li>
+<li>加强相关接口监控</li>
+</ul>
+</li>
+<li>弱口令：<ul>
+<li>冻结被入侵账号</li>
+<li>强制修改密码</li>
+<li>审计登录日志和操作记录</li>
+<li>检查是否建立持久化访问</li>
+<li>开启 多因素验证(MFA) 或登录限制</li>
+</ul>
+</li>
+<li>远控后门：<ul>
+<li>EDR 发现异常连接或进程</li>
+<li>隔离主机并抓取内存 &#x2F; 进程信息</li>
+<li>清除后门程序及启动项</li>
+<li>排查是否存在横向移动</li>
+<li>重装或恢复系统（必要时）</li>
+</ul>
+</li>
+<li>钓鱼攻击：<ul>
+<li>木马常见处理手段+下面</li>
+<li>使用邮件网关(SEG)根据发件人地址，域名，Hash进行收索，定位收件人列表</li>
+<li>使用SEG的远程邮件删除功能，批量删除</li>
+<li>封禁发件人 &#x2F; 域名 &#x2F; URL，阻断后续邮件</li>
+<li>将发件人或域名加入黑名单</li>
+<li>使用防火墙等设备封禁钓鱼域名和URL</li>
+<li>群发安全提醒</li>
+<li>对于个人邮箱可以使用上网行为管理设备+EDR进行限制</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p>网络攻击类：DDOS 攻击、DNS 劫持、ARP 欺骗</p>
+<ul>
+<li>DDOS 攻击：<ul>
+<li>启用云 WAF &#x2F; 高防</li>
+<li>流量清洗、限速</li>
+<li>与运营商协同处置</li>
+<li>调整业务阈值</li>
+<li>攻击结束后优化策略</li>
+</ul>
+</li>
+<li>DNS 劫持：<ul>
+<li>切换可信 DNS</li>
+<li>检查 DNS 服务器配置和账号安全</li>
+<li>恢复正确解析记录</li>
+<li>排查是否存在控制面入侵</li>
+<li>开启 DNS 变更审计</li>
+</ul>
+</li>
+<li>ARP 欺骗：<ul>
+<li>断开异常设备</li>
+<li>静态绑定 ARP &#x2F; IP-MAC</li>
+<li>启用交换机 ARP 防护</li>
+<li>排查内网异常主机</li>
+<li>恢复网络拓扑</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h3 id="风险评估"><a href="#风险评估" class="headerlink" title="风险评估"></a><strong>风险评估</strong></h3><p><strong>第1步：准备与计划</strong></p>
+<p>这是流程的基石，决定了评估的成败。</p>
+<ol>
+<li>确定目标与范围：明确为什么要做风险评估（如合规、安全事件驱动、年度计划），以及范围是什么（如整个组织、某个部门、特定系统）。</li>
+<li>识别相关方组建团队：确定需要参与和知晓评估结果的内部和外部人员, 成立由管理层、业务部门、IT、安全专家组成的跨职能团队。</li>
+<li>定义风险评估方法：选择定性（高&#x2F;中&#x2F;低）、定量（货币化计算）或半定量方法。</li>
+<li>确立风险评估准则：提前定义“何谓高风险、中风险、低风险”的判断标准。例如：<br>· 高风险：可能导致重大财务损失（&gt;100万）、严重法律后果、核心业务中断超过24小时。<br>· 中风险：造成中等影响，需要管理关注。<br>· 低风险：影响轻微，可接受或日常处理。</li>
+</ol>
+<hr>
+<p><strong>第2步：风险识别</strong></p>
+<p>这是最核心的步骤，目标是建立一个“风险清单”。<br>通常采用“资产-威胁-脆弱性” 模型：</p>
+<ol>
+<li><strong>识别资产：</strong>列出范围内的所有重要资产，并评估其机密性、完整性、可用性三性的价值。<br>· 资产示例：服务器、数据库、知识产权、员工信息、公司声誉。</li>
+<li><strong>识别威胁：</strong>识别可能对资产造成损害的潜在事件或来源。<br>· 威胁源示例：黑客、内部人员（恶意或无意）、自然灾害、供应链故障。<br>· 威胁行为示例：恶意软件感染、数据窃取、拒绝服务、物理破坏。</li>
+<li><strong>识别脆弱性（漏洞）：</strong>找出资产或防护措施中可能被威胁利用的弱点。<br>· 脆弱性示例：未打补丁的系统、弱密码策略、员工安全意识不足、物理门禁失效。</li>
+<li><strong>识别现有控制措施：</strong>分析已部署的安全措施（如防火墙、防病毒、审计制度），评估其有效性。</li>
+</ol>
+<p>输出：一份包含“关键资产列表”及与之关联的“威胁-脆弱性对”的清单。</p>
+<hr>
+<p><strong>第3步：风险分析</strong></p>
+<p>对识别出的每个风险，评估其发生的可能性和一旦发生造成的影响。</p>
+<p><strong>评估可能性：</strong>威胁利用脆弱性发生的概率。考虑因素：威胁动机&#x2F;能力、脆弱性暴露程度、现有控制措施的有效性。</p>
+<p><strong>评估影响：</strong>风险事件发生后，对资产三性（保密性、完整性、可用性）及业务运营造成的负面后果。可从财务、运营、法律、声誉等方面衡量。</p>
+<p><strong>计算风险值：</strong>根据采用的方法进行计算。</p>
+<ul>
+<li>定性：使用风险矩阵，将可能性和影响等级（如1-5级）组合，定位风险级别。</li>
+<li>定量：风险值 &#x3D; 可能性 × 影响（货币化）。</li>
+</ul>
+<p>输出：每个风险的风险值或风险等级。</p>
+<hr>
+<p><strong>第4步：风险评价</strong></p>
+<p>将分析得出的风险等级与第1步制定的风险评估准则进行比较，确定风险的优先级和处理方式。</p>
+<ul>
+<li><p>不可接受风险（高风险）：必须优先处理，需要立即采取行动。</p>
+</li>
+<li><p>可考虑处理风险（中风险）：应根据资源情况制定计划进行管理。</p>
+</li>
+<li><p>可接受风险（低风险）：暂时接受，但需定期复审。</p>
+</li>
+</ul>
+<p>输出：已排序的风险优先处理列表。</p>
+<hr>
+<p><strong>第5步：风险处置（风险应对）</strong></p>
+<p>为每个需要处理的风险制定并实施应对计划。主要有四种策略：</p>
+<ol>
+<li>风险规避：停止可能导致风险的活动。例如，关闭高风险但非核心的业务。</li>
+<li>风险缓解：采取安全措施降低风险的可能性和&#x2F;或影响。这是最常用的策略。例如，打补丁、部署WAF、实施多因素认证、开展员工培训。</li>
+<li>风险转移：将风险后果转移给第三方。例如，购买网络安全保险、与服务商签订SLA（服务等级协议）。</li>
+<li>风险接受：在明确了解后果且符合接受准则的情况下，不采取任何行动。必须由管理层正式批准。</li>
+</ol>
+<p>输出：风险处置计划，明确每项风险的负责人、行动措施、时间表和所需资源。</p>
+<hr>
+<p><strong>第6步：风险沟通与监控</strong></p>
+<p>沟通：在整个过程中，与所有相关方（管理层、业务部门、技术人员）持续沟通风险状况、处置进展和决策依据。</p>
+<p>监控：</p>
+<ul>
+<li>跟踪风险处置计划的实施情况。</li>
+<li>持续监控风险环境的变化（如新威胁、新资产、新漏洞）。</li>
+<li>验证已实施的控制措施是否有效。</li>
+</ul>
+<hr>
+<p><strong>第7步：持续审查与更新</strong></p>
+<p>风险评估不是一次性项目，而应是持续循环的过程。</p>
+<ul>
+<li><p>定期复审：至少每年进行一次全面复审。</p>
+</li>
+<li><p>触发式更新：当发生重大变化时应立即启动，例如：新系统上线、重大安全事件后、法律法规变更、公司战略调整后。</p>
+</li>
+</ul>
+<hr>
+<p><strong>风险评估的核心特点总结</strong></p>
+<ul>
+<li><p>业务驱动：始终与业务目标和影响相关联。</p>
+</li>
+<li><p>持续过程：需要定期重复以应对不断变化的威胁环境。</p>
+</li>
+<li><p>管理决策工具：最终目的是为管理层提供基于风险的决策信息，将有限资源投入到最需要的地方。</p>
+</li>
+</ul>
+<p>通过遵循上述结构化的流程，组织可以系统化地管理其信息安全风险，从被动响应转向主动防御，从而提升整体安全水平。</p>
+<ul>
+<li><strong>应急响应（你之前学过，优势）</strong></li>
+</ul>
+<hr>
+<h2 id="Day-6：项目-实战-红蓝经验包装"><a href="#Day-6：项目-实战-红蓝经验包装" class="headerlink" title="Day 6：项目 &#x2F; 实战 &#x2F; 红蓝经验包装"></a>Day 6：项目 &#x2F; 实战 &#x2F; 红蓝经验包装</h2><h3 id="蓝队HVV面经"><a href="#蓝队HVV面经" class="headerlink" title="蓝队HVV面经"></a>蓝队HVV面经</h3><p>E:\hexo\blog\MyBlog\source_posts\HVV笔记.md</p>
+<h3 id="溯源反制经验"><a href="#溯源反制经验" class="headerlink" title="溯源反制经验"></a>溯源反制经验</h3><p>1.通过攻击IP反打，反向渗透服务器进行分析，最终定位到攻击者相关信息<br>2.通过攻击IP历史解析记录&#x2F;域名，对域名注册信息进行溯源分析<br>3.利用ID追溯邮箱，真实姓名，通过姓名找到相关简历信息<br>4.提取木马样本特征、用户名、ID、邮箱、C2服务器等信息—同源分析<br>5.基于JSONP跨域，获取攻击者的主机信息、浏览器信息、真实 IP及社交信息等</p>
+<hr>
+<h2 id="Day-7：全真模拟面试-背诵清单"><a href="#Day-7：全真模拟面试-背诵清单" class="headerlink" title="Day 7：全真模拟面试 + 背诵清单"></a>Day 7：全真模拟面试 + 背诵清单</h2><h3 id="目标"><a href="#目标" class="headerlink" title="目标"></a>目标</h3><p>看完：面试笔记，常见技术题梳理，做梦梦到的题目，数据库提权，SQL Server渗透测试完整工具链手册，面试案例</p>
+<h3 id="面试案例——————————————————————"><a href="#面试案例——————————————————————" class="headerlink" title="面试案例——————————————————————"></a>面试案例——————————————————————</h3><ul>
+<li><p>挖矿木马</p>
+</li>
+<li><p>僵尸网络</p>
+</li>
+<li><p>应急响应3个</p>
+</li>
+<li><p>溯源分析3个</p>
+</li>
+<li><p>安服项目3个(基线检测，风险评估，安全专项实施)</p>
+</li>
+<li><p>红队渗透经历3个</p>
+</li>
+<li><p>近期安全事件或漏洞3个</p>
+</li>
+<li><p>简历去掉一个安全服务，替换成省护</p>
+</li>
+<li><p>一个你印象最深的漏洞</p>
+</li>
+</ul>
+<hr>
+<h3 id="自测问题（一定要自己说一遍）"><a href="#自测问题（一定要自己说一遍）" class="headerlink" title="自测问题（一定要自己说一遍）"></a>自测问题（一定要自己说一遍）</h3><ul>
+<li>SQL 注入怎么测？</li>
+<li>扫描工具误报怎么办？</li>
+<li>SSRF 怎么判断？</li>
+<li>应急响应流程？</li>
+<li>你觉得安全运维和渗透的区别？</li>
+</ul>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta">文章作者: </span><span class="post-copyright-info"><a href="http://RuiJiLuo.github.io">Rui Ji</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta">文章链接: </span><span class="post-copyright-info"><a href="http://ruijiluo.github.io/2023/12/20/%E9%9D%A2%E8%AF%95%E7%AC%94%E8%AE%B0/">http://ruijiluo.github.io/2023/12/20/%E9%9D%A2%E8%AF%95%E7%AC%94%E8%AE%B0/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta">版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来自 <a href="http://RuiJiLuo.github.io" target="_blank">RJ の 博客</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"></div><div class="post_share"><div class="social-share" data-image="https://s2.loli.net/2024/03/07/Dxc6Z5vWzdCfQIP.jpg" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><div class="prev-post pull-left"><a href="/2023/12/20/%E5%B8%B8%E8%A7%81%E6%8A%80%E6%9C%AF%E9%A2%98%E6%A2%B3%E7%90%86/" title="面试笔记2"><img class="cover" src="https://s2.loli.net/2024/03/07/Dxc6Z5vWzdCfQIP.jpg" onerror="onerror=null;src='/img/404.jpg'" alt="cover of previous post"><div class="pagination-info"><div class="label">上一篇</div><div class="prev_info">面试笔记2</div></div></a></div><div class="next-post pull-right"><a href="/2023/12/15/%E6%9A%B4%E5%8A%9B%E7%A0%B4%E8%A7%A3/" title="暴力破解"><img class="cover" src="https://s2.loli.net/2023/12/15/eFXEOHPdqrBkgKI.jpg" onerror="onerror=null;src='/img/404.jpg'" alt="cover of next post"><div class="pagination-info"><div class="label">下一篇</div><div class="next_info">暴力破解</div></div></a></div></nav></div><div class="aside-content" id="aside-content"><div class="card-widget card-info"><div class="is-center"><div class="avatar-img"><img src="https://s2.loli.net/2023/09/07/oZOaspjYrzmT5e9.jpg" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info__name">Rui Ji</div><div class="author-info__description">私 の hacker 夢</div></div><div class="card-info-data site-data is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">37</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">9</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">0</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/ruijiluo"><i class="fab fa-github"></i><span>Follow Me</span></a></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BA%8C%E3%80%817-%E5%A4%A9%E8%AF%A6%E7%BB%86%E5%AE%89%E6%8E%92%EF%BC%88%E6%AF%8F%E5%A4%A9%E4%B8%BB%E9%A2%98%E6%98%8E%E7%A1%AE%EF%BC%89"><span class="toc-text">二、7 天详细安排（每天主题明确）</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Day-1%EF%BC%9A%E6%89%BE%E5%9B%9E%E2%80%9C%E5%AE%89%E5%85%A8%E6%95%B4%E4%BD%93%E6%84%9F%E2%80%9D%E5%92%8C%E9%9D%A2%E8%AF%95%E6%A1%86%E6%9E%B6"><span class="toc-text">Day 1：找回“安全整体感”和面试框架</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%B8%97%E9%80%8F%E6%B5%8B%E8%AF%95%E6%A0%87%E5%87%86%E6%B5%81%E7%A8%8B"><span class="toc-text">渗透测试标准流程</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Day-2%EF%BC%9AWeb-%E6%B8%97%E9%80%8F"><span class="toc-text">Day 2：Web 渗透</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%80%9A%E7%94%A8%E6%BC%8F%E6%B4%9E"><span class="toc-text">通用漏洞</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#SQL-%E6%B3%A8%E5%85%A5"><span class="toc-text">SQL 注入</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#XSS"><span class="toc-text">XSS</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#SSRF"><span class="toc-text">SSRF</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E6%96%87%E4%BB%B6%E4%B8%8A%E4%BC%A0"><span class="toc-text">文件上传</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%91%BD%E4%BB%A4%E6%89%A7%E8%A1%8C"><span class="toc-text">命令执行</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E6%96%87%E4%BB%B6%E5%8C%85%E5%90%AB"><span class="toc-text">文件包含</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#CSRF"><span class="toc-text">CSRF</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#XXE"><span class="toc-text">XXE</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%A4%B1%E6%95%88%E7%9A%84%E8%AE%BF%E9%97%AE%E6%8E%A7%E5%88%B6"><span class="toc-text">失效的访问控制</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96"><span class="toc-text">反序列化</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E9%80%BB%E8%BE%91%E6%BC%8F%E6%B4%9E"><span class="toc-text">逻辑漏洞</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%BC%B1%E5%8F%A3%E4%BB%A4"><span class="toc-text">弱口令</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E6%95%8F%E6%84%9F%E4%BF%A1%E6%81%AF%E6%B3%84%E9%9C%B2"><span class="toc-text">敏感信息泄露</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E4%BB%BB%E6%84%8F%E6%96%87%E4%BB%B6%E4%B8%8B%E8%BD%BD"><span class="toc-text">任意文件下载</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#CORS-%E9%85%8D%E7%BD%AE%E4%B8%8D%E5%BD%93"><span class="toc-text">CORS 配置不当</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#JWT-%E5%AE%89%E5%85%A8%E9%97%AE%E9%A2%98"><span class="toc-text">JWT 安全问题</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#HTTP-%E8%AF%B7%E6%B1%82%E8%B5%B0%E7%A7%81"><span class="toc-text">HTTP 请求走私</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%BB%84%E4%BB%B6-%E6%A1%86%E6%9E%B6-%E7%B3%BB%E7%BB%9F%E7%BA%A7%E6%BC%8F%E6%B4%9E"><span class="toc-text">组件 &#x2F; 框架 &#x2F; 系统级漏洞</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#Tomcat"><span class="toc-text">Tomcat</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Spring-Spring-Boot"><span class="toc-text">Spring &#x2F; Spring Boot</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Struts2"><span class="toc-text">Struts2</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#ThinkPHP"><span class="toc-text">ThinkPHP</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Fastjson"><span class="toc-text">Fastjson</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Log4j"><span class="toc-text">Log4j</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Shiro"><span class="toc-text">Shiro</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Redis"><span class="toc-text">Redis</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#MongoDB"><span class="toc-text">MongoDB</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Nginx"><span class="toc-text">Nginx</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Apache-HTTPD"><span class="toc-text">Apache HTTPD</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#WebLogic"><span class="toc-text">WebLogic</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Jenkins"><span class="toc-text">Jenkins</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Jackson"><span class="toc-text">Jackson</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Docker"><span class="toc-text">Docker</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#IIS"><span class="toc-text">IIS</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%95%B0%E6%8D%AE%E5%BA%93%E6%8F%90%E6%9D%83"><span class="toc-text">数据库提权</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E7%AC%94%E8%AE%B0%E2%80%94-E-hexo-blog-MyBlog-source-posts"><span class="toc-text">笔记—&gt;E:\hexo\blog\MyBlog\source_posts</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%B8%97%E9%80%8F%E6%B5%81%E7%A8%8B"><span class="toc-text">渗透流程</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Day-3%EF%BC%9A%E7%A7%BB%E5%8A%A8%E7%AB%AF%E6%B8%97%E9%80%8F"><span class="toc-text">Day 3：移动端渗透</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#App%E6%B8%97%E9%80%8F-%E6%B3%9B"><span class="toc-text">App渗透(泛)</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%B0%8F%E7%A8%8B%E5%BA%8F%E6%B8%97%E9%80%8F-%E7%BB%86"><span class="toc-text">小程序渗透(细)</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E6%B7%B1%E5%BA%A6%E8%A7%A3%E6%9E%90%E5%BE%AE%E4%BF%A1%E5%B0%8F%E7%A8%8B%E5%BA%8F%E6%BC%8F%E6%B4%9E%E6%8C%96%E6%8E%98-%E5%85%88%E7%9F%A5%E7%A4%BE%E5%8C%BA"><span class="toc-text">深度解析微信小程序漏洞挖掘-先知社区</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%B0%8F%E7%A8%8B%E5%BA%8F%E5%B8%B8%E8%A7%81%E6%BC%8F%E6%B4%9E"><span class="toc-text">小程序常见漏洞</span></a><ol class="toc-child"><li class="toc-item toc-level-6"><a class="toc-link" href="#%E4%BB%BB%E6%84%8F%E7%94%A8%E6%88%B7%E7%99%BB%E5%BD%95%E6%BC%8F%E6%B4%9E%EF%BC%88session-key-%E6%89%8B%E6%9C%BA%E5%8F%B7%E8%A7%A3%E5%AF%86%E5%9C%BA%E6%99%AF%EF%BC%89"><span class="toc-text">任意用户登录漏洞（session_key + 手机号解密场景）</span></a></li></ol></li></ol></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%BE%AE%E4%BF%A1%E5%B0%8F%E7%A8%8B%E5%BA%8F%E6%8E%88%E6%9D%83%E7%99%BB%E5%BD%95%E6%B5%81%E7%A8%8B%EF%BC%88%E7%B2%BE%E7%82%BC%E7%89%88%EF%BC%89"><span class="toc-text">微信小程序授权登录流程（精炼版）</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Day-4%EF%BC%9A%E5%B7%A5%E5%85%B7%E4%B8%93%E9%A1%B9%EF%BC%88%E9%9D%9E%E5%B8%B8%E9%87%8D%E8%A6%81%EF%BC%89"><span class="toc-text">Day 4：工具专项（非常重要）</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BF%A1%E6%81%AF%E6%94%B6%E9%9B%86%E5%B7%A5%E5%85%B7"><span class="toc-text">信息收集工具</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#TCP-%E6%89%AB%E6%8F%8F"><span class="toc-text">TCP 扫描</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#UDP-%E6%89%AB%E6%8F%8F"><span class="toc-text">UDP 扫描</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%B8%97%E9%80%8F%E6%B5%8B%E8%AF%95%E5%B7%A5%E5%85%B7"><span class="toc-text">渗透测试工具</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Web-%E6%BC%8F%E6%B4%9E%E4%B8%93%E9%A1%B9%E5%B7%A5%E5%85%B7"><span class="toc-text">Web 漏洞专项工具</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%BC%8F%E6%B4%9E%E6%89%AB%E6%8F%8F%E5%B7%A5%E5%85%B7"><span class="toc-text">漏洞扫描工具</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BB%A3%E7%A0%81%E5%AE%A1%E8%AE%A1%E5%B7%A5%E5%85%B7"><span class="toc-text">代码审计工具</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%BF%9C%E7%A8%8B%E6%8E%A7%E5%88%B6-%E5%90%8E%E6%B8%97%E9%80%8F%E5%B7%A5%E5%85%B7"><span class="toc-text">远程控制 &#x2F; 后渗透工具</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%86%85%E7%BD%91-%E8%BF%90%E7%BB%B4%E7%9B%B8%E5%85%B3%E5%B7%A5%E5%85%B7"><span class="toc-text">内网 &#x2F; 运维相关工具</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#webshell%E5%B7%A5%E5%85%B7"><span class="toc-text">webshell工具</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%93%9D%E9%98%9F%E5%B7%A5%E5%85%B7"><span class="toc-text">蓝队工具</span></a><ol class="toc-child"><li class="toc-item toc-level-6"><a class="toc-link" href="#%E6%97%A5%E5%BF%97"><span class="toc-text">日志</span></a></li><li class="toc-item toc-level-6"><a class="toc-link" href="#WAF-%E4%B8%8E-Web-%E9%98%B2%E6%8A%A4"><span class="toc-text">WAF 与 Web 防护</span></a></li><li class="toc-item toc-level-6"><a class="toc-link" href="#%E4%B8%BB%E6%9C%BA%E5%AE%89%E5%85%A8"><span class="toc-text">主机安全</span></a></li><li class="toc-item toc-level-6"><a class="toc-link" href="#EDR"><span class="toc-text">EDR</span></a></li><li class="toc-item toc-level-6"><a class="toc-link" href="#%E5%85%A5%E4%BE%B5%E6%A3%80%E6%B5%8B%E4%B8%8E%E6%B5%81%E9%87%8F%E5%88%86%E6%9E%90"><span class="toc-text">入侵检测与流量分析</span></a></li><li class="toc-item toc-level-6"><a class="toc-link" href="#WebShell-%E4%B8%8E%E6%81%B6%E6%84%8F%E4%BB%A3%E7%A0%81%E6%A3%80%E6%B5%8B"><span class="toc-text">WebShell 与恶意代码检测</span></a></li><li class="toc-item toc-level-6"><a class="toc-link" href="#RASP"><span class="toc-text">RASP</span></a></li><li class="toc-item toc-level-6"><a class="toc-link" href="#%E8%B4%A6%E5%8F%B7%E4%B8%8E%E6%9D%83%E9%99%90%E9%98%B2%E6%8A%A4"><span class="toc-text">账号与权限防护</span></a></li><li class="toc-item toc-level-6"><a class="toc-link" href="#Wireshark"><span class="toc-text">Wireshark</span></a></li><li class="toc-item toc-level-6"><a class="toc-link" href="#%E5%A8%81%E8%83%81%E6%83%85%E6%8A%A5%E4%B8%8E%E5%91%8A%E8%AD%A6"><span class="toc-text">威胁情报与告警</span></a></li><li class="toc-item toc-level-6"><a class="toc-link" href="#SOAR"><span class="toc-text">SOAR</span></a></li><li class="toc-item toc-level-6"><a class="toc-link" href="#%E5%86%85%E5%AD%98%E9%A9%AC%E6%9F%A5%E6%9D%80"><span class="toc-text">内存马查杀</span></a></li></ol></li></ol></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Day-5%EF%BC%9ALinux-Windows-%E5%AE%89%E5%85%A8%E8%BF%90%E7%BB%B4-%E9%A3%8E%E9%99%A9%E8%AF%84%E4%BC%B0"><span class="toc-text">Day 5：Linux &#x2F; Windows + 安全运维+风险评估</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Linux-%E5%BF%85%E4%BC%9A"><span class="toc-text">Linux 必会</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Windows-%E5%BF%85%E4%BC%9A"><span class="toc-text">Windows 必会</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%97%A0%E6%96%87%E4%BB%B6%E8%90%BD%E5%9C%B0%E6%94%BB%E5%87%BB"><span class="toc-text">无文件落地攻击</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%BA%94%E6%80%A5%E5%93%8D%E5%BA%94"><span class="toc-text">应急响应</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%BA%94%E6%80%A5%E5%93%8D%E5%BA%94%E6%B5%81%E7%A8%8B%EF%BC%9A"><span class="toc-text">应急响应流程：</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#1%EF%B8%8F%E2%83%A3-%E5%8F%91%E7%8E%B0%EF%BC%88Detection%EF%BC%89"><span class="toc-text">1️⃣ 发现（Detection）</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#2%EF%B8%8F%E2%83%A3-%E7%A0%94%E5%88%A4%EF%BC%88Analysis%EF%BC%89"><span class="toc-text">2️⃣ 研判（Analysis）</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#3%EF%B8%8F%E2%83%A3-%E9%81%8F%E5%88%B6%EF%BC%88Containment%EF%BC%89"><span class="toc-text">3️⃣ 遏制（Containment）</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#4%EF%B8%8F%E2%83%A3-%E6%B8%85%E9%99%A4%EF%BC%88Eradication%EF%BC%89"><span class="toc-text">4️⃣ 清除（Eradication）</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#5%EF%B8%8F%E2%83%A3-%E6%81%A2%E5%A4%8D%EF%BC%88Recovery%EF%BC%89"><span class="toc-text">5️⃣ 恢复（Recovery）</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#6%EF%B8%8F%E2%83%A3-%E5%A4%8D%E7%9B%98%EF%BC%88Lessons-Learned%EF%BC%89"><span class="toc-text">6️⃣ 复盘（Lessons Learned）</span></a></li></ol></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%BA%94%E6%80%A5%E5%93%8D%E5%BA%94%E4%B8%AD%E7%9A%84%E5%B7%A5%E5%85%B7%E8%A7%92%E8%89%B2%EF%BC%88%E7%AE%80%E8%BF%B0%EF%BC%89"><span class="toc-text">应急响应中的工具角色（简述）</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%B8%B8%E8%A7%81%E5%BA%94%E6%80%A5%E4%BA%8B%E4%BB%B6%EF%BC%9A"><span class="toc-text">常见应急事件：</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%A3%8E%E9%99%A9%E8%AF%84%E4%BC%B0"><span class="toc-text">风险评估</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Day-6%EF%BC%9A%E9%A1%B9%E7%9B%AE-%E5%AE%9E%E6%88%98-%E7%BA%A2%E8%93%9D%E7%BB%8F%E9%AA%8C%E5%8C%85%E8%A3%85"><span class="toc-text">Day 6：项目 &#x2F; 实战 &#x2F; 红蓝经验包装</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%93%9D%E9%98%9FHVV%E9%9D%A2%E7%BB%8F"><span class="toc-text">蓝队HVV面经</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%BA%AF%E6%BA%90%E5%8F%8D%E5%88%B6%E7%BB%8F%E9%AA%8C"><span class="toc-text">溯源反制经验</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Day-7%EF%BC%9A%E5%85%A8%E7%9C%9F%E6%A8%A1%E6%8B%9F%E9%9D%A2%E8%AF%95-%E8%83%8C%E8%AF%B5%E6%B8%85%E5%8D%95"><span class="toc-text">Day 7：全真模拟面试 + 背诵清单</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%9B%AE%E6%A0%87"><span class="toc-text">目标</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%9D%A2%E8%AF%95%E6%A1%88%E4%BE%8B%E2%80%94%E2%80%94%E2%80%94%E2%80%94%E2%80%94%E2%80%94%E2%80%94%E2%80%94%E2%80%94%E2%80%94%E2%80%94%E2%80%94%E2%80%94%E2%80%94%E2%80%94%E2%80%94%E2%80%94%E2%80%94%E2%80%94%E2%80%94%E2%80%94%E2%80%94"><span class="toc-text">面试案例——————————————————————</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%87%AA%E6%B5%8B%E9%97%AE%E9%A2%98%EF%BC%88%E4%B8%80%E5%AE%9A%E8%A6%81%E8%87%AA%E5%B7%B1%E8%AF%B4%E4%B8%80%E9%81%8D%EF%BC%89"><span class="toc-text">自测问题（一定要自己说一遍）</span></a></li></ol></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item"><a class="thumbnail" href="/2026/05/03/Mimitatz%E4%BD%BF%E7%94%A8/" title="Mimikatz 完全学习笔记"><img src="https://s2.loli.net/2024/03/07/Dxc6Z5vWzdCfQIP.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="Mimikatz 完全学习笔记"/></a><div class="content"><a class="title" href="/2026/05/03/Mimitatz%E4%BD%BF%E7%94%A8/" title="Mimikatz 完全学习笔记">Mimikatz 完全学习笔记</a><time datetime="2026-05-03T08:36:14.000Z" title="发表于 2026-05-03 16:36:14">2026-05-03</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2025/05/30/Cobalt%20Strike%20C2%E4%BD%93%E7%B3%BB%E6%B7%B1%E5%BA%A6%E8%A7%A3%E6%9E%90/" title="Cobalt Strike C2体系深度解析"><img src="https://s2.loli.net/2024/03/07/Dxc6Z5vWzdCfQIP.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="Cobalt Strike C2体系深度解析"/></a><div class="content"><a class="title" href="/2025/05/30/Cobalt%20Strike%20C2%E4%BD%93%E7%B3%BB%E6%B7%B1%E5%BA%A6%E8%A7%A3%E6%9E%90/" title="Cobalt Strike C2体系深度解析">Cobalt Strike C2体系深度解析</a><time datetime="2025-05-30T08:36:14.000Z" title="发表于 2025-05-30 16:36:14">2025-05-30</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2025/05/30/SQL%20Server%E6%B8%97%E9%80%8F%E6%B5%8B%E8%AF%95%E5%AE%8C%E6%95%B4%E5%B7%A5%E5%85%B7%E9%93%BE%E6%89%8B%E5%86%8C/" title="SQL Server渗透测试"><img src="https://s2.loli.net/2024/03/07/Dxc6Z5vWzdCfQIP.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="SQL Server渗透测试"/></a><div class="content"><a class="title" href="/2025/05/30/SQL%20Server%E6%B8%97%E9%80%8F%E6%B5%8B%E8%AF%95%E5%AE%8C%E6%95%B4%E5%B7%A5%E5%85%B7%E9%93%BE%E6%89%8B%E5%86%8C/" title="SQL Server渗透测试">SQL Server渗透测试</a><time datetime="2025-05-30T08:36:14.000Z" title="发表于 2025-05-30 16:36:14">2025-05-30</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2025/05/30/Java%E5%86%85%E5%AD%98%E9%A9%AC/" title="Java内存马"><img src="https://s2.loli.net/2024/03/07/Dxc6Z5vWzdCfQIP.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="Java内存马"/></a><div class="content"><a class="title" href="/2025/05/30/Java%E5%86%85%E5%AD%98%E9%A9%AC/" title="Java内存马">Java内存马</a><time datetime="2025-05-30T08:36:14.000Z" title="发表于 2025-05-30 16:36:14">2025-05-30</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2025/05/30/Shiro-721%20Padding%20Oracle%E6%94%BB%E5%87%BB%E5%AE%8C%E6%95%B4%E7%AC%94%E8%AE%B0/" title="Shiro-721 Padding Oracle攻击完整笔记"><img src="https://s2.loli.net/2024/03/07/Dxc6Z5vWzdCfQIP.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="Shiro-721 Padding Oracle攻击完整笔记"/></a><div class="content"><a class="title" href="/2025/05/30/Shiro-721%20Padding%20Oracle%E6%94%BB%E5%87%BB%E5%AE%8C%E6%95%B4%E7%AC%94%E8%AE%B0/" title="Shiro-721 Padding Oracle攻击完整笔记">Shiro-721 Padding Oracle攻击完整笔记</a><time datetime="2025-05-30T08:36:14.000Z" title="发表于 2025-05-30 16:36:14">2025-05-30</time></div></div></div></div></div></div></main><footer id="footer"><div id="footer-wrap"><div class="copyright">&copy;2020 - 2026 By Rui Ji</div><div class="framework-info"><span>框架 </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo</a><span class="footer-separator">|</span><span>主题 </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly</a></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="浅色和深色模式转换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside_config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><button id="go-up" type="button" title="回到顶部"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox/fancybox.umd.min.js"></script><div class="js-pjax"></div><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div></body></html>
